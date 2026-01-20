@@ -37,12 +37,12 @@ def admin_auth_register(email_input, password_input):
 
 #POST route to register user and GET to load HTML template
 @app.route('/register/', methods=['POST', 'GET'])
-def register():
+def user_register():
     if request.method == 'GET':
         return render_template('register.html')
     elif request.method == 'POST':
-        password_input = request.form.get('password')
-        email_input = request.form.get('email')
+        password_input = request.form.get('register-password')
+        email_input = request.form.get('register-email')
         admin_auth_register(email_input, password_input)
         return redirect(url_for('home'))
 
