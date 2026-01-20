@@ -8,19 +8,19 @@ db = SQLAlchemy(app)
 
 # Define a User table schema
 class User(db.Model):
-    user_id = db.Column('user_id', db.Integer, primary_key=True)
+    name = db.Column('name', db.String(100), primary_key=True)
     email = db.Column('email', db.String(100), nullable=False, unique=True)
     password = db.Column('password', db.String(200), nullable=True)
 
     #constructor method
-    def __init__(self, user_id, email, password): 
-        self.user_id = user_id
+    def __init__(self, name, email, password): 
+        self.user_id = name
         self.email = email
         self.password = password
 
     #set and get methods
     def get_id(self):
-        return self.user_id
+        return self.name
     
     def get_email(self):
         return self.email
@@ -31,8 +31,8 @@ with app.app_context():
     db.create_all()
 
 #Helper function to store new user to database
-def admin_auth_register(email_input, password_input):
-    new_user = User(email=email_input, password=password_input)
+def admin_auth_register(name_input, email_input, password_input):
+    new_user = User(name=name_input, email=email_input, password=password_input)
     db.session.add(new_user)
     db.session.commit()
 
