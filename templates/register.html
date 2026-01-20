@@ -7,6 +7,15 @@
 </head>
 <body>
     <h1>Create an account</h1>
+    <form method="POST" id="register-form">
+        <input type="text" name="register-email" placeholder="example@email.com">
+        <br><br>
+        <input type="text" name="register-name" placeholder="E.g. John Smith">
+        <br><br>
+        <input type="password" name="register-password" placeholder="Enter a password">
+        <br><br>
+        <button type="submit" id="register-button">Login</button>
+    </form>
     <h4>Already have an account? Login <a href="{{ url_for('login')}}">here</a></h4>
 </body>
 </html>
