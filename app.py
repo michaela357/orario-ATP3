@@ -20,12 +20,14 @@ def home():
 # Define a User table schema
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(200), nullable=True)
 
     #constructor method
-    def __init__(self, email, password): 
+    def __init__(self, email, name, password): 
         self.email = email
+        self.name = name
         self.password = password
 
 # Create the database tables from she
@@ -33,8 +35,8 @@ with app.app_context():
     db.create_all()
 
 #Helper function to store new user to database
-def admin_auth_register(email_input, password_input):
-    new_user = User(email=email_input, password=password_input)
+def admin_auth_register(email_input, name_input, password_input):
+    new_user = User(email=email_input, name=name_input, password=password_input)
     db.session.add(new_user)
     db.session.commit()
 
@@ -45,13 +47,14 @@ def user_register():
         return render_template('register.html')
     elif request.method == 'POST':
         register_password = request.form.get('register-password')
+        register_name = request.form.get('register-name')
         register_email = request.form.get('register-email')
 
         hashed_password = generate_password_hash(register_password)
         username_exists = User.query.filter(User.email == register_email).first()
 
         if not username_exists:
-            admin_auth_register(register_email, hashed_password)
+            admin_auth_register(register_email, register_name, hashed_password)
 
         return redirect(url_for('login'))
     
@@ -70,6 +73,7 @@ def login():
         return render_template('login.html')
     elif request.method == "POST":
         login_email = request.form['login-email']
+        login_name = request.form['login-name']
         login_password = request.form['login-password']
 
         correct_user = User.query.filter(User.email == login_email).first()
