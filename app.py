@@ -73,7 +73,6 @@ def login():
         return render_template('login.html')
     elif request.method == "POST":
         login_email = request.form['login-email']
-        login_name = request.form['login-name']
         login_password = request.form['login-password']
 
         correct_user = User.query.filter(User.email == login_email).first()
