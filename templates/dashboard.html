@@ -4,8 +4,5 @@ Dashboard
 {% endblock %}
 
 {% block content %}
-<h1>Welcome, {{ current_user.name }}</h1>
-{% if current_user.is_authenticated %}
-    <button onclick=window.location.href="{{ url_for('logout') }}">Logout</button>
-{% endif %}
+<h1>You are logged in as {{ name }}!</h1>
 {% endblock %}
