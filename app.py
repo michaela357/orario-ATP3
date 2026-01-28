@@ -1,88 +1,90 @@
-from flask import Flask, render_template, make_response, request, g, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask import Flask, render_template, request, url_for, redirect, flash
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
+from datetime import timedelta
 
+from extensions import db
 
+# Initialise Flask app
 app = Flask(__name__)
-login_manager = LoginManager(app)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
+app.config['SECRET_KEY'] = secrets.token_urlsafe(32)    # generates a random cryptographically secure key
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
+app.config['SESSION_COOKIE_SECURE'] = True  # HTTPS only
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent XSS
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # CSRF protection
 
-db = SQLAlchemy(app)
+# Initialise database
+db.init_app(app)
 
+# Configure Flask-Login
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+# Stops circular import
+from models import User
+
+# Load user for Flask-Login
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Create the database tables
+with app.app_context():
+    db.create_all()
+
+# Home route
 @app.route('/')
 def home():
     return render_template('home.html')
 
-# Define a User table schema
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
-    password = db.Column(db.String(200), nullable=True)
-
-    #constructor method
-    def __init__(self, email, name, password): 
-        self.email = email
-        self.name = name
-        self.password = password
-
-# Create the database tables from she
-with app.app_context():
-    db.create_all()
-
-#Helper function to store new user to database
-def admin_auth_register(email_input, name_input, password_input):
-    new_user = User(email=email_input, name=name_input, password=password_input)
-    db.session.add(new_user)
-    db.session.commit()
-
-#POST route to register user and GET to load HTML template
+# Register route
 @app.route('/register/', methods=['POST', 'GET'])
-def user_register():
-    if request.method == 'GET':
-        return render_template('register.html')
-    elif request.method == 'POST':
-        register_password = request.form.get('register-password')
-        register_name = request.form.get('register-name')
-        register_email = request.form.get('register-email')
+def register():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
 
-        hashed_password = generate_password_hash(register_password)
-        username_exists = User.query.filter(User.email == register_email).first()
+        user = User.query.filter_by(email=email).first()
 
-        if not username_exists:
-            admin_auth_register(register_email, register_name, hashed_password)
+        if user:
+            flash('Email address already exists', 'error')
+            return render_template('register.html')
+        # return render_template("register.html", error="A user already exists with that email!")
+        
+        new_user = User(email=email, name=name, password=generate_password_hash(password))
+        db.session.add(new_user)
+        db.session.commit()
 
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
+
+    return render_template("register.html")
     
+# Login route
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get('email')
+        password = request.form.get('password')
+        remember = True if request.form.get('remember') else False
+
+        existing_user = User.query.filter_by(email=email).first()
+
+        if not existing_user or not check_password_hash(existing_user.password, password):
+            flash('Invalid login details. Try again', 'error')
+            return redirect(url_for('login'))
+        
+        login_user(existing_user, remember=remember)
+        return render_template('dashboard.html', name=current_user.name)
+    
+    return render_template("login.html")
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
-
-@login_manager.user_loader
-def load_user(id):
-    return db.session.get(User, id)
-
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    if request.method == "GET":
-        return render_template('login.html')
-    elif request.method == "POST":
-        login_email = request.form['login-email']
-        login_password = request.form['login-password']
-
-        correct_user = User.query.filter(User.email == login_email).first()
-
-        if correct_user is not None and check_password_hash(correct_user.password, login_password):
-            login_user(correct_user)
-            return redirect(url_for('dashboard'))
-        else:
-            return render_template('home.html')
-
+    return render_template('dashboard.html', name=current_user.name)
 
 @app.route('/logout')
 @login_required
