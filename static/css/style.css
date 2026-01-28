@@ -1,7 +1,229 @@
-h1 {
-    color: green
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
-body{
-    background-color: lightcoral
+.home-title {
+    color: blue;
+    padding: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+}
+
+.home-directions {
+    color: green;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    padding: 50px;
+    height: 200px
+}
+
+body {
+    margin: 0;
+    padding-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-position: center;
+}
+
+.wrapper {
+    width: 420px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    border-radius: 10px;
+    padding: 30px 40px;
+}
+
+.wrapper h1{
+    font-size: 36px;
+    text-align: center;
+}
+
+.wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    background: rgb(137, 195, 162);;
+    margin: 30px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #fff;
+    padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder{
+    color: #fff;
+}
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 22px;
+    transform: translateY(-50%);
+    color: #ffffff;
+    pointer-events: none; /* Allows clicks to pass through the label to the input */
+    transition: all 0.3s ease; /* Smooth transition for the movement */
+  }
+
+.input-box input:focus ~ label,
+.input-box input:not(:placeholder-shown) ~ label {
+    top: 0; /* Moves the label to the top */
+    font-size: 12px; /* Makes the label smaller */
+    color: #ffffff; /* Changes label color */
+    transform: translateY(-9px); /* Adjust translateY based on your design for exact positioning above the input */
+    padding: 0 5px; /* Optional: adds padding to background */
+  }
+  
+  /* Optional: Change input border color on focus */
+  .input-box input:focus {
+    border-bottom-color: #00ffb7;
+  }
+
+.wrapper .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.remember-forgot label input {
+    accent-color: #fff;
+    margin-right: 3px;
+}
+
+.remember-forgot a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.wrapper .btn {
+    width: 100%;
+    height: 45px;
+    background: #fff;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    transition: all 0.5s ease;
+}
+
+.wrapper .btn:hover {
+    background: #1b1f48;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #cfd7d6;
+    font-weight: 600;
+}
+
+.wrapper .link {
+    font-size: 14.5px;
+    text-align: center;
+    margin: 20px 0 15px;
+}
+
+.link p a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link p a:hover {
+    text-decoration: underline;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1b1f48;
+    z-index: 1000;
+}
+
+nav a {
+    float: left;
+  }
+  
+nav a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: all 0.5s ease;
+  }
+  
+ nav a:hover {
+    background-color: #6e7193;
+    text-decoration: underline;
+  }
+
+body {
+    background-color: rgb(137, 195, 162);
+}
+
+.error{
+    color: white;
+    padding: 30px;
+    background-color: red;
+}
+
+.success {
+    color: white;
+    padding: 30px;
+    background-color: green;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden;
+    color: white;
+    background-color: #1b1f48;
+    z-index: 1000;
 }
