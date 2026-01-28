@@ -4,15 +4,35 @@ Create an account
 {% endblock %}
 
 {% block content %}
-    <h1>Create an account</h1>
-    <form method="POST" id="register-form">
-        <input type="text" name="register-email" placeholder="example@email.com">
-        <br><br>
-        <input type="text" name="register-name" placeholder="E.g. John Smith">
-        <br><br>
-        <input type="password" name="register-password" placeholder="Enter a password">
-        <br><br>
-        <button type="submit" id="register-button">Login</button>
-    </form>
-    <h4>Already have an account? Login <a href="{{ url_for('login')}}">here</a></h4>
+    <div class="wrapper">
+        <h1 class="title">Sign Up</h1>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="error">
+                {{ messages[0] }}. Go to <a href="/login">login page</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/register">
+            <div class="input-box">
+                <input type="email" name="email" placeholder="Email" autofocus="" required>
+                <i class='bx  bx-envelope'></i> 
+            </div>
+    
+            <div class="input-box">
+                <input type="text" name="name" placeholder="Name" autofocus="" required>
+                <i class='bx  bxs-user'></i>
+            </div>
+    
+            <div class="input-box">
+                <input type="password" name="password" placeholder="Password" required>
+                <i class='bx  bxs-lock-alt'></i>
+            </div>
+    
+            <button type="submit" class="btn">Sign up</button>
+            <div class="link">
+                <p>Already have an account? Login <a href="/login">here</a></p>
+            </div>
+            </form>
+    </div>
 {% endblock %}
