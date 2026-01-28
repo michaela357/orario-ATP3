@@ -6,22 +6,34 @@ Login
 {% block content %}
     <div class="wrapper">
         <h1 class="title">Login</h1>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
+        {% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
             <div class="error">
-                {{ messages[0] }}
+                {{ errors[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        {% with successes = get_flashed_messages(category_filter=["success"]) %}
+        {% if successes %}
+            <div class="success">
+                {{ successes[0] }}
             </div>
         {% endif %}
         {% endwith %}
         <form method="POST" action="/login">
             <div class="input-box">
-                <input type="email" name="email" placeholder="Email" autofocus="" required>
-                <i class='bx  bx-envelope'></i> 
+                <input id="email" type="email" name="email" placeholder="" autofocus="" required>
+                <label for='email'>Email</label>
+                <i class='bx  bx-envelope'></i>
             </div>
+
             <div class="input-box">
-                <input type="password" name="password" placeholder="Password" required>
+                <input id="password" type="password" name="password" placeholder="" required>
+                <label for='password'>Password</label>
                 <i class='bx  bxs-lock-alt'></i>
             </div>
+            
             <div class="remember-forgot">
                 <label class="checkbox">
                     <input type="checkbox" name="remember">

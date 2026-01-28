@@ -52,12 +52,11 @@ def register():
         if user:
             flash('Email address already exists', 'error')
             return render_template('register.html')
-        # return render_template("register.html", error="A user already exists with that email!")
         
         new_user = User(email=email, name=name, password=generate_password_hash(password))
         db.session.add(new_user)
         db.session.commit()
-
+        flash('Registration successful! Login:', 'success')
         return redirect(url_for("login"))
 
     return render_template("register.html")
