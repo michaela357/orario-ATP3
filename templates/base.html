@@ -5,7 +5,31 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/o_logo.png') }}">
     <title>{% block title %} {% endblock %}</title>
     <link rel="stylesheet" type="text/css" href = "{{ url_for('static', filename='/css/style.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
+<nav>
+    <a href="{{ url_for('home') }}" class="navbar-item">
+        Home
+    </a>
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('dashboard') }}" class="navbar-item">
+        Dashboard
+    </a>
+    {% endif %}
+    {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('login') }}" class="navbar-item">
+        Login
+    </a>
+    <a href="{{ url_for('register') }}" class="navbar-item">
+        Sign Up
+    </a>
+    {% endif %}
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('logout') }}" class="navbar-item">
+        Logout
+    </a>
+    {% endif %}
+</nav>
 <body>
     {% block content %}
     {% endblock %}
