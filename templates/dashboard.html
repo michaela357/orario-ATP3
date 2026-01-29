@@ -4,5 +4,16 @@ Dashboard
 {% endblock %}
 
 {% block content %}
-<h1>Welcome, {{ name }}!</h1>
+<div class="welcome-title">
+    <h1>Welcome, {{ name }}!</h1>
+    <div class="clock-container">
+        <p>Current Time:</p>
+        <time id="current-time"></time>
+        <input type="radio" id="24-hr" name="time-setting">
+        <label for="24-hr">24-hour time</label><br>
+        <input type="radio" id="12-hr" name="time-setting" checked>
+        <label for="12-hr">12-hour time</label><br><br>
+    </div>
+    <script src="../static/js/display_time.js"></script>
+</div>
 {% endblock %}
