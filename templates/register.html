@@ -6,6 +6,7 @@ Create an account
 {% block content %}
     <div class="wrapper">
         <h1 class="title">Sign Up</h1>
+        <!-- Display any error messages -->
         {% with errors = get_flashed_messages(category_filter=["error"]) %}
         {% if errors %}
             <div class="error">
@@ -13,7 +14,7 @@ Create an account
             </div>
         {% endif %}
         {% endwith %}
-
+    <!-- Display any success messages -->
         {% with successes = get_flashed_messages(category_filter=["success"]) %}
         {% if successes %}
             <div class="success">
