@@ -83,16 +83,16 @@ def register():
                 return jsonify({'success': False, 'error': 'Password too short'}), 400
         
             elif re.search(r"[a-z]", password) == None:
-                return jsonify({'success': False, 'error': 'Passoword does not meet requirements'}), 400
+                return jsonify({'success': False, 'error': 'Password does not meet requirements'}), 400
         
             elif re.search(r"[A-Z]", password) == None:
-                return jsonify({'success': False, 'error': 'Passoword must contain a capital letter'}), 400
+                return jsonify({'success': False, 'error': 'Password must contain a capital letter'}), 400
         
             elif re.search(r"[0-9]", password) == None:
-                return jsonify({'success': False, 'error': 'Passoword must contain a digit'}), 400
+                return jsonify({'success': False, 'error': 'Password must contain a digit'}), 400
         
             elif re.search(r"[!@#$%^&*]", password) == None:
-                return jsonify({'success': False, 'error': 'Passoword must contain a special character'}), 400
+                return jsonify({'success': False, 'error': 'Password must contain a special character'}), 400
 
             else:
                 issvalid = 1
