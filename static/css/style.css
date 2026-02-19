@@ -250,16 +250,26 @@ body {
 }
 
 .error{
-    color: white;
-    padding: 30px;
-    background-color: red;
+    display: none;
+    color: red;
+    background-color: #fce4e4;
+    border: 1px solid #fcc2c2;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
 }
 
 .success {
-    color: white;
-    padding: 30px;
-    background-color: green;
+    display: none;
+    color: rgb(12, 114, 12);
+    background-color: #e4fcee;
+    border: 1px solid #c2fcd3;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
 }
+
+
 
 footer {
     position: fixed;

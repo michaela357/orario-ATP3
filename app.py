@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, flash
+from flask import Flask, render_template, request, url_for, redirect, flash, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
@@ -45,7 +45,7 @@ def home():
 @app.route('/register/', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
-        name = request.form.get('name')
+        name = html.escape(request.form.get('name'))
         email = html.escape(request.form.get('email'))
         password = request.form.get('password')
 
@@ -80,24 +80,19 @@ def register():
 
         while issvalid == 0:
             if len(password) < 8 or len(password) > 64:
-                flash('Password must be between 8 and 64 characters long', 'error')
-                return render_template('register.html')
+                return jsonify({'success': False, 'error': 'Password too short'}), 400
         
             elif re.search(r"[a-z]", password) == None:
-                flash("Password must contain at least one lowercase letter", 'error')
-                return render_template('register.html')
+                return jsonify({'success': False, 'error': 'Passoword does not meet requirements'}), 400
         
             elif re.search(r"[A-Z]", password) == None:
-                flash("Password must contain at least one uppercase letter", 'error')
-                return render_template('register.html')
+                return jsonify({'success': False, 'error': 'Passoword must contain a capital letter'}), 400
         
             elif re.search(r"[0-9]", password) == None:
-                flash("Password must contain at least one digit", 'error')
-                return render_template('register.html')
+                return jsonify({'success': False, 'error': 'Passoword must contain a digit'}), 400
         
             elif re.search(r"[!@#$%^&*]", password) == None:
-                flash("Password must contain at least one special character", 'error')
-                return render_template('register.html')
+                return jsonify({'success': False, 'error': 'Passoword must contain a special character'}), 400
 
             else:
                 issvalid = 1
