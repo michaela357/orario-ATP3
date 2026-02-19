@@ -5,6 +5,7 @@ Create an account
 
 {% block content %}
     <div class="wrapper">
+        <div id="error-message" class="error"></div>
         <h1 class="title">Sign Up</h1>
         <!-- Display any error messages -->
         {% with errors = get_flashed_messages(category_filter=["error"]) %}
@@ -40,6 +41,17 @@ Create an account
                 <label for='password'>Password</label>
                 <i class='bx  bxs-lock-alt'></i>
             </div>
+
+            <ul id="password-requirements" style="list-style: none; font-size: 0.8em; color: gray;">
+                <li id="length">✖ 8-64 characters</li>
+                <li id="uppercase">✖ One uppercase letter</li>
+                <li id="number">✖ One digit</li>
+                <li id="special">✖ One special character (!@#$%^&*)</li>
+            </ul>
+
+            <br>
+            
+            <script src="../static/js/input_validation.js"></script>
     
             <button type="submit" class="btn">Sign up</button>
             <div class="link">
