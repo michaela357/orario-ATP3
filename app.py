@@ -58,6 +58,11 @@ def register():
         name.lower()
         cleaned_name = name.replace('\x00', '')
 
+        if not re.match(r"^[a-zA-Z0-9+!+#]+(?:[._-][a-zA-Z0-9+!+#]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$", email):
+            return jsonify({'success': False, 'error': 'Invalid email format'}), 400
+        if email == "":
+            return jsonify({'success': False, 'error': 'Must enter an email!'}), 400
+
         # Use regex to remove any potential dangerous substrings
         dangerous_patterns = [r'onload', 
                             r'onerror', 
@@ -104,7 +109,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         flash('Registration successful! Login:', 'success')
-        return redirect(url_for("login"))
+        return jsonify({"success": True, "redirect": "/login"}), 200
 
     return render_template("register.html")
     
@@ -119,8 +124,7 @@ def login():
         existing_user = User.query.filter_by(email=email).first()
 
         if not existing_user or not check_password_hash(existing_user.password, password):
-            flash('Invalid login details. Try again', 'error')
-            return redirect(url_for('login'))
+            return jsonify({'success': False, 'error': 'Invalid login details'}), 400
         
         login_user(existing_user, remember=remember)
         return render_template('dashboard.html', name=current_user.name)
