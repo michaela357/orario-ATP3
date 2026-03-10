@@ -21,6 +21,17 @@ function updateRequirements() {
             item.element.innerHTML = `✖ ${item.element.innerText.slice(2)}`;
         }
     }
+    if (Object.values(requirements).every(item => item.re.test(value))) {
+        const successBox = document.getElementById('success-message')
+        successBox.innerText = 'Valid password!';
+        successBox.style.display = 'block';
+        successBox.style.opacity = '100';
+        setTimeout(() => {
+            successBox.style.opacity = '0';
+            setTimeout(() => { successBox.style.display = 'none'; }, 3000);
+        }, 10000);
+
+    }
 };
 
 document.querySelector('form').addEventListener('submit', async (e) => {
@@ -37,8 +48,13 @@ document.querySelector('form').addEventListener('submit', async (e) => {
         const errorBox = document.getElementById('error-message')
         errorBox.innerText = result.error;
         errorBox.style.display = 'block';
+        errorBox.style.opacity = '100';
+        setTimeout(() => {
+            errorBox.style.opacity = '0';
+            setTimeout(() => { errorBox.style.display = 'none'; }, 500);
+        }, 10000);
     } else {
-        window.location.href = '/login'; // Only reload if successful
+        window.location.href = '/dashboard'; // Only reload if successful
     }
 });
 

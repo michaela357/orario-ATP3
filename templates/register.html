@@ -6,6 +6,7 @@ Create an account
 {% block content %}
     <div class="wrapper">
         <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
         <h1 class="title">Sign Up</h1>
         <!-- Display any error messages -->
         {% with errors = get_flashed_messages(category_filter=["error"]) %}
