@@ -252,6 +252,7 @@ body {
 .error{
     display: none;
     color: red;
+    transition: opacity 0.5s ease;
     background-color: #fce4e4;
     border: 1px solid #fcc2c2;
     padding: 10px;
@@ -261,6 +262,7 @@ body {
 
 .success {
     display: none;
+    transition: opacity 0.5s ease;
     color: rgb(12, 114, 12);
     background-color: #e4fcee;
     border: 1px solid #c2fcd3;
