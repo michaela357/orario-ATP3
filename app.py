@@ -55,13 +55,7 @@ def register():
             return jsonify({'success': False, 'error': 'Email address already exists'}), 400
 
         
-        name.lower()
-        cleaned_name = name.replace('\x00', '')
-
-        if not re.match(r"^[a-zA-Z0-9+!+#]+(?:[._-][a-zA-Z0-9+!+#]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$", email):
-            return jsonify({'success': False, 'error': 'Invalid email format'}), 400
-        if email == "":
-            return jsonify({'success': False, 'error': 'Must enter an email!'}), 400
+        cleaned_name = name.lower().replace('\x00', '')
 
         # Use regex to remove any potential dangerous substrings
         dangerous_patterns = [r'onload', 
@@ -81,7 +75,10 @@ def register():
 
         sanitised_name = html.escape(cleaned_name) # in case any HTML tags remain, escape them
 
-        issvalid = 0 # flag to see whether a valid password has been provided
+        if not re.match(r"^[a-zA-Z0-9+!+#]+(?:[._-][a-zA-Z0-9+!+#]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$", email):
+            return jsonify({'success': False, 'error': 'Invalid email format'}), 400
+        if email == "":
+            return jsonify({'success': False, 'error': 'Must enter an email!'}), 400
 
         if len(password) < 8 or len(password) > 64:
             return jsonify({'success': False, 'error': 'Password too short'}), 400
@@ -98,14 +95,19 @@ def register():
         elif re.search(r"[!@#$%^&*]", password) == None:
             return jsonify({'success': False, 'error': 'Password must contain a special character'}), 400
 
-        sanitised_name.split()
-    
+        sanitised_name = html.escape(cleaned_name)
+        name_parts = sanitised_name.split()
+        first_name = name_parts[0] if name_parts else "User"
 
-        new_user = User(email=email, name=sanitised_name[0], password=generate_password_hash(password))
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Registration successful! Login:', 'success')
-        return jsonify({"success": True, "redirect": "/login"}), 200
+        # Implement try / except to catch any database errors
+        try:
+            new_user = User(email=email, name=first_name.capitalize, password=generate_password_hash(password))
+            db.session.add(new_user)
+            db.session.commit()
+            return jsonify({"success": True, "redirect": "/login"}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"success": False, "error": "Database error"}), 500
 
     return render_template("register.html")
     
