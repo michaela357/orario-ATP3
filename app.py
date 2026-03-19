@@ -52,8 +52,8 @@ def register():
         user = User.query.filter_by(email=email).first()
 
         if user:
-            flash('Email address already exists', 'error')
-            return render_template('register.html')
+            return jsonify({'success': False, 'error': 'Email address already exists'}), 400
+
         
         name.lower()
         cleaned_name = name.replace('\x00', '')
@@ -83,24 +83,20 @@ def register():
 
         issvalid = 0 # flag to see whether a valid password has been provided
 
-        while issvalid == 0:
-            if len(password) < 8 or len(password) > 64:
-                return jsonify({'success': False, 'error': 'Password too short'}), 400
+        if len(password) < 8 or len(password) > 64:
+            return jsonify({'success': False, 'error': 'Password too short'}), 400
         
-            elif re.search(r"[a-z]", password) == None:
-                return jsonify({'success': False, 'error': 'Password does not meet requirements'}), 400
+        elif re.search(r"[a-z]", password) == None:
+            return jsonify({'success': False, 'error': 'Password does not meet requirements'}), 400
         
-            elif re.search(r"[A-Z]", password) == None:
-                return jsonify({'success': False, 'error': 'Password must contain a capital letter'}), 400
+        elif re.search(r"[A-Z]", password) == None:
+            return jsonify({'success': False, 'error': 'Password must contain a capital letter'}), 400
         
-            elif re.search(r"[0-9]", password) == None:
-                return jsonify({'success': False, 'error': 'Password must contain a digit'}), 400
+        elif re.search(r"[0-9]", password) == None:
+            return jsonify({'success': False, 'error': 'Password must contain a digit'}), 400
         
-            elif re.search(r"[!@#$%^&*]", password) == None:
-                return jsonify({'success': False, 'error': 'Password must contain a special character'}), 400
-
-            else:
-                issvalid = 1
+        elif re.search(r"[!@#$%^&*]", password) == None:
+            return jsonify({'success': False, 'error': 'Password must contain a special character'}), 400
 
         sanitised_name.split()
     
