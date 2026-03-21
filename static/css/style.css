@@ -7,11 +7,22 @@
     font-family: "Poppins", sans-serif;
 }
 
+body {
+    background-color: #f4f7f6; /* Clean background for better readability */
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px; /* Space for fixed nav */
+}
+
 .home-title {
-    color: blue;
-    padding: 50px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 40px;
+    color: #1b1f48;
+    padding: 40px;
+    border: 2px solid #1b1f48; /* Professional solid border */
+    border-radius: 20px;
+    margin-bottom: 20px;
 }
 
 .welcome-title {
@@ -23,15 +34,14 @@
 
 .welcome-title .clock-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
     justify-content: space-evenly;
-    text-align: center;
-    padding: 20px;
-    border: 2px solid #110475;
-    border-radius: 10px;
-    background-color: #00ffb7;
-    color: rgb(0, 0, 0);
+    align-items: center;
+    padding: 25px;
+    border: none;
+    border-radius: 15px;
+    background-color: #1b1f48; /* Matching the Nav */
+    color: #00ffb7;           /* Neon accent text */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
 .welcome-title .clock-container div {
@@ -41,16 +51,17 @@
 
 #current-time {
     font-size: 3rem;
-    font-weight: bold;
-    color: #110475;
+    font-weight: 800;
+    color: #00ffb7;
 }
 
 .home-directions {
-    color: green;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 40px;
-    padding: 50px;
-    height: 200px
+    color: #444;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 body {
@@ -65,26 +76,28 @@ body {
 
 .wrapper {
     width: 420px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    color: #fff;
-    border-radius: 10px;
-    padding: 30px 40px;
+    background: white;
+    border: 1px solid #eee;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    color: #333;
+    border-radius: 20px;
+    padding: 40px;
 }
 
 .wrapper h1{
     font-size: 36px;
     text-align: center;
+    color: #1b1f48;
+    font-weight: 700;
 }
 
 .wrapper .input-box {
     position: relative;
     width: 100%;
     height: 50px;
-    background: rgb(137, 195, 162);;
-    margin: 30px 0;
+    background: #f0f2f1;
+    border-radius: 40px;
+    margin: 25px 0;
 }
 
 .input-box input {
@@ -96,12 +109,13 @@ body {
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 40px;
     font-size: 16px;
-    color: #fff;
     padding: 20px 45px 20px 20px;
+    color: #333;
+    border: 2px solid transparent;
 }
 
 .input-box input::placeholder{
-    color: #fff;
+    color: #1b1f48;
 }
 
 .input-box i {
@@ -117,18 +131,18 @@ body {
     top: 50%;
     left: 22px;
     transform: translateY(-50%);
-    color: #ffffff;
+    color: #777;
     pointer-events: none; /* Allows clicks to pass through the label to the input */
     transition: all 0.3s ease; /* Smooth transition for the movement */
   }
 
 .input-box input::placeholder {
-    color: white;
+    color: #1b1f48;
     opacity: 0;
   }
 
 .input-box input:focus::placeholder {
-    color: white;
+    color: #1b1f48;
     opacity: 0.7;
 }
 
@@ -136,7 +150,7 @@ body {
 .input-box input:not(:placeholder-shown) ~ label {
     top: 0;
     font-size: 12px;
-    color: #ffffff;
+    color: #1b1f48;
     transform: translateY(-9px);
     padding: 0 5px;
   }
@@ -176,26 +190,29 @@ body {
 .wrapper .btn {
     width: 100%;
     height: 45px;
-    background: #fff;
     border: none;
     outline: none;
     border-radius: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    
     font-size: 16px;
-    color: #333;
     font-weight: 600;
-    transition: all 0.5s ease;
+
+    background: #1b1f48;
+    color: white;
+    transition: transform 0.2s ease;
 }
 
 .wrapper .btn:hover {
-    background: #1b1f48;
     border: none;
     outline: none;
     border-radius: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    color: #cfd7d6;
     font-weight: 600;
+    background: #2a2f6a;
+    color: #00ffb7; /* Text turns mint on hover */
+    transform: translateY(-2px);
 }
 
 .wrapper .link {
@@ -244,10 +261,6 @@ nav a {
     background-color: #6e7193;
     text-decoration: underline;
   }
-
-body {
-    background-color: rgb(137, 195, 162);
-}
 
 .error{
     display: none;
