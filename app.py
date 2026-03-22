@@ -101,7 +101,7 @@ def register():
 
         # Implement try / except to catch any database errors
         try:
-            new_user = User(email=email, name=first_name.capitalize, password=generate_password_hash(password))
+            new_user = User(email=email, name=first_name.capitalize(), password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
             return jsonify({"success": True, "redirect": "/login"}), 200
