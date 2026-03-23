@@ -125,7 +125,7 @@ def login():
             return jsonify({'success': False, 'error': 'Invalid login details'}), 400
         
         login_user(existing_user, remember=remember)
-        return render_template('dashboard.html', name=current_user.name)
+        return jsonify({"success": True, "redirect": "/dashboard"}), 200
     
     return render_template("login.html")
 
