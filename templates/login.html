@@ -6,22 +6,8 @@ Login
 {% block content %}
     <div class="wrapper">
         <h1 class="title">Login</h1>
-    <!-- Display any error messages -->
-        {% with errors = get_flashed_messages(category_filter=["error"]) %}
-        {% if errors %}
-            <div class="error">
-                {{ errors[0] }}
-            </div>
-        {% endif %}
-        {% endwith %}
-    <!-- Display any success messages -->
-        {% with successes = get_flashed_messages(category_filter=["success"]) %}
-        {% if successes %}
-            <div class="success">
-                {{ successes[0] }}
-            </div>
-        {% endif %}
-        {% endwith %}
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
         
         <form method="POST" action="/login">
             <div class="input-box">
