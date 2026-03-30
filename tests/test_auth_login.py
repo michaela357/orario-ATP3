@@ -67,8 +67,8 @@ def test_unsuccessful_login(client):
         - If a success json response is false
     """
     response = client.post('/login', data={
-        'email': 'test@email.com',
-        'password': 'wrongpassword'
+        'email': 'unregistered_user@email.com',
+        'password': 'NotARealPassword123!'
     })
     
     data = response.get_json()
