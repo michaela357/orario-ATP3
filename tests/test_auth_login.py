@@ -46,7 +46,24 @@ class TestUserLogin(unittest.TestCase):
         self.assertEqual(data['redirect'], '/dashboard')
         
         with self.client.session_transaction() as sess:
-            self.assertIn('_user_id', sess) 
+            self.assertIn('_user_id', sess)
+
+    def test_unsuccessful_login(self):
+        """
+        Test that login is unsuccessful with an unregistered user
+        Asserts that:
+            - Response is not successful (400)
+            - The user is not redirected to the dashboard
+            - If a success json response is false
+        """
+        response = self.client.post('/login', data={
+            'email': 'test@email.com',
+            'password': 'wrongpassword'
+        })
+        
+        data = response.get_json()
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(data['success'])
 
 if __name__ == '__main__':
     unittest.main()
