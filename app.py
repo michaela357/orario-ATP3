@@ -97,11 +97,16 @@ def register():
 
         sanitised_name = html.escape(cleaned_name)
         name_parts = sanitised_name.split()
-        first_name = name_parts[0] if name_parts else "User"
+
+        final_name = ''
+
+        for name in name_parts:
+            newname = name.capitalize()
+            final_name += newname + ' '
 
         # Implement try / except to catch any database errors
         try:
-            new_user = User(email=email, name=first_name.capitalize(), password=generate_password_hash(password))
+            new_user = User(email=email, name=final_name.strip(), password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
             return jsonify({"success": True, "redirect": "/login"}), 200
@@ -132,7 +137,8 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', name=current_user.name)
+    first_name = current_user.name.split()[0]
+    return render_template('dashboard.html', name=first_name)
 
 @app.route('/logout')
 @login_required
