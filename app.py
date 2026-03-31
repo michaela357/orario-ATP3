@@ -42,7 +42,7 @@ def home():
     return render_template('home.html')
 
 # Register route
-@app.route('/register/', methods=['POST', 'GET'])
+@app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         name = html.escape(request.form.get('name'))
@@ -75,10 +75,13 @@ def register():
 
         sanitised_name = html.escape(cleaned_name) # in case any HTML tags remain, escape them
 
+        if not email:
+            return jsonify({'success': False, 'error': 'Must enter an email!'}), 400
         if not re.match(r"^[a-zA-Z0-9+!+#]+(?:[._-][a-zA-Z0-9+!+#]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$", email):
             return jsonify({'success': False, 'error': 'Invalid email format'}), 400
-        if email == "":
-            return jsonify({'success': False, 'error': 'Must enter an email!'}), 400
+
+        if not password:
+            return jsonify({'success': False, 'error': 'Password is required'}), 400
 
         if len(password) < 8 or len(password) > 64:
             return jsonify({'success': False, 'error': 'Password too short'}), 400
