@@ -42,7 +42,7 @@ def home():
     return render_template('home.html')
 
 # Register route
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/register/', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         name = html.escape(request.form.get('name'))

@@ -29,7 +29,7 @@ def test_register_success(client):
         - The response returns the correct status code (200)
         - The user is redirected to the login page
     """
-    response = client.post('/register', data={
+    response = client.post('/register/', data={
         'email': 'test@email.com.au',
         'name' : 'John Smith',
         'password' : 'Correctpassword123!'
@@ -54,7 +54,7 @@ def test_unsuccessful_register(client):
         - Check that success is returned as False in the response
         - Make sure that there is no redirect (i.e. unauthorised access)
     """
-    response = client.post('/register', data={
+    response = client.post('/register/', data={
         'email': 'test2@email.com.au',
         'name' : 'John Smith',
         'password' : 'wrongpassword' # Fails Regex
