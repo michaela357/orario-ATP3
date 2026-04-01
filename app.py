@@ -140,9 +140,6 @@ def login():
         if not existing_user or not check_password_hash(existing_user.password, password):
             return jsonify({'success': False, 'error': 'Invalid login details'}), 400
         
-        print("FORM:", request.form)
-        print("HEADERS:", request.headers)
-        
         login_user(existing_user, remember=remember)
         return jsonify({"success": True, "redirect": "/dashboard"}), 200
     
@@ -154,10 +151,11 @@ def dashboard():
     first_name = current_user.name.split()[0]
     return render_template('dashboard.html', name=first_name)
 
-@app.route('/logout')
+@app.route('/logout', methods=["POST"])
 @login_required
 def logout():
     logout_user()
+    session.clear()
     return redirect(url_for('home'))
 
 if __name__ == "__main__":
