@@ -135,12 +135,12 @@ body {
     color: #777;
     pointer-events: none; /* Allows clicks to pass through the label to the input */
     transition: all 0.3s ease; /* Smooth transition for the movement */
-  }
+}
 
 .input-box input::placeholder {
     color: #1b1f48;
     opacity: 0;
-  }
+}
 
 .input-box input:focus::placeholder {
     color: #1b1f48;
@@ -154,12 +154,12 @@ body {
     color: #1b1f48;
     transform: translateY(-9px);
     padding: 0 5px;
-  }
+}
   
-  /* Optional: Change input border color on focus */
-  .input-box input:focus {
+
+.input-box input:focus {
     border-bottom-color: #00ffb7;
-  }
+}
 
 .wrapper .remember-forgot {
     display: flex;
@@ -244,24 +244,26 @@ nav {
     background-color: #1b1f48;
     z-index: 1000;
 }
-
-nav a {
-    float: left;
-  }
   
-nav a {
+nav a, nav button {
+    float: left;
+    background-color: #1b1f48;
     display: block;
     color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
     transition: all 0.5s ease;
-  }
-  
- nav a:hover {
+}
+
+nav button {
+    float: right;
+}
+
+ nav a:hover, nav button:hover {
     background-color: #6e7193;
     text-decoration: underline;
-  }
+}
 
 .error{
     display: none;
