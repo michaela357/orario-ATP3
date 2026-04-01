@@ -36,10 +36,15 @@ function updateRequirements() {
 
 document.querySelector('form').addEventListener('submit', async (e) => {
     e.preventDefault();
-
+    
     const formData = new FormData(e.target);
+    const csrfToken = formData.get('csrf_token');
+    
     const response = await fetch('/register/', {
         method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
         body: formData
     });
 
@@ -54,7 +59,7 @@ document.querySelector('form').addEventListener('submit', async (e) => {
             setTimeout(() => { errorBox.style.display = 'none'; }, 500);
         }, 10000);
     } else {
-        window.location.href = '/dashboard'; // Only reload if successful
+        window.location.href = '/login'; // Only reload if successful
     }
 });
 

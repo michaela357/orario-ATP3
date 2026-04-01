@@ -2,8 +2,13 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
+    const csrfToken = formData.get('csrf_token');
+
     const response = await fetch('/login', {
         method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
         body: formData
     });
 
