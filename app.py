@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, url_for, redirect, flash, jsonify
+from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 import html
@@ -10,6 +11,7 @@ from extensions import db
 
 # Initialise Flask app
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = secrets.token_urlsafe(32)    # generates a random cryptographically secure key
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
@@ -40,6 +42,11 @@ with app.app_context():
 @app.route('/')
 def home():
     return render_template('home.html')
+
+# Custom error response
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return jsonify({"success": False, "error": f"CSRF Error: {e.description}"}), 400
 
 # Register route
 @app.route('/register/', methods=['POST', 'GET'])
@@ -112,6 +119,7 @@ def register():
             new_user = User(email=email, name=final_name.strip(), password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
+            session.clear()
             return jsonify({"success": True, "redirect": "/login"}), 200
         except Exception as e:
             db.session.rollback()
