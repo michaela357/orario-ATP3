@@ -140,6 +140,9 @@ def login():
         if not existing_user or not check_password_hash(existing_user.password, password):
             return jsonify({'success': False, 'error': 'Invalid login details'}), 400
         
+        print("FORM:", request.form)
+        print("HEADERS:", request.headers)
+        
         login_user(existing_user, remember=remember)
         return jsonify({"success": True, "redirect": "/dashboard"}), 200
     
