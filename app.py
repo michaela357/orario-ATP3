@@ -80,8 +80,6 @@ def register():
         for pattern in dangerous_patterns:
             cleaned_name = re.sub(pattern, '', cleaned_name)
 
-        sanitised_name = html.escape(cleaned_name) # in case any HTML tags remain, escape them
-
         if not email:
             return jsonify({'success': False, 'error': 'Must enter an email!'}), 400
         if not re.match(r"^[a-zA-Z0-9+!+#]+(?:[._-][a-zA-Z0-9+!+#]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$", email):
@@ -159,5 +157,5 @@ def logout():
     return redirect(url_for('home'))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, ssl_context='adhoc')
 
