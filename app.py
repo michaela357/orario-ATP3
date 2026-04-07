@@ -121,7 +121,7 @@ def register():
             return jsonify({"success": True, "redirect": "/login"}), 200
         except Exception as e:
             db.session.rollback()
-            return jsonify({"success": False, "error": "Database error"}), 500
+            return jsonify({"success": False, "error": "An unexpected error occurred"}), 500
 
     return render_template("register.html")
     
