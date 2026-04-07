@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, session
+from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, session, make_response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -154,7 +154,11 @@ def dashboard():
 def logout():
     logout_user()
     session.clear()
-    return redirect(url_for('home'))
+    response = make_response(redirect(url_for('login'))) 
+    
+    response.set_cookie('remember_token', '', expires=0)
+    
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True, ssl_context='adhoc')
