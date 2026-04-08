@@ -1,28 +1,11 @@
-document.querySelector('form').addEventListener('submit', async (e) => {
+document.querySelector('#login-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
-    const csrfToken = formData.get('csrf_token');
+    const result = await postForm('/login', e.target);
 
-    const response = await fetch('/login', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        body: formData
-    });
-
-    const result = await response.json();
-    if (result.error) {
-        const errorBox = document.getElementById('error-message')
-        errorBox.innerText = result.error;
-        errorBox.style.display = 'block';
-        errorBox.style.opacity = '100';
-        setTimeout(() => {
-            errorBox.style.opacity = '0';
-            setTimeout(() => { errorBox.style.display = 'none'; }, 500);
-        }, 10000);
+    if (!result.success) {
+        showError(result.error);
     } else {
-        window.location.href = '/dashboard'; // Only reload if successful
+        window.location.href = result.redirect;
     }
 });
