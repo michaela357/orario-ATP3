@@ -12,7 +12,7 @@
     <a href="{{ url_for('dashboard') }}" class="navbar-item">
         Dashboard
     </a>
-    <form action="{{ url_for('logout') }}" method="POST">
+    <form id='logout-form' action="{{ url_for('logout') }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit" class="logout-btn">Logout</button>
     </form>
@@ -32,5 +32,9 @@
 <body>
     {% block content %}
     {% endblock %}
+    <script src = "../static/js/api.js"></script>
+    <script src = "../static/js/logout_validation.js"></script>
 </body>
+<div id="error-message" class="error"></div>
+<div id="success-message" class="success"></div>
 </html>
