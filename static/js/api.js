@@ -35,6 +35,7 @@ function showError(message) {
 
     errorBox.innerText = message;
     errorBox.style.display = 'block';
+    errorBox.style.opacity = '1'
     setTimeout(() => {
         errorBox.style.opacity = '0';
         setTimeout(() => { errorBox.style.display = 'none'; }, 500);
@@ -47,6 +48,7 @@ function showSuccess(message) {
 
     successBox.innerText = message;
     successBox.style.display = 'block';
+    successBox.style.opacity = '1'
     setTimeout(() => {
         successBox.style.opacity = '0';
         setTimeout(() => { successBox.style.display = 'none'; }, 500);
