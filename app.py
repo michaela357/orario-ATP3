@@ -152,7 +152,15 @@ def dashboard():
 @login_required
 def logout():
     logout_user()
-    return jsonify({"success": True, "redirect": "/login"})
+    session.clear()
+    
+    response = make_response(jsonify({"success": True, "redirect": "/login"}))
+    
+    # Remove session token and remember token when user logs out
+    response.set_cookie('remember_token', '', expires=0)
+    response.set_cookie('session', '', expires=0)
+
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True, ssl_context='adhoc')
