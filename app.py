@@ -117,7 +117,6 @@ def register():
             new_user = User(email=email, name=final_name.strip(), password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
-            session.clear()
             return jsonify({"success": True, "redirect": "/login"}), 200
         except Exception as e:
             db.session.rollback()
@@ -153,12 +152,7 @@ def dashboard():
 @login_required
 def logout():
     logout_user()
-    session.clear()
-    response = make_response(redirect(url_for('login'))) 
-    
-    response.set_cookie('remember_token', '', expires=0)
-    
-    return response
+    return jsonify({"success": True, "redirect": "/login"})
 
 if __name__ == "__main__":
     app.run(debug=True, ssl_context='adhoc')
