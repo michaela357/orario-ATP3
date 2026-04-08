@@ -273,7 +273,10 @@ nav button {
     border: 1px solid #fcc2c2;
     padding: 10px;
     border-radius: 5px;
-    margin-bottom: 15px;
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    margin:0%;
 }
 
 .success {
@@ -284,7 +287,10 @@ nav button {
     border: 1px solid #c2fcd3;
     padding: 10px;
     border-radius: 5px;
-    margin-bottom: 15px;
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    margin:0%;
 }
 
 
