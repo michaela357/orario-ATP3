@@ -54,3 +54,10 @@ function showSuccess(message) {
         setTimeout(() => { successBox.style.display = 'none'; }, 500);
     }, 6000);
 }
+
+// check if page was loaded from cache
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
