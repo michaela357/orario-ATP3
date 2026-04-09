@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, url_for, redirect, flash, jsonify
+from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, session, make_response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 import html
@@ -10,6 +11,7 @@ from extensions import db
 
 # Initialise Flask app
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = secrets.token_urlsafe(32)    # generates a random cryptographically secure key
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
@@ -40,6 +42,15 @@ with app.app_context():
 @app.route('/')
 def home():
     return render_template('home.html')
+
+# Custom error response
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return jsonify({"success": False, "error": f"CSRF Error: {e.description}"}), 400
+
+@app.errorhandler(404)
+def page_not_found_error(e):
+    return render_template("404.html", error_message=e.description), 404
 
 # Register route
 @app.route('/register/', methods=['POST', 'GET'])
@@ -72,8 +83,6 @@ def register():
         # Replace dangerous substrings with an empty string, case insensitive
         for pattern in dangerous_patterns:
             cleaned_name = re.sub(pattern, '', cleaned_name)
-
-        sanitised_name = html.escape(cleaned_name) # in case any HTML tags remain, escape them
 
         if not email:
             return jsonify({'success': False, 'error': 'Must enter an email!'}), 400
@@ -115,7 +124,7 @@ def register():
             return jsonify({"success": True, "redirect": "/login"}), 200
         except Exception as e:
             db.session.rollback()
-            return jsonify({"success": False, "error": "Database error"}), 500
+            return jsonify({"success": False, "error": "An unexpected error occurred"}), 500
 
     return render_template("register.html")
     
@@ -143,12 +152,20 @@ def dashboard():
     first_name = current_user.name.split()[0]
     return render_template('dashboard.html', name=first_name)
 
-@app.route('/logout')
+@app.route('/logout', methods=["POST"])
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    session.clear()
+    
+    response = make_response(jsonify({"success": True, "redirect": "/login"}))
+    
+    # Remove session token and remember token when user logs out
+    response.set_cookie('remember_token', '', expires=0)
+    response.set_cookie('session', '', expires=0)
+
+    return response
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, ssl_context='adhoc')
 
