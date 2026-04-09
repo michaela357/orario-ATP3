@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Error 404
+{% endblock %}
+{% block content %}
+<div class="wrapper">
+    <h1 class="title">Error 404- Page not found</h1>
+    <br>
+    <div id="error-message" class="error">{{ error_message }}</div>
+    <br>
+    <br>
+    <button class="btn" onclick="window.location.href = '/login'">Back to login</button>
+</div>
+
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+
+<script>
+    const serverErrorMessage = "{{ error_message }}";
+
+    showError(serverErrorMessage);
+</script>
+{% endblock %}
