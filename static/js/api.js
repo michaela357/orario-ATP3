@@ -29,6 +29,19 @@ async function postForm(url, form) {
     return result;
 }
 
+async function getPage(url) {
+    const response = await fetch(url, {
+        method: 'GET',
+    });
+    
+    const data = await response.json();
+
+    if (!data.success && data.redirect) {
+        window.location.href = data.redirect;
+    }
+    return data;
+}
+
 function showError(message) {
     const errorBox = document.getElementById('error-message');
     if (!errorBox) return;
