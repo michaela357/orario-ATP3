@@ -48,6 +48,10 @@ def home():
 def handle_csrf_error(e):
     return jsonify({"success": False, "error": f"CSRF Error: {e.description}"}), 400
 
+@app.errorhandler(404)
+def page_not_found_error(e):
+    return render_template("404.html", error_message=e.description), 404
+
 # Register route
 @app.route('/register/', methods=['POST', 'GET'])
 def register():
