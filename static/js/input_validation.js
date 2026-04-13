@@ -1,10 +1,11 @@
 const passwordInput = document.getElementById('password');
 
 const requirements = {
-    length: { re: /.{8,64}/, element: document.getElementById('length') },
+    length: { re: /^.{8,64}$/, element: document.getElementById('length') },
     uppercase: { re: /[A-Z]/, element: document.getElementById('uppercase') },
+    lowercase: {re: /[a-z]/, element: document.getElementById('lowercase')},
     number: { re: /[0-9]/, element: document.getElementById('number') },
-    special: { re: /[!@#$%^&*]/, element: document.getElementById('special') }
+    special: { re: /[!@#\-_=+.\$%\^&\*]/, element: document.getElementById('special') }
 };
 
     
