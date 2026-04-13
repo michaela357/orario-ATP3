@@ -93,10 +93,10 @@ def register():
             return jsonify({'success': False, 'error': 'Password is required'}), 400
 
         if len(password) < 8 or len(password) > 64:
-            return jsonify({'success': False, 'error': 'Password too short'}), 400
+            return jsonify({'success': False, 'error': 'Password incorrect length'}), 400
         
         elif re.search(r"[a-z]", password) == None:
-            return jsonify({'success': False, 'error': 'Password does not meet requirements'}), 400
+            return jsonify({'success': False, 'error': 'Password must contain a lowercase letter'}), 400
         
         elif re.search(r"[A-Z]", password) == None:
             return jsonify({'success': False, 'error': 'Password must contain a capital letter'}), 400
@@ -104,7 +104,7 @@ def register():
         elif re.search(r"[0-9]", password) == None:
             return jsonify({'success': False, 'error': 'Password must contain a digit'}), 400
         
-        elif re.search(r"[!@#$%^&*]", password) == None:
+        elif re.search(r"[!@#\-_=+.\$%\^&\*]", password) == None:
             return jsonify({'success': False, 'error': 'Password must contain a special character'}), 400
 
         sanitised_name = html.escape(cleaned_name)
