@@ -25,35 +25,55 @@ body {
     margin-bottom: 20px;
 }
 
-.welcome-title {
-    position: absolute;
-    top: 40px;
-    left: 10px;
-    padding: 50px;
-}
-
-.welcome-title .clock-container {
+/* Container for all widgets */
+.widget-container {
     display: flex;
-    width: 500px;
-    justify-content: space-evenly;
-    align-items: center;
-    padding: 25px;
-    border: none;
-    border-radius: 15px;
-    background-color: #1b1f48; /* Matching the Nav */
-    color: #00ffb7;           /* Neon accent text */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    flex-wrap: wrap;       /* Crucial for responsiveness */
+    gap: 2rem;             /* Consistent spacing between widgets */
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 20px;
 }
 
-.welcome-title .clock-container div {
-    padding-left: 20px;
-    transform: translateY(10px);
+/* Base style for every widget you add */
+.widget {
+    background: rgba(255, 255, 255, 0.9); /* Slight transparency looks modern */
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    
+    /* This makes widgets behave nicely */
+    flex: 1 1 350px;       /* Grow, Shrink, and "Ideal width" of 350px */
+    max-width: 100%;       /* Don't bleed off screen */
 }
 
-#current-time {
-    font-size: 3rem;
-    font-weight: 800;
-    color: #00ffb7;
+.widget:hover {
+    transform: translateY(-5px); /* Subtle feedback */
+}
+
+/* Specific sizing for the Calendar (it needs more space) */
+.card {
+    flex: 2 1 450px;       /* Takes up twice the relative space of the clock */
+}
+
+/* Title Styling */
+.dashboard-header {
+    width: 100%;
+    padding: 20px 40px;
+    color: white;
+}
+
+/* Responsive adjustment */
+@media (max-width: 800px) {
+    .widget-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .widget {
+        width: 100%;
+        max-width: 500px;
+    }
 }
 
 .home-directions {
@@ -293,18 +313,169 @@ nav button {
     margin:0%;
 }
 
+/* Dashboard styles*/
 
-
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+.dashboard-wrapper {
     width: 100%;
-    list-style-type: none;
-    margin: 0;
-    padding: 20px;
-    overflow: hidden;
-    color: white;
+    max-width: 100vw;
+    padding: 100px 20px 80px 20px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.dashboard-header {
+    width: 100%;
+    max-width: 1150px;
+    margin-bottom: 25px;
+}
+
+.dashboard-header h1 {
+    color: #1b1f48;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.widget-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Base Widget Style */
+.widget {
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
+    transition: transform 0.3s ease;
+}
+
+.widget:hover {
+    transform: translateY(-5px);
+}
+
+/* --- Clock widget --- */
+.side-panel.clock-widget {
+    flex: 1 1 400px;
+    min-width: 300px;
+    max-width: 450px;
     background-color: #1b1f48;
-    z-index: 1000;
+    color: #00ffb7;
+}
+
+#current-time {
+    display: block;
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #00ffb7;
+    text-shadow: 0 0 10px rgba(0, 255, 183, 0.3);
+}
+
+.clock-widget label {
+    color: #ffffff;
+    font-size: 0.95rem;
+    margin-left: 5px;
+}
+
+.clock-widget input[type="radio"] {
+    accent-color: #00ffb7;
+}
+
+/* --- Calendar widget --- */
+.card {
+    flex: 2 1 500px;
+    max-width: 650px;
+    background-color: white;
+}
+
+.card-header {
+    background: #1b1f48;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 12px;
+    align-items: center;
+    color: #ffffff;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.button {
+    text-decoration: none;
+    color: white;
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.button:hover {
+    background-color: #5f65a4ab; /* Neon teal glow on hover */
+}
+
+.bordered-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bordered-table th {
+    color: #1b1f48;
+    padding-bottom: 15px;
+    opacity: 0.7;
+}
+
+.bordered-table td {
+    height: 55px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: 0.2s;
+    color: #1b1f48;
+    font-weight: 500;
+}
+
+.bordered-table td:hover:not(:empty) {
+    background-color: #1b1f48;
+    color: #00ffb7; /* Neon teal pop on calendar hover */
+}
+
+/* Current day */
+.bordered-table td.current-day {
+    background-color: #00ffb7;
+    color: #1b1f48;
+    font-weight: 800;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 255, 183, 0.5);
+}
+
+.bordered-table td.current-day:hover {
+    background-color: #1b1f48;
+    color: #00ffb7;
+}
+/* Stacking for the dashboard */
+@media (max-width: 1000px) {
+    .widget-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .side-panel.clock-widget, .card {
+        width: 100%;
+        max-width: 600px;
+        flex: none;
+    }
+    
+    .dashboard-header {
+        text-align: center;
+    }
 }
