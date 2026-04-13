@@ -10,7 +10,8 @@ Dashboard
     </header>
 
     <main class="widget-container">
-        <section class="widget side-panel clock-widget">
+        <div class="side-panel-column">
+        <section class="widget clock-widget">
             <time id="current-time"></time>
             <div id="time-options">
                 <input type="radio" id="24-hr" name="time-setting">
@@ -20,6 +21,20 @@ Dashboard
             </div>
             <script src="../static/js/display_time.js"></script>
         </section>
+        <div class="widget side-panel quote">
+            <h1 id="editable-quote" contenteditable="True">The harder I work, the luckier I get</h1>
+            <script>
+                const editableQuote = document.getElementById("editable-quote");
+
+                function showButton(){
+                    editableQuote.style.color == white;
+                };
+                
+                editableQuote.addEventListener("input", showButton)
+
+            </script>
+        </div>
+        </div>
 
         <section class="widget card">
             <div class="card-header">

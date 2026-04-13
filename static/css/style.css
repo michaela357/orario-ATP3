@@ -353,19 +353,31 @@ nav button {
     padding: 30px;
     box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
     transition: transform 0.3s ease;
+    align-self: flex-start;
 }
 
 .widget:hover {
     transform: translateY(-5px);
 }
 
+.side-panel-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1 1 300px;
+    max-width: 450px;
+    height: 600px;
+}
+
 /* --- Clock widget --- */
-.side-panel.clock-widget {
+.widget.clock-widget {
     flex: 1 1 400px;
     min-width: 300px;
     max-width: 450px;
     background-color: #1b1f48;
     color: #00ffb7;
+    align-self: center;
+    width: 110%;
 }
 
 #current-time {
@@ -387,11 +399,30 @@ nav button {
     accent-color: #00ffb7;
 }
 
+/* Inspirational quote widget */
+.widget.quote {
+    background-color: #ffffff;
+    color: #1b1f48;
+    text-align: center;
+    align-self: center;
+    max-width: 450px;
+    min-width: 300px;
+    flex: 1 1 400px;
+}
+
+.widget.quote:hover {
+    text-decoration: underline dashed #1b1f48;
+}
+
 /* --- Calendar widget --- */
 .card {
     flex: 2 1 500px;
     max-width: 650px;
+    min-width: 600px;
     background-color: white;
+    align-self: top;
+    align-self: center;
+    padding: 80px 80px 50px 80px;
 }
 
 .card-header {
@@ -493,7 +524,7 @@ nav button {
         gap: 20px;
     }
 
-    .side-panel.clock-widget, .card {
+    .side-panel-column.clock-widget, .card {
         width: 100%;
         max-width: 600px;
         flex: none;
@@ -501,5 +532,26 @@ nav button {
     
     .dashboard-header {
         text-align: center;
+    }
+}
+
+/* Optimization for Large Screens */
+@media (min-width: 1200px) {
+    .widget-container {
+        max-width: 1400px;
+        gap: 40px;
+    }
+
+    .side-panel-column {
+        flex: 0 0 400px;
+    }
+
+    .card {
+        flex: 1;
+        max-width: 900px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 3rem;
     }
 }
