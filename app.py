@@ -179,6 +179,8 @@ def dashboard():
         next_year = year + 1
 
     today = datetime.now().day
+    current_month = datetime.now().month
+    current_year = datetime.now().year
 
     return render_template('dashboard.html',
                            name=first_name,
@@ -190,7 +192,9 @@ def dashboard():
                            next_year=next_year,
                            next_month=next_month,
                            month_name=month_name,
-                           today=today
+                           today=today,
+                           current_month=current_month,
+                           current_year=current_year
                            )
 
 @app.route('/logout', methods=["POST"])

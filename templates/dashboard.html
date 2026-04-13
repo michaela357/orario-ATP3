@@ -39,7 +39,7 @@ Dashboard
                     {% for week in calendar %}
                     <tr>
                         {% for day in week %}
-                        <td class="{% if day == today %}current-day{% endif %}">
+                        <td class="{% if day == today and month == current_month and year == current_year %}current-day{% endif %}">
                             {{ day if day != 0 else '' }}
                         </td>
                         {% endfor %}
@@ -47,6 +47,7 @@ Dashboard
                     {% endfor %}
                 </tbody>
             </table>
+            <a href = "{{ url_for('dashboard', month=current_month, year=current_year) }}" class="btn">Today</a>
         </section>
     </main>
 </div>
