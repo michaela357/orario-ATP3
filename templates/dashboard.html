@@ -4,17 +4,50 @@ Dashboard
 {% endblock %}
 
 {% block content %}
-<div class="welcome-title">
-    <h1>Welcome, {{ name }}!</h1>
-    <div class="clock-container">
-        <time id="current-time"></time>
-        <div id="time-options">
-            <input type="radio" id="24-hr" name="time-setting">
-            <label for="24-hr">24-hour time</label><br>
-            <input type="radio" id="12-hr" name="time-setting" checked>
-            <label for="12-hr">12-hour time</label><br><br>
-        </div>
-    </div>
-    <script src="../static/js/display_time.js"></script>
+<div class="dashboard-wrapper">
+    <header class="dashboard-header">
+        <h1>Welcome, {{ name }}!</h1>
+    </header>
+
+    <main class="widget-container">
+        <section class="widget side-panel clock-widget">
+            <time id="current-time"></time>
+            <div id="time-options">
+                <input type="radio" id="24-hr" name="time-setting">
+                <label for="24-hr">24-hour time</label><br>
+                <input type="radio" id="12-hr" name="time-setting" checked>
+                <label for="12-hr">12-hour time</label>
+            </div>
+            <script src="../static/js/display_time.js"></script>
+        </section>
+
+        <section class="widget card">
+            <div class="card-header">
+                <a href="{{ url_for('dashboard', year=prev_year, month=prev_month) }}" class="button">《 -</a>
+                <span class="month-year-title">{{month_name}} {{year}}</span>
+                <a href="{{ url_for('dashboard', year=next_year, month=next_month) }}" class="button">- 》</a>
+            </div>
+            <table class="bordered-table">
+                <thead>
+                    <tr>
+                        {% for day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+                            <th>{{ day }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for week in calendar %}
+                    <tr>
+                        {% for day in week %}
+                        <td class="{% if day == today %}current-day{% endif %}">
+                            {{ day if day != 0 else '' }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
 </div>
 {% endblock %}
