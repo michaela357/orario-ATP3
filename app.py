@@ -181,6 +181,12 @@ def dashboard():
     today = datetime.now().day
     current_month = datetime.now().month
     current_year = datetime.now().year
+    
+    # temporary tasks dictionary to work with to put on dashboard
+    tasks = {
+        1 : ['Software notes', 'Notes on secure software architecture', datetime.strptime('1/4/2026', "%d/%m/%Y").date(), 'No'],
+        2 : ['Make lunch', 'Peel carrots and make a sandwich', datetime.strptime('15/04/2026', "%d/%m/%Y").date(), 'Yes']
+    }
 
     return render_template('dashboard.html',
                            name=first_name,
@@ -194,7 +200,8 @@ def dashboard():
                            month_name=month_name,
                            today=today,
                            current_month=current_month,
-                           current_year=current_year
+                           current_year=current_year,
+                           Tasks=tasks
                            )
 
 @app.route('/logout', methods=["POST"])
