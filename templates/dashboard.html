@@ -55,7 +55,16 @@ Dashboard
                     <tr>
                         {% for day in week %}
                         <td class="{% if day == today and month == current_month and year == current_year %}current-day{% endif %}">
-                            {{ day if day != 0 else '' }}
+                            {% if day != 0 %}
+                                {{ day }}
+                                
+                                {% for key, value in Tasks.items() %}
+                                    {% if value[2].year == year and value[2].month == month and value[2].day == day %}
+                                        <span class="task-dot"></span>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                            {% endif %}
                         </td>
                         {% endfor %}
                     </tr>
@@ -63,6 +72,39 @@ Dashboard
                 </tbody>
             </table>
             <a href = "{{ url_for('dashboard', month=current_month, year=current_year) }}" class="btn">Today</a>
+        </section>
+
+        <section class="widget to-do">
+            <div class="card-header">
+                <h1 class="to-do-title">To-do</h1>
+            </div>
+
+            <div class="todo-buttons">
+            <a class="button">Add task</a>
+            <a class="button">Delete task</a>
+            <a class="button">Edit task</a>
+            </div>
+
+            <table class="bordered-table">
+                <thead>
+                    <th>Task ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Due date</th>
+                    <th>Reminder?</th>
+                </thead>
+                <tbody>
+                    {% for key, value in Tasks.items() %}
+                <tr>
+                    <td><strong>{{ key }}</strong></td>
+                    <td>{{ value[0] }}</td>
+                    <td>{{ value[1] }}</td>
+                    <td>{{ value[2] }}</td>
+                    <td>{{ value[3] }}</td>
+                </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </section>
     </main>
 </div>
