@@ -118,7 +118,7 @@ def register():
 
         # Implement try / except to catch any database errors
         try:
-            new_user = User(email=email, name=final_name.strip(), password=generate_password_hash(password))
+            new_user = User(email=email, name=final_name.strip(), password=generate_password_hash(password), quote=None)
             db.session.add(new_user)
             db.session.commit()
             return jsonify({"success": True, "redirect": "/login"}), 200
@@ -150,6 +150,7 @@ def login():
 @login_required
 def dashboard():
     first_name = current_user.name.split()[0]
+    user_quote = current_user.quote
 
     try:
         year = int(request.args.get("year", datetime.now().year))
@@ -189,20 +190,35 @@ def dashboard():
     }
 
     return render_template('dashboard.html',
-                           name=first_name,
-                           year=year,
-                           month=month,
-                           calendar=cal,
-                           prev_year=prev_year,
-                           prev_month=prev_month,
-                           next_year=next_year,
-                           next_month=next_month,
-                           month_name=month_name,
-                           today=today,
-                           current_month=current_month,
-                           current_year=current_year,
-                           Tasks=tasks
-                           )
+                            user_quote=user_quote,
+                            name=first_name,
+                            year=year,
+                            month=month,
+                            calendar=cal,
+                            prev_year=prev_year,
+                            prev_month=prev_month,
+                            next_year=next_year,
+                            next_month=next_month,
+                            month_name=month_name,
+                            today=today,
+                            current_month=current_month,
+                            current_year=current_year,
+                            Tasks=tasks
+                        )
+
+@app.route('/api/update_quote', methods=['POST'])
+@login_required
+def update_quote():
+    data = request.get_json()
+    
+    if not data or 'quote' not in data:
+        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+
+    current_user.quote = data['quote']
+    db.session.commit()
+
+    return jsonify({'status': 'success'}), 200
+
 
 @app.route('/logout', methods=["POST"])
 @login_required
