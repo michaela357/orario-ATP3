@@ -21,10 +21,10 @@
             </section>
 
             <div class="widget side-panel quote">
-                <span id="editable-quote" contenteditable="False"></span>
+                <meta name="csrf-token" content="{{ csrf_token() }}">
+                <span id="editable-quote" contenteditable="False">{{ user_quote or "The harder I work, the luckier I get" }}</span>
                 <button id="name-edit" hidden="True">✍️ Editing quote...</button>
                 <div id="save-msg" class="success" style="color: #1b1f48; font-size: 0.8rem; margin-top: 5px; opacity: 0; transition: 0.3s;">Saved!</div>
-
             </div>
         </div>
 
@@ -170,4 +170,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script src = "../static/js/change_quote.js"></script>
 {% endblock %}
