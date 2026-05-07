@@ -447,6 +447,16 @@ nav button {
 
 
 /* --- To-do widget --- */
+.widget-to-do {
+    flex: 2 1 500px;
+    max-width: 650px;
+    min-width: 600px;
+    background-color: white;
+    align-self: top;
+    align-self: center;
+    padding: 80px 80px 50px 80px;
+}
+
 .to-do-title {
     color:#00ffb7;
     text-align: center;
@@ -638,7 +648,7 @@ div .todo-buttons a{
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(27, 31, 72, 0.7); /* Navy with transparency */
+    background-color: rgba(27, 31, 72, 0.7);
     backdrop-filter: blur(8px); /* Frosted glass effect */
 }
 .task-popover {
