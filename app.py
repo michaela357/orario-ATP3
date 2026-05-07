@@ -41,10 +41,8 @@ with app.app_context():
 # Home route
 @app.route('/')
 def home():
-    #return render_template('home.html')
-
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard')) # Send them away if they are already logged in!
+        return redirect(url_for('dashboard')) # Send users back to dashboard if logged in
     return render_template('index.html')
 
 # Custom error response
