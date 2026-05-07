@@ -300,7 +300,7 @@ nav button {
 }
 
 .success {
-    display: none;
+    opacity: 0;
     transition: opacity 0.5s ease;
     color: rgb(12, 114, 12);
     background-color: #e4fcee;
@@ -400,18 +400,66 @@ nav button {
 }
 
 /* Inspirational quote widget */
-.widget.quote {
-    background-color: #ffffff;
-    color: #1b1f48;
-    text-align: center;
-    align-self: center;
-    max-width: 450px;
-    min-width: 300px;
-    flex: 1 1 400px;
+.widget.side-panel.quote {
+    background: white; /* Your Navy */
+    padding: 30px;
+    border-radius: 15px;
+    border-left: 5px solid #00ffb7; /* Mint accent */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.widget.quote:hover {
-    text-decoration: underline dashed #1b1f48;
+/* Quote Text */
+#editable-quote {
+    color: #1b1f48;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-style: italic;
+    cursor: pointer;
+    outline: none;
+    line-height: 1.4;
+    transition: 0.2s;
+}
+
+/* When editing, give it a slight mint glow */
+#editable-quote[contenteditable="true"] {
+    color: #00ffb7;
+    background-color: #1b1f48;
+    padding: 5%;
+    border-bottom: 1px dashed #00ffb7;
+}
+
+/* The "Editing..." text/button */
+#name-edit {
+    background: transparent;
+    border: none;
+    color: #1b1f48;
+    font-size: 0.8rem;
+    text-align: left;
+    padding: 0;
+    margin-top: 10px;
+    font-family: inherit;
+    pointer-events: none; /* User doesn't need to click the text itself */
+}
+
+
+/* --- To-do widget --- */
+.to-do-title {
+    color:#00ffb7;
+    text-align: center;
+}
+a .button {
+    color: green;
+}
+div .todo-buttons a{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    color: black;
+    text-decoration-color: #000000;
 }
 
 /* --- Calendar widget --- */
@@ -450,7 +498,7 @@ nav button {
 }
 
 .button:hover {
-    background-color: #5f65a4ab; /* Neon teal glow on hover */
+    background-color: #5f65a4ab;
 }
 
 .bordered-table {
@@ -476,7 +524,32 @@ nav button {
 
 .bordered-table td:hover:not(:empty) {
     background-color: #1b1f48;
-    color: #00ffb7; /* Neon teal pop on calendar hover */
+    color: #00ffb7;
+}
+
+.bordered-table td {
+    position: relative;
+    height: 55px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.task-dot {
+    display: block;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.current-day .task-dot {
+    background-color: #1b1f48;
+    box-shadow: none;
 }
 
 /* Current day */
@@ -496,7 +569,7 @@ nav button {
 .widget.card .btn {
     display: block;
     width: fit-content;
-    margin: 20px auto 0 auto; /* Centers it and adds space above */
+    margin: 20px auto 0 auto;
     padding: 8px 25px;
     background-color: transparent;
     color: #1b1f48;
@@ -511,7 +584,7 @@ nav button {
 
 .widget.card .btn:hover {
     background-color: #1b1f48;
-    color: #00ffb7; /* Neon teal text on hover */
+    color: #00ffb7;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(27, 31, 72, 0.2);
 }
@@ -554,4 +627,56 @@ nav button {
     .dashboard-header h1 {
         font-size: 3rem;
     }
+}
+
+/* Modal Background (Overlay) */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 2000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(27, 31, 72, 0.7); /* Navy with transparency */
+    backdrop-filter: blur(8px); /* Frosted glass effect */
+}
+.task-popover {
+    display: none;
+    position: absolute;
+    z-index: 3000;
+    width: 200px;
+    background: #1b1f48;
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border: 1px solid #00ffb7;
+    transition: opacity 0.5s ease;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.task-popover h4 {
+    color: #00ffb7;
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+}
+
+.task-popover p {
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+.popover-arrow {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #1b1f48;
+    border-left: 1px solid #00ffb7;
+    border-top: 1px solid #00ffb7;
+    top: 10px;
+    left: -5.7px;
+    transform: rotate(-45deg);
 }
