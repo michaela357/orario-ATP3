@@ -9,26 +9,32 @@ function handleInputKey(event) {
     if (event.keyCode === ENTER_KEY_CODE) {
 
     event.preventDefault();
+    n_quote = newQuote.textContent
 
-    fetch('/api/update_quote', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({ quote: newQuote.textContent })
-    })
-
-
-    newQuote.contentEditable = "false";
-    newQuote.blur();
-    editButton.setAttribute('hidden', 'true');
-    saveMsg.style.opacity = "1";
-
-    setTimeout(() => {
-        saveMsg.style.opacity = "0";
-        }, 2000);
-    }}
+    if (n_quote.length > 250 || n_quote.length === 0) {
+        alert("Please enter a quote that is shorter than 250 characters.")
+    } else {
+        fetch('/api/update_quote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ quote: n_quote })
+        })
+    
+    
+        newQuote.contentEditable = "false";
+        newQuote.blur();
+        editButton.setAttribute('hidden', 'true');
+    
+        saveMsg.style.opacity = "1";
+    
+        setTimeout(() => {
+            saveMsg.style.opacity = "0";
+            }, 2000);
+        }}
+    }
 
 function clickToEdit() {
     newQuote.contentEditable = "true";
