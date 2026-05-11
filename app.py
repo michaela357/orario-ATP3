@@ -43,7 +43,7 @@ with app.app_context():
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard')) # Send users back to dashboard if logged in
-    return render_template('index.html')
+    return render_template('home.html')
 
 # Custom error response
 @app.errorhandler(CSRFError)
@@ -214,7 +214,7 @@ def update_quote():
     data = request.get_json()
     
     if not data or 'quote' not in data:
-        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+        return jsonify({'success': False, 'error': 'Invalid quote details'}), 400
 
     current_user.quote = data['quote']
     db.session.commit()
