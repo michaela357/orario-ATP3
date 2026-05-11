@@ -410,6 +410,17 @@ nav button {
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    padding: 20px;
+    display: block;
+    min-height: 80px;
+    max-height: 400px;
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+
+.widget.side-panel.quote h1{
+    color: #1b1f48;
 }
 
 /* Quote Text */
@@ -422,6 +433,17 @@ nav button {
     outline: none;
     line-height: 1.4;
     transition: 0.2s;
+    display: block;
+    width: 100%;
+
+    /* Force long words to break */
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
+span #editable-quote {
+    max-width: 100%;
 }
 
 /* When editing, give it a slight mint glow */
@@ -442,7 +464,7 @@ nav button {
     padding: 0;
     margin-top: 10px;
     font-family: inherit;
-    pointer-events: none; /* User doesn't need to click the text itself */
+    pointer-events: none;
 }
 
 
