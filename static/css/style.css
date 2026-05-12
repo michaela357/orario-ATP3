@@ -7,20 +7,55 @@
     font-family: "Poppins", sans-serif;
 }
 
+:root {
+    --bg-color: #f4f7f6;
+    --widget-bg: #ffffff;
+    --text-color: #1b1f48;
+    --button-color: #1b1f48;
+    --button-text-color: #f4f7f6;
+    --accent-color: #00ffb7;
+    --border-color: #eee;
+    --nav-bg: #1b1f48;
+}
+
+[data-theme="dark"] {
+    --bg-color: #0b0e24;
+    --widget-bg: #1b1f48;
+    --button-color: #f4f7f6;
+    --text-color: #f4f7f6;
+    --button-text-color: #1b1f48;
+    --accent-color: #00ffb7;
+    --border-color: #2a2f5b;
+    --nav-bg: #070914;
+}
+
+[data-theme="purple"] {
+    --bg-color: #41035e;
+    --widget-bg: #bb4bef;
+    --button-color: #41035e
+    --text-color: #f4f7f6;
+    --accent-color: #d3f127;
+    --border-color: #ffb9ea;
+    --nav-bg: #2a024d;
+}
+
 body {
-    background-color: #f4f7f6; /* Clean background for better readability */
-    color: #333;
+    margin: 0;
+    padding-top: 80px; 
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 80px; /* Space for fixed nav */
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: "Poppins", sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .home-title {
-    color: #1b1f48;
+    color: var(--text-color);
     padding: 40px;
-    border: 2px solid #1b1f48; /* Professional solid border */
+    border: 2px solid var(--text-color); /* Professional solid border */
     border-radius: 20px;
     margin-bottom: 20px;
 }
@@ -35,26 +70,25 @@ body {
     padding: 20px;
 }
 
-/* Base style for every widget you add */
+/* Base style for every widget I add */
 .widget {
-    background: rgba(255, 255, 255, 0.9); /* Slight transparency looks modern */
+    background: var(--widget-bg); /* Slight transparency looks modern */
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     
-    /* This makes widgets behave nicely */
-    flex: 1 1 350px;       /* Grow, Shrink, and "Ideal width" of 350px */
-    max-width: 100%;       /* Don't bleed off screen */
+    flex: 1 1 350px;
+    max-width: 100%;
 }
 
 .widget:hover {
     transform: translateY(-5px); /* Subtle feedback */
 }
 
-/* Specific sizing for the Calendar (it needs more space) */
+/* Specific sizing for the Calendar */
 .card {
-    flex: 2 1 450px;       /* Takes up twice the relative space of the clock */
+    flex: 2 1 450px;
 }
 
 /* Title Styling */
@@ -85,22 +119,12 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-body {
-    margin: 0;
-    padding-top: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-position: center;
-}
-
 .wrapper {
     width: 420px;
-    background: white;
-    border: 1px solid #eee;
+    background: var(--widget-bg);
+    border: 1px solid var(--border-color);;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-    color: #333;
+    color: var(--text-color);
     border-radius: 20px;
     padding: 40px;
 }
@@ -108,7 +132,7 @@ body {
 .wrapper h1{
     font-size: 36px;
     text-align: center;
-    color: #1b1f48;
+    color: var(--text-color);
     font-weight: 700;
 }
 
@@ -116,7 +140,7 @@ body {
     position: relative;
     width: 100%;
     height: 50px;
-    background: #f0f2f1;
+    background: var(--bg-color);
     border-radius: 40px;
     margin: 25px 0;
 }
@@ -131,12 +155,12 @@ body {
     border-radius: 40px;
     font-size: 16px;
     padding: 20px 45px 20px 20px;
-    color: #333;
+    color: var(--text-color);
     border: 2px solid transparent;
 }
 
 .input-box input::placeholder{
-    color: #1b1f48;
+    color: var(--text-color);
 }
 
 .input-box i {
@@ -158,12 +182,12 @@ body {
 }
 
 .input-box input::placeholder {
-    color: #1b1f48;
+    color: var(--text-color);
     opacity: 0;
 }
 
 .input-box input:focus::placeholder {
-    color: #1b1f48;
+    color: var(--text-color);
     opacity: 0.7;
 }
 
@@ -171,14 +195,14 @@ body {
 .input-box input:not(:placeholder-shown) ~ label {
     top: 0;
     font-size: 12px;
-    color: #1b1f48;
+    color: var(--text-color);
     transform: translateY(-9px);
     padding: 0 5px;
 }
   
 
 .input-box input:focus {
-    border-bottom-color: #00ffb7;
+    border-bottom-color: var(--accent-color);
 }
 
 .wrapper .remember-forgot {
@@ -189,12 +213,12 @@ body {
 }
 
 .remember-forgot label input {
-    accent-color: #fff;
+    accent-color: var(--widget-bg);
     margin-right: 3px;
 }
 
 .remember-forgot a {
-    color: #fff;
+    color: var(--widget-bg);
     text-decoration: none;
 }
 
@@ -203,7 +227,7 @@ body {
 }
 
 .remember-forgot input[type="checkbox"] {
-    accent-color: #290d99; /* Changes the checked color to a shade of green */
+    accent-color: #290d99;
     width: 20px;
     transform: translateY(1.5px) translateX(1.5px);
 }
@@ -220,8 +244,8 @@ body {
     font-size: 16px;
     font-weight: 600;
 
-    background: #1b1f48;
-    color: white;
+    background: var(--button-color);
+    color: var(--button-text-color);
     transition: transform 0.2s ease;
 }
 
@@ -231,8 +255,8 @@ body {
     border-radius: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-weight: 600;
-    background: #2a2f6a;
-    color: #00ffb7; /* Text turns mint on hover */
+    background: var(--nav-bg);
+    color: var(--accent-color);
     transform: translateY(-2px);
 }
 
@@ -243,7 +267,7 @@ body {
 }
 
 .link p a {
-    color: #000000;
+    color: var(--text-color);
     text-decoration: none;
     font-weight: 600;
 }
@@ -261,15 +285,15 @@ nav {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #1b1f48;
+    background-color: var(--nav-bg);
     z-index: 1000;
 }
   
 nav a, nav button {
     float: left;
-    background-color: #1b1f48;
+    background-color: var(--text-color);
     display: block;
-    color: white;
+    color: var(--border-color);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -332,7 +356,7 @@ nav button {
 }
 
 .dashboard-header h1 {
-    color: #1b1f48;
+    color: var(--text-color);
     font-size: 2.5rem;
     font-weight: 700;
 }
@@ -346,6 +370,61 @@ nav button {
     width: 100%;
     max-width: 1200px;
 }
+
+/* Theme switch style */
+.theme-switch-container {
+    padding: 10px;
+}
+
+.slider-round {
+    position: absolute;
+    cursor: pointer;
+    background-color: #e9e9e9;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider-round:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #072c4a;
+    -webkit-transition: .4s;
+    transition: .4s;
+    background-image: url('../img/icons8-moon-and-stars-30.png');
+}
+  
+
+input:checked + .slider-round {
+    background-color: #072c4a;
+}
+  
+input:focus + .slider-round {
+    box-shadow: 0 0 1px #072c4a;
+}
+  
+input:checked + .slider-round:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+    background-color: white;
+    background-image: url('../img/icons8-sun-50.png');
+}
+  
+  /* Rounded sliders */
+.slider-round {
+    border-radius: 34px;
+    width: 60px;
+    height: 35px;
+}
+
+.slider-round:before {
+    border-radius: 50%;
+}
+
 
 /* Base Widget Style */
 .widget {
@@ -374,8 +453,8 @@ nav button {
     flex: 1 1 400px;
     min-width: 300px;
     max-width: 450px;
-    background-color: #1b1f48;
-    color: #00ffb7;
+    background-color: var(--text-color);
+    color: var(--accent-color);
     align-self: center;
     width: 110%;
 }
@@ -385,26 +464,26 @@ nav button {
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 15px;
-    color: #00ffb7;
+    color: var(--accent-color);
     text-shadow: 0 0 10px rgba(0, 255, 183, 0.3);
 }
 
 .clock-widget label {
-    color: #ffffff;
+    color: var(--widget-bg);
     font-size: 0.95rem;
     margin-left: 5px;
 }
 
 .clock-widget input[type="radio"] {
-    accent-color: #00ffb7;
+    accent-color: var(--accent-color);
 }
 
 /* Inspirational quote widget */
 .widget.side-panel.quote {
-    background: white; /* Your Navy */
+    background: var(--widget-bg);
     padding: 30px;
     border-radius: 15px;
-    border-left: 5px solid #00ffb7; /* Mint accent */
+    border-left: 5px solid var(--accent-color);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     min-height: 100px;
     display: flex;
@@ -420,12 +499,12 @@ nav button {
 }
 
 .widget.side-panel.quote h1{
-    color: #1b1f48;
+    color: var(--text-color);
 }
 
 /* Quote Text */
 #editable-quote {
-    color: #1b1f48;
+    color: var(--text-color);
     font-size: 1.2rem;
     font-weight: 600;
     font-style: italic;
@@ -448,17 +527,17 @@ span #editable-quote {
 
 /* When editing, give it a slight mint glow */
 #editable-quote[contenteditable="true"] {
-    color: #00ffb7;
-    background-color: #1b1f48;
+    color: var(--accent-color);
+    background-color: var(--text-color);
     padding: 5%;
-    border-bottom: 1px dashed #00ffb7;
+    border-bottom: 1px dashed var(--accent-color);
 }
 
 /* The "Editing..." text/button */
 #name-edit {
     background: transparent;
     border: none;
-    color: #1b1f48;
+    color: var(--text-color);
     font-size: 0.8rem;
     text-align: left;
     padding: 0;
@@ -473,14 +552,14 @@ span #editable-quote {
     flex: 2 1 500px;
     max-width: 650px;
     min-width: 600px;
-    background-color: white;
+    background-color: var(--widget-bg);
     align-self: top;
     align-self: center;
     padding: 80px 80px 50px 80px;
 }
 
 .to-do-title {
-    color:#00ffb7;
+    color:var(--accent-color);
     text-align: center;
 }
 a .button {
@@ -499,19 +578,19 @@ div .todo-buttons a{
     flex: 2 1 500px;
     max-width: 650px;
     min-width: 600px;
-    background-color: white;
+    background-color: var(--widget-bg);
     align-self: top;
     align-self: center;
     padding: 80px 80px 50px 80px;
 }
 
 .card-header {
-    background: #1b1f48;
+    background: var(--text-color);
     display: flex;
     justify-content: space-between;
     border-radius: 12px;
     align-items: center;
-    color: #ffffff;
+    color: var(--widget-bg);
     padding: 15px;
     margin-bottom: 20px;
 }
@@ -539,7 +618,7 @@ div .todo-buttons a{
 }
 
 .bordered-table th {
-    color: #1b1f48;
+    color: var(--text-color);
     padding-bottom: 15px;
     opacity: 0.7;
 }
@@ -550,13 +629,13 @@ div .todo-buttons a{
     cursor: pointer;
     border-radius: 12px;
     transition: 0.2s;
-    color: #1b1f48;
+    color: var(--text-color);
     font-weight: 500;
 }
 
 .bordered-table td:hover:not(:empty) {
-    background-color: #1b1f48;
-    color: #00ffb7;
+    background-color: var(--text-color);
+    color: var(--accent-color);
 }
 
 .bordered-table td {
@@ -580,22 +659,22 @@ div .todo-buttons a{
 }
 
 .current-day .task-dot {
-    background-color: #1b1f48;
+    background-color: var(--text-color);
     box-shadow: none;
 }
 
 /* Current day */
 .bordered-table td.current-day {
-    background-color: #00ffb7;
-    color: #1b1f48;
+    background-color: var(--accent-color);
+    color: var(--text-color);
     font-weight: 800;
     position: relative;
     box-shadow: 0 0 10px rgba(0, 255, 183, 0.5);
 }
 
 .bordered-table td.current-day:hover {
-    background-color: #1b1f48;
-    color: #00ffb7;
+    background-color: var(--text-color);
+    color: var(--accent-color);
 }
 
 .widget.card .btn {
@@ -604,8 +683,8 @@ div .todo-buttons a{
     margin: 20px auto 0 auto;
     padding: 8px 25px;
     background-color: transparent;
-    color: #1b1f48;
-    border: 2px solid #1b1f48;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
     border-radius: 40px;
     text-decoration: none;
     font-size: 0.9rem;
@@ -615,8 +694,8 @@ div .todo-buttons a{
 }
 
 .widget.card .btn:hover {
-    background-color: #1b1f48;
-    color: #00ffb7;
+    background-color: var(--text-color);
+    color: var(--accent-color);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(27, 31, 72, 0.2);
 }
@@ -678,19 +757,19 @@ div .todo-buttons a{
     position: absolute;
     z-index: 3000;
     width: 200px;
-    background: #1b1f48;
-    color: white;
+    background: var(--text-color);
+    color: var(--widget-bg);
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    border: 1px solid #00ffb7;
+    border: 1px solid var(--accent-color);
     transition: opacity 0.5s ease;
     font-size: 0.9rem;
     pointer-events: none;
 }
 
 .task-popover h4 {
-    color: #00ffb7;
+    color: var(--accent-color);
     margin: 0 0 5px 0;
     font-size: 1rem;
 }
@@ -705,9 +784,9 @@ div .todo-buttons a{
     position: absolute;
     width: 10px;
     height: 10px;
-    background: #1b1f48;
-    border-left: 1px solid #00ffb7;
-    border-top: 1px solid #00ffb7;
+    background: var(--text-color);
+    border-left: 1px solid var(--accent-color);
+    border-top: 1px solid var(--accent-color);
     top: 10px;
     left: -5.7px;
     transform: rotate(-45deg);
