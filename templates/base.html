@@ -28,12 +28,21 @@
         Sign Up
     </a>
     {% endif %}
+    <div class="theme-switch-container">
+        <label class="switch">
+            <input type="checkbox" id="toggleCheckbox" hidden>
+            <span class="slider-round"></span>
+        </label>
+        <em id="light-dark-indicator">Enable Light Mode!</em>
+    </div>
 </nav>
 <body>
+
     {% block content %}
     {% endblock %}
     <script src = "../static/js/api.js"></script>
     <script src = "../static/js/logout_validation.js"></script>
+    <script src="../static/js/change_theme.js"></script>
 </body>
 <div id="error-message" class="error"></div>
 <div id="success-message" class="success"></div>
