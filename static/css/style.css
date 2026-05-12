@@ -13,7 +13,8 @@
     --text-color: #1b1f48;
     --button-color: #1b1f48;
     --button-text-color: #f4f7f6;
-    --accent-color: #00ffb7;
+    --accent-color1: #00ffb7;
+    --accent-color2: #00ffb7;
     --border-color: #eee;
     --nav-bg: #1b1f48;
 }
@@ -24,7 +25,8 @@
     --button-color: #f4f7f6;
     --text-color: #f4f7f6;
     --button-text-color: #1b1f48;
-    --accent-color: #00ffb7;
+    --accent-color1: #00ffb7;
+    --accent-color2: #1b1f48;
     --border-color: #2a2f5b;
     --nav-bg: #070914;
 }
@@ -202,7 +204,7 @@ body {
   
 
 .input-box input:focus {
-    border-bottom-color: var(--accent-color);
+    border-bottom-color: var(--accent-color1);
 }
 
 .wrapper .remember-forgot {
@@ -227,7 +229,7 @@ body {
 }
 
 .remember-forgot input[type="checkbox"] {
-    accent-color: #290d99;
+    accent-color: var(--accent-color1);
     width: 20px;
     transform: translateY(1.5px) translateX(1.5px);
 }
@@ -256,7 +258,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-weight: 600;
     background: var(--nav-bg);
-    color: var(--accent-color);
+    color: var(--accent-color1);
     transform: translateY(-2px);
 }
 
@@ -454,7 +456,7 @@ input:checked + .slider-round:before {
     min-width: 300px;
     max-width: 450px;
     background-color: var(--text-color);
-    color: var(--accent-color);
+    color: var(--accent-color2);
     align-self: center;
     width: 110%;
 }
@@ -464,7 +466,7 @@ input:checked + .slider-round:before {
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 15px;
-    color: var(--accent-color);
+    color: var(--accent-color2);
     text-shadow: 0 0 10px rgba(0, 255, 183, 0.3);
 }
 
@@ -475,7 +477,7 @@ input:checked + .slider-round:before {
 }
 
 .clock-widget input[type="radio"] {
-    accent-color: var(--accent-color);
+    accent-color: var(--accent-color1);
 }
 
 /* Inspirational quote widget */
@@ -483,7 +485,7 @@ input:checked + .slider-round:before {
     background: var(--widget-bg);
     padding: 30px;
     border-radius: 15px;
-    border-left: 5px solid var(--accent-color);
+    border-left: 5px solid var(--accent-color1);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     min-height: 100px;
     display: flex;
@@ -527,10 +529,10 @@ span #editable-quote {
 
 /* When editing, give it a slight mint glow */
 #editable-quote[contenteditable="true"] {
-    color: var(--accent-color);
+    color: var(--accent-color1);
     background-color: var(--text-color);
     padding: 5%;
-    border-bottom: 1px dashed var(--accent-color);
+    border-bottom: 1px dashed var(--accent-color1);
 }
 
 /* The "Editing..." text/button */
@@ -559,7 +561,7 @@ span #editable-quote {
 }
 
 .to-do-title {
-    color:var(--accent-color);
+    color:var(--accent-color2);
     text-align: center;
 }
 a .button {
@@ -635,7 +637,7 @@ div .todo-buttons a{
 
 .bordered-table td:hover:not(:empty) {
     background-color: var(--text-color);
-    color: var(--accent-color);
+    color: var(--accent-color2);
 }
 
 .bordered-table td {
@@ -665,7 +667,7 @@ div .todo-buttons a{
 
 /* Current day */
 .bordered-table td.current-day {
-    background-color: var(--accent-color);
+    background-color: var(--accent-color1);
     color: var(--text-color);
     font-weight: 800;
     position: relative;
@@ -674,7 +676,7 @@ div .todo-buttons a{
 
 .bordered-table td.current-day:hover {
     background-color: var(--text-color);
-    color: var(--accent-color);
+    color: var(--accent-color2);
 }
 
 .widget.card .btn {
@@ -695,7 +697,7 @@ div .todo-buttons a{
 
 .widget.card .btn:hover {
     background-color: var(--text-color);
-    color: var(--accent-color);
+    color: var(--accent-color2);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(27, 31, 72, 0.2);
 }
@@ -762,14 +764,14 @@ div .todo-buttons a{
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    border: 1px solid var(--accent-color);
+    border: 1px solid var(--accent-color1);
     transition: opacity 0.5s ease;
     font-size: 0.9rem;
     pointer-events: none;
 }
 
 .task-popover h4 {
-    color: var(--accent-color);
+    color: var(--accent-color2);
     margin: 0 0 5px 0;
     font-size: 1rem;
 }
@@ -785,8 +787,8 @@ div .todo-buttons a{
     width: 10px;
     height: 10px;
     background: var(--text-color);
-    border-left: 1px solid var(--accent-color);
-    border-top: 1px solid var(--accent-color);
+    border-left: 1px solid var(--accent-color1);
+    border-top: 1px solid var(--accent-color1);
     top: 10px;
     left: -5.7px;
     transform: rotate(-45deg);
