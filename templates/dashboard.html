@@ -6,7 +6,6 @@
     <header class="dashboard-header">
         <h1>Welcome, {{ name }}!</h1>
     </header>
-
     <main class="widget-container">
         <div class="side-panel-column">
             <section class="widget clock-widget">
@@ -21,9 +20,11 @@
             </section>
 
             <div class="widget side-panel quote">
+                <h1>Inspirational Quote</h1>
                 <meta name="csrf-token" content="{{ csrf_token() }}">
+                <br><br>
                 <span id="editable-quote" contenteditable="False">{{ user_quote or "The harder I work, the luckier I get" }}</span>
-                <button id="name-edit" hidden="True">✍️ Editing quote...</button>
+                <button id="name-edit" hidden="True">✍️ Click to edit quote</button>
                 <div id="save-msg" class="success" style="color: #1b1f48; font-size: 0.8rem; margin-top: 5px; opacity: 0; transition: 0.3s;">Saved!</div>
             </div>
         </div>
