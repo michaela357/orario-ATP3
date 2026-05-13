@@ -80,9 +80,25 @@
             </div>
 
             <div class="todo-buttons">
-                <a class="button" id="add-button">Add</a>
+                <a class="button" id="add-button" onclick="addTaskPopup()">Add</a>
                 <a class="button" id="delete-button">Delete</a>
                 <a class="button" id="edit-button">Edit</a>
+            </div>
+            
+            <!-- Popup form to add task -->
+            <div class="overlay" id="popupOverlay">
+                <div class="popup">
+                    <meta name="csrf-token" content="{{ csrf_token() }}">
+                    <button class="close-btn" onclick="closeAddPopup()">&times;</button>
+                    <h2>Contact Form</h2>
+                    <form onsubmit="return validateForm(event)">
+                        <input type="text" id="title" placeholder="Title" required>
+                        <input type="text" id="description" placeholder="Description" required>
+                        <input type="date" id="due_date" placeholder="Date due" required>
+                        <input type="checkbox" id="reminder">
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
             </div>
 
             <table class="bordered-table">
@@ -172,4 +188,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script src = "../static/js/change_quote.js"></script>
+<script src="../static/js/to-do-popups.js"></script>
 {% endblock %}
