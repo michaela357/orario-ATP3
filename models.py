@@ -20,22 +20,28 @@ class User(UserMixin, db.Model):
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
     due_date = db.Column(db.Date, nullable=False, default=date.today)
     description = db.Column(db.String(200), nullable=False)
+    reminder = db.Column(db.Boolean, default=False)
     complete = db.Column(db.Boolean, default=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __init__(self, due_date, description, complete, user_id):
+    def __init__(self, title, description, due_date, reminder, complete, user_id):
+        self.title = title
         self.due_date = due_date
         self.description = description
+        self.reminder = reminder
         self.complete = complete
         self.user_id = user_id
 
     def to_dict(self):
         return {
             'id': self.id,
-            'due_date': self.due_date.strftime('%Y-%m-%d'),
+            'title': self.title,
             'description': self.description,
+            'due_date': self.due_date.strftime('%Y-%m-%d'),
+            'reminder': self.reminder,
             'complete': self.complete
         }      
