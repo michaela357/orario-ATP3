@@ -4,11 +4,46 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/o_logo.png') }}">
     <title>{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href = "{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href = "{{ url_for('static', filename='/css/style.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
+<nav>
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('dashboard') }}" class="navbar-item">
+        Dashboard
+    </a>
+    <form id='logout-form' action="{{ url_for('logout') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
+    {% endif %}
+    {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('home') }}" class="navbar-item">
+        Home
+    </a>
+    <a href="{{ url_for('login') }}" class="navbar-item">
+        Login
+    </a>
+    <a href="{{ url_for('register') }}" class="navbar-item">
+        Sign Up
+    </a>
+    {% endif %}
+    <div class="theme-switch-container">
+        <label class="switch">
+            <input type="checkbox" id="toggleCheckbox" hidden>
+            <span class="slider-round"></span>
+        </label>
+        <em id="light-dark-indicator">Enable Light Mode!</em>
+    </div>
+</nav>
 <body>
+
     {% block content %}
     {% endblock %}
+    <script src = "../static/js/api.js"></script>
+    <script src = "../static/js/logout_validation.js"></script>
+    <script src="../static/js/change_theme.js"></script>
 </body>
-
+<div id="error-message" class="error"></div>
+<div id="success-message" class="success"></div>
 </html>

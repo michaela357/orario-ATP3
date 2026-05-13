@@ -1,0 +1,795 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+:root {
+    --bg-color: #f4f7f6;
+    --widget-bg: #ffffff;
+    --text-color: #1b1f48;
+    --button-color: #1b1f48;
+    --button-text-color: #f4f7f6;
+    --accent-color1: #00ffb7;
+    --accent-color2: #00ffb7;
+    --border-color: #eee;
+    --nav-bg: #1b1f48;
+}
+
+[data-theme="dark"] {
+    --bg-color: #0b0e24;
+    --widget-bg: #1b1f48;
+    --button-color: #f4f7f6;
+    --text-color: #f4f7f6;
+    --button-text-color: #1b1f48;
+    --accent-color1: #00ffb7;
+    --accent-color2: #1b1f48;
+    --border-color: #2a2f5b;
+    --nav-bg: #070914;
+}
+
+[data-theme="purple"] {
+    --bg-color: #41035e;
+    --widget-bg: #bb4bef;
+    --button-color: #41035e
+    --text-color: #f4f7f6;
+    --accent-color: #d3f127;
+    --border-color: #ffb9ea;
+    --nav-bg: #2a024d;
+}
+
+body {
+    margin: 0;
+    padding-top: 80px; 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: "Poppins", sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.home-title {
+    color: var(--text-color);
+    padding: 40px;
+    border: 2px solid var(--text-color); /* Professional solid border */
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+/* Container for all widgets */
+.widget-container {
+    display: flex;
+    flex-wrap: wrap;       /* Crucial for responsiveness */
+    gap: 2rem;             /* Consistent spacing between widgets */
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+/* Base style for every widget I add */
+.widget {
+    background: var(--widget-bg); /* Slight transparency looks modern */
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    
+    flex: 1 1 350px;
+    max-width: 100%;
+}
+
+.widget:hover {
+    transform: translateY(-5px); /* Subtle feedback */
+}
+
+/* Specific sizing for the Calendar */
+.card {
+    flex: 2 1 450px;
+}
+
+/* Title Styling */
+.dashboard-header {
+    width: 100%;
+    padding: 20px 40px;
+    color: white;
+}
+
+/* Responsive adjustment */
+@media (max-width: 800px) {
+    .widget-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .widget {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+.home-directions {
+    color: #444;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.wrapper {
+    width: 420px;
+    background: var(--widget-bg);
+    border: 1px solid var(--border-color);;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+    border-radius: 20px;
+    padding: 40px;
+}
+
+.wrapper h1{
+    font-size: 36px;
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+.wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    background: var(--bg-color);
+    border-radius: 40px;
+    margin: 25px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    font-size: 16px;
+    padding: 20px 45px 20px 20px;
+    color: var(--text-color);
+    border: 2px solid transparent;
+}
+
+.input-box input::placeholder{
+    color: var(--text-color);
+}
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 22px;
+    transform: translateY(-50%);
+    color: #777;
+    pointer-events: none; /* Allows clicks to pass through the label to the input */
+    transition: all 0.3s ease; /* Smooth transition for the movement */
+}
+
+.input-box input::placeholder {
+    color: var(--text-color);
+    opacity: 0;
+}
+
+.input-box input:focus::placeholder {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.input-box input:focus ~ label,
+.input-box input:not(:placeholder-shown) ~ label {
+    top: 0;
+    font-size: 12px;
+    color: var(--text-color);
+    transform: translateY(-9px);
+    padding: 0 5px;
+}
+  
+
+.input-box input:focus {
+    border-bottom-color: var(--accent-color1);
+}
+
+.wrapper .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.remember-forgot label input {
+    accent-color: var(--widget-bg);
+    margin-right: 3px;
+}
+
+.remember-forgot a {
+    color: var(--widget-bg);
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.remember-forgot input[type="checkbox"] {
+    accent-color: var(--accent-color1);
+    width: 20px;
+    transform: translateY(1.5px) translateX(1.5px);
+}
+
+.wrapper .btn {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    
+    font-size: 16px;
+    font-weight: 600;
+
+    background: var(--button-color);
+    color: var(--button-text-color);
+    transition: transform 0.2s ease;
+}
+
+.wrapper .btn:hover {
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    background: var(--nav-bg);
+    color: var(--accent-color1);
+    transform: translateY(-2px);
+}
+
+.wrapper .link {
+    font-size: 14.5px;
+    text-align: center;
+    margin: 20px 0 15px;
+}
+
+.link p a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link p a:hover {
+    text-decoration: underline;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--nav-bg);
+    z-index: 1000;
+}
+  
+nav a, nav button {
+    float: left;
+    background-color: var(--text-color);
+    display: block;
+    color: var(--border-color);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: all 0.5s ease;
+}
+
+nav button {
+    float: right;
+}
+
+ nav a:hover, nav button:hover {
+    background-color: #6e7193;
+    text-decoration: underline;
+}
+
+.error{
+    display: none;
+    color: red;
+    transition: opacity 0.5s ease;
+    background-color: #fce4e4;
+    border: 1px solid #fcc2c2;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+    bottom: 1%;
+    right: 1%;
+    margin:0%;
+}
+
+.success {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    color: rgb(12, 114, 12);
+    background-color: #e4fcee;
+    border: 1px solid #c2fcd3;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+    bottom: 1%;
+    right: 1%;
+    margin:0%;
+}
+
+/* Dashboard styles*/
+
+.dashboard-wrapper {
+    width: 100%;
+    max-width: 100vw;
+    padding: 10px 15px 40px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.dashboard-header {
+    width: 100%;
+    max-width: 2000px;
+    margin-bottom: 25px;
+}
+
+.dashboard-header h1 {
+    color: var(--text-color);
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.widget-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Theme switch style */
+.theme-switch-container {
+    padding: 10px;
+}
+
+.slider-round {
+    position: absolute;
+    cursor: pointer;
+    background-color: #e9e9e9;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider-round:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #072c4a;
+    -webkit-transition: .4s;
+    transition: .4s;
+    background-image: url('../img/icons8-moon-and-stars-30.png');
+}
+  
+
+input:checked + .slider-round {
+    background-color: #072c4a;
+}
+  
+input:focus + .slider-round {
+    box-shadow: 0 0 1px #072c4a;
+}
+  
+input:checked + .slider-round:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+    background-color: white;
+    background-image: url('../img/icons8-sun-50.png');
+}
+  
+  /* Rounded sliders */
+.slider-round {
+    border-radius: 34px;
+    width: 60px;
+    height: 35px;
+}
+
+.slider-round:before {
+    border-radius: 50%;
+}
+
+
+/* Base Widget Style */
+.widget {
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
+    transition: transform 0.3s ease;
+    align-self: flex-start;
+}
+
+.widget:hover {
+    transform: translateY(-5px);
+}
+
+.side-panel-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1 1 300px;
+    max-width: 450px;
+    height: 600px;
+}
+
+/* --- Clock widget --- */
+.widget.clock-widget {
+    flex: 1 1 400px;
+    min-width: 300px;
+    max-width: 450px;
+    background-color: var(--text-color);
+    color: var(--accent-color2);
+    align-self: center;
+    width: 110%;
+}
+
+#current-time {
+    display: block;
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: var(--accent-color2);
+    text-shadow: 0 0 10px rgba(0, 255, 183, 0.3);
+}
+
+.clock-widget label {
+    color: var(--widget-bg);
+    font-size: 0.95rem;
+    margin-left: 5px;
+}
+
+.clock-widget input[type="radio"] {
+    accent-color: var(--accent-color1);
+}
+
+/* Inspirational quote widget */
+.widget.side-panel.quote {
+    background: var(--widget-bg);
+    padding: 30px;
+    border-radius: 15px;
+    border-left: 5px solid var(--accent-color1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 20px;
+    display: block;
+    min-height: 80px;
+    max-height: 400px;
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+
+.widget.side-panel.quote h1{
+    color: var(--text-color);
+}
+
+/* Quote Text */
+#editable-quote {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-style: italic;
+    cursor: pointer;
+    outline: none;
+    line-height: 1.4;
+    transition: 0.2s;
+    display: block;
+    width: 100%;
+
+    /* Force long words to break */
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
+span #editable-quote {
+    max-width: 100%;
+}
+
+/* When editing, give it a slight mint glow */
+#editable-quote[contenteditable="true"] {
+    color: var(--accent-color1);
+    background-color: var(--text-color);
+    padding: 5%;
+    border-bottom: 1px dashed var(--accent-color1);
+}
+
+/* The "Editing..." text/button */
+#name-edit {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 0.8rem;
+    text-align: left;
+    padding: 0;
+    margin-top: 10px;
+    font-family: inherit;
+    pointer-events: none;
+}
+
+
+/* --- To-do widget --- */
+.widget-to-do {
+    flex: 2 1 500px;
+    max-width: 650px;
+    min-width: 600px;
+    background-color: var(--widget-bg);
+    align-self: top;
+    align-self: center;
+    padding: 80px 80px 50px 80px;
+}
+
+.to-do-title {
+    color:var(--accent-color2);
+    text-align: center;
+}
+a .button {
+    color: green;
+}
+div .todo-buttons a{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    color: black;
+    text-decoration-color: #000000;
+}
+
+/* --- Calendar widget --- */
+.card {
+    flex: 2 1 500px;
+    max-width: 650px;
+    min-width: 600px;
+    background-color: var(--widget-bg);
+    align-self: top;
+    align-self: center;
+    padding: 80px 80px 50px 80px;
+}
+
+.card-header {
+    background: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    border-radius: 12px;
+    align-items: center;
+    color: var(--widget-bg);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.button {
+    text-decoration: none;
+    color: white;
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.button:hover {
+    background-color: #5f65a4ab;
+}
+
+.bordered-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bordered-table th {
+    color: var(--text-color);
+    padding-bottom: 15px;
+    opacity: 0.7;
+}
+
+.bordered-table td {
+    height: 55px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: 0.2s;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.bordered-table td:hover:not(:empty) {
+    background-color: var(--text-color);
+    color: var(--accent-color2);
+}
+
+.bordered-table td {
+    position: relative;
+    height: 55px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.task-dot {
+    display: block;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.current-day .task-dot {
+    background-color: var(--text-color);
+    box-shadow: none;
+}
+
+/* Current day */
+.bordered-table td.current-day {
+    background-color: var(--accent-color1);
+    color: var(--text-color);
+    font-weight: 800;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 255, 183, 0.5);
+}
+
+.bordered-table td.current-day:hover {
+    background-color: var(--text-color);
+    color: var(--accent-color2);
+}
+
+.widget.card .btn {
+    display: block;
+    width: fit-content;
+    margin: 20px auto 0 auto;
+    padding: 8px 25px;
+    background-color: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    border-radius: 40px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.widget.card .btn:hover {
+    background-color: var(--text-color);
+    color: var(--accent-color2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(27, 31, 72, 0.2);
+}
+
+/* Stacking for the dashboard */
+@media (max-width: 1000px) {
+    .widget-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .side-panel-column.clock-widget, .card {
+        width: 100%;
+        max-width: 600px;
+        flex: none;
+    }
+    
+    .dashboard-header {
+        text-align: center;
+    }
+}
+
+/* Optimization for Large Screens */
+@media (min-width: 1200px) {
+    .widget-container {
+        max-width: 1400px;
+        gap: 40px;
+    }
+
+    .side-panel-column {
+        flex: 0 0 400px;
+    }
+
+    .card {
+        flex: 1;
+        max-width: 900px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 3rem;
+    }
+}
+
+/* Modal Background (Overlay) */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 2000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(27, 31, 72, 0.7);
+    backdrop-filter: blur(8px); /* Frosted glass effect */
+}
+.task-popover {
+    display: none;
+    position: absolute;
+    z-index: 3000;
+    width: 200px;
+    background: var(--text-color);
+    color: var(--widget-bg);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border: 1px solid var(--accent-color1);
+    transition: opacity 0.5s ease;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.task-popover h4 {
+    color: var(--accent-color2);
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+}
+
+.task-popover p {
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+.popover-arrow {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--text-color);
+    border-left: 1px solid var(--accent-color1);
+    border-top: 1px solid var(--accent-color1);
+    top: 10px;
+    left: -5.7px;
+    transform: rotate(-45deg);
+}

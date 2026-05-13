@@ -1,0 +1,9 @@
+users.db
+__pycache__/app.cpython-313.pyc
+__pycache__/extensions.cpython-313.pyc
+__pycache__/models.cpython-313.pyc
+__pycache__/tests
+tests/__pycache__/__init__.cpython-313.pyc
+tests/__pycache__/test_auth_login.cpython-313-pytest-8.3.3.pyc
+tests/__pycache__/test_auth_register.cpython-313-pytest-8.3.3.pyc
+tests/__pycache__/test_csrf_protection.cpython-313-pytest-8.3.3.pyc
