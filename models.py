@@ -30,8 +30,8 @@ class Task(db.Model):
 
     def __init__(self, title, description, due_date, reminder, complete, user_id):
         self.title = title
-        self.due_date = due_date
         self.description = description
+        self.due_date = due_date
         self.reminder = reminder
         self.complete = complete
         self.user_id = user_id
