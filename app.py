@@ -27,7 +27,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
 # Stops circular import
-from models import User
+from models import User, Task
 
 # Load user for Flask-Login
 @login_manager.user_loader
@@ -44,6 +44,48 @@ def home():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard')) # Send users back to dashboard if logged in
     return render_template('home.html')
+
+# To-do routes
+@app.route('/api/get_tasks')
+@login_required
+def get_tasks():
+    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
+    
+    print(f"Found {len(user_tasks)} tasks for {current_user.username}")
+    
+    return jsonify([task.to_dict() for task in user_tasks])
+
+@app.route('/api/add_task', methods=['POST'])
+@login_required
+def add_task():
+    data = request.get_json()
+
+    title = html.escape(data.get('title'))
+    description = html.escape(data.get('description'))
+    due_date = data.get('due_date')
+    reminder = True if data.get('reminder') else False
+
+    try:
+        from datetime import datetime
+        valid_date = datetime.strptime(due_date, '%Y-%m-%d').date()
+
+        new_task = Task(
+            title=title,
+            description=description,
+            due_date=valid_date,
+            reminder=reminder,
+            complete=False,
+            user_id=current_user.id
+        )
+
+        db.session.add(new_task)
+        db.session.commit()
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        print(f"Error: {e}")
+        db.session.rollback()
+        return jsonify({"success": False, "error": "An unexpected error occurred"}), 500
+
 
 # Custom error response
 @app.errorhandler(CSRFError)
@@ -186,10 +228,16 @@ def dashboard():
     current_year = datetime.now().year
     
     # temporary tasks dictionary to work with to put on dashboard
-    tasks = {
-        1 : ['Software notes', 'Notes on secure software architecture', datetime.strptime('1/4/2026', "%d/%m/%Y").date(), 'No'],
-        2 : ['Make lunch', 'Peel carrots and make a sandwich', datetime.strptime('15/04/2026', "%d/%m/%Y").date(), 'Yes']
-    }
+    user_tasks = current_user.tasks.order_by(Task.due_date.asc()).all()
+
+    tasks_dict = {}
+    for task in user_tasks:
+        tasks_dict[task.id] = [
+            task.title,
+            task.description,
+            task.due_date, 
+            'Yes' if task.reminder else 'No'
+        ]
 
     return render_template('dashboard.html',
                             user_quote=user_quote,
@@ -205,7 +253,7 @@ def dashboard():
                             today=today,
                             current_month=current_month,
                             current_year=current_year,
-                            Tasks=tasks
+                            Tasks=tasks_dict
                         )
 
 @app.route('/api/update_quote', methods=['POST'])
