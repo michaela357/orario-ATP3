@@ -74,7 +74,7 @@ def add_task():
             description=description,
             due_date=valid_date,
             reminder=reminder,
-            complete=False,
+            is_complete=False,
             user_id=current_user.id
         )
 
@@ -86,11 +86,48 @@ def add_task():
         db.session.rollback()
         return jsonify({"success": False, "error": "An unexpected error occurred"}), 500
 
+@app.route('/api/edit_task', methods=['POST'])
+def edit_task():
+    data = request.get_json()
+    task = db.session.get(Task, task_id)
+
+    if not task or task.user_id != current_user.id:
+        return jsonify({"success": False, "error": "Task not found"}), 404
+
+    try:
+        if 'title' in data:
+            task.title = html.escape(data.get('title'))
+        if 'description' in data:
+            task.description = html.escape(data.get('description'))
+        if 'due_date' in data:
+            task.due_date = datetime.strptime(data.get('due_date'), '%Y-%m-%d').date()
+        if 'is_complete' in data:
+            task.is_complete = bool(data.get('is_complete'))
+        if 'reminder' in data:
+            task.reminder = bool(data.get('reminder'))
+
+        db.session.commit()
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/delete_task/<int:task_id>', methods=['POST'])
+@login_required
+def delete_task(task_id):
+    task = db.session.get(Task, task_id)
+    
+    if task and task.user_id == current_user.id:
+        db.session.delete(task)
+        db.session.commit()
+        return jsonify({"success": True}), 200
+    
+    return jsonify({"success": False, "error": "Unauthorised"}), 403
 
 # Custom error response
 @app.errorhandler(CSRFError)
 def handle_csrf_error(e):
-    return jsonify({"success": False, "error": f"CSRF Error: {e.description}"}), 400
+    return render_template("404.html", error_message=e.description), 400
 
 @app.errorhandler(404)
 def page_not_found_error(e):
@@ -235,7 +272,8 @@ def dashboard():
         tasks_dict[task.id] = [
             task.title,
             task.description,
-            task.due_date, 
+            task.due_date,
+            'Complete' if task.is_complete else 'Incomplete',
             'Yes' if task.reminder else 'No'
         ]
 
