@@ -376,6 +376,8 @@ nav button {
 /* Theme switch style */
 .theme-switch-container {
     padding: 10px;
+    color: var(--accent-color1);
+    display: flexbox;
 }
 
 .slider-round {
@@ -575,6 +577,108 @@ div .todo-buttons a{
     text-decoration-color: #000000;
 }
 
+/* --- To-do popup --- */
+/* Button styling */
+.open-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 20px;
+    border-radius: 5px;
+}
+.open-btn:hover {
+    background-color: #45a049;
+}
+
+/* Overlay background */
+.overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+/* Popup box */
+.popup {
+    background: var(--bg-color);
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* Form styling */
+.popup form {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+.popup input[type="text"], .popup input[type="email"] {
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+.popup button[type="submit"] {
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.popup button[type="submit"]:hover {
+    background-color: var(--button-color);
+    color: var(--accent-color2)
+}
+
+.task-button {
+    background-color: var(--button-color);
+    padding: 10px;
+    border: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--button-text-color);
+}
+
+#button.complete {
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+#button.complete:hover {
+    cursor: pointer;
+    color: var(--accent-color2);
+}
+
+#button.incomplete {
+    cursor: pointer;
+    color: red;
+}
+
 /* --- Calendar widget --- */
 .card {
     flex: 2 1 500px;
@@ -628,7 +732,6 @@ div .todo-buttons a{
 .bordered-table td {
     height: 55px;
     text-align: center;
-    cursor: pointer;
     border-radius: 12px;
     transition: 0.2s;
     color: var(--text-color);
