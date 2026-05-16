@@ -160,3 +160,55 @@ document.getElementById("edit-task-form")
         alert(data.error);
     }
 });
+
+
+
+function requestNotificationPermission() {
+    if (!("Notification" in window)) {
+        console.log("This browser does not support desktop notifications");
+        return;
+    }
+
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                console.log("Notification permission granted!");
+            }
+        });
+    }
+}
+
+// Call this when the page loads
+document.addEventListener('DOMContentLoaded', requestNotificationPermission);
+
+
+function showNotification(title, body) {
+    if (Notification.permission === "granted") {
+        const notification = new Notification(title, {
+            body: body,
+            icon: "/static/img/logo.png" // Optional: path to an icon
+        });
+
+        notification.onclick = () => {
+            window.focus(); // Bring the tab to the front when clicked
+        };
+    }
+}
+
+
+function checkReminders() {
+    fetch('/api/get_tasks')
+        .then(res => res.json())
+        .then(tasks => {
+            const now = new Date().toISOString().split('T')[0]; // Current date
+            tasks.forEach(task => {
+                // If task is due today, hasn't been reminded, and has reminder=True
+                if (task.due_date === now && task.reminder && !task.is_complete) {
+                    showNotification("Task Reminder!", `Don't forget: ${task.title}`);
+                }
+            });
+        });
+}
+
+// Check every minute
+setInterval(checkReminders, 60000);
