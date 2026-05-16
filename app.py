@@ -49,26 +49,78 @@ def home():
 @app.route('/api/get_tasks')
 @login_required
 def get_tasks():
-    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
-    
-    print(f"Found {len(user_tasks)} tasks for {current_user.username}")
-    
-    return jsonify([task.to_dict() for task in user_tasks])
+    user_tasks = (
+        Task.query
+        .filter_by(user_id=current_user.id)
+        .order_by(Task.due_date.asc())
+        .all()
+    )
+
+    return jsonify({
+        "success": True,
+        "tasks": [task.to_dict() for task in user_tasks]
+    }), 200
 
 @app.route('/api/add_task', methods=['POST'])
 @login_required
 def add_task():
     data = request.get_json()
 
-    title = html.escape(data.get('title'))
-    description = html.escape(data.get('description'))
+    if not data:
+        return jsonify({
+            "success": False,
+            "error": "Invalid request"
+        }), 400
+
+    title = html.escape(data.get('title', '').strip())
+    description = html.escape(data.get('description', '').strip())
     due_date = data.get('due_date')
-    reminder = True if data.get('reminder') else False
+    reminder = bool(data.get('reminder', False))
+
+    # Validation
+    if not title:
+        return jsonify({
+            "success": False,
+            "error": "Title is required"
+        }), 400
+
+    if len(title) > 100:
+        return jsonify({
+            "success": False,
+            "error": "Title too long"
+        }), 400
+
+    if not description:
+        return jsonify({
+            "success": False,
+            "error": "Description is required"
+        }), 400
+
+    if len(description) > 500:
+        return jsonify({
+            "success": False,
+            "error": "Description too long"
+        }), 400
+
+    if not due_date:
+        return jsonify({
+            "success": False,
+            "error": "Due date is required"
+        }), 400
 
     try:
-        from datetime import datetime
-        valid_date = datetime.strptime(due_date, '%Y-%m-%d').date()
+        valid_date = datetime.strptime(
+            due_date,
+            '%Y-%m-%d'
+        ).date()
 
+    except ValueError:
+        return jsonify({
+            "success": False,
+            "error": "Invalid date"
+        }), 400
+
+    try:
         new_task = Task(
             title=title,
             description=description,
@@ -80,49 +132,97 @@ def add_task():
 
         db.session.add(new_task)
         db.session.commit()
-        return jsonify({"success": True}), 200
-    except Exception as e:
-        print(f"Error: {e}")
-        db.session.rollback()
-        return jsonify({"success": False, "error": "An unexpected error occurred"}), 500
 
-@app.route('/api/edit_task', methods=['POST'])
-def edit_task():
+        return jsonify({
+            "success": True,
+            "task": new_task.to_dict()
+        }), 201
+
+    except Exception:
+        db.session.rollback()
+
+        return jsonify({
+            "success": False,
+            "error": "An unexpected error occurred"
+        }), 500
+
+@app.route('/api/edit_task/<int:task_id>', methods=['POST'])
+@login_required
+def edit_task(task_id):
+
     data = request.get_json()
+
     task = db.session.get(Task, task_id)
 
     if not task or task.user_id != current_user.id:
-        return jsonify({"success": False, "error": "Task not found"}), 404
+        return jsonify({
+            "success": False,
+            "error": "Task not found"
+        }), 404
 
     try:
+
         if 'title' in data:
             task.title = html.escape(data.get('title'))
+
         if 'description' in data:
             task.description = html.escape(data.get('description'))
+
         if 'due_date' in data:
-            task.due_date = datetime.strptime(data.get('due_date'), '%Y-%m-%d').date()
+            task.due_date = datetime.strptime(
+                data.get('due_date'),
+                '%Y-%m-%d'
+            ).date()
+
         if 'is_complete' in data:
             task.is_complete = bool(data.get('is_complete'))
+
         if 'reminder' in data:
             task.reminder = bool(data.get('reminder'))
 
         db.session.commit()
-        return jsonify({"success": True}), 200
+
+        return jsonify({
+            "success": True
+        }), 200
+
     except Exception as e:
+
         db.session.rollback()
-        return jsonify({"success": False, "error": str(e)}), 500
+
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
 
 @app.route('/api/delete_task/<int:task_id>', methods=['POST'])
 @login_required
 def delete_task(task_id):
+
     task = db.session.get(Task, task_id)
-    
-    if task and task.user_id == current_user.id:
+
+    if not task or task.user_id != current_user.id:
+        return jsonify({
+            "success": False,
+            "error": "Task not found"
+        }), 404
+
+    try:
         db.session.delete(task)
         db.session.commit()
-        return jsonify({"success": True}), 200
-    
-    return jsonify({"success": False, "error": "Unauthorised"}), 403
+
+        return jsonify({
+            "success": True
+        }), 200
+
+    except Exception:
+        db.session.rollback()
+
+        return jsonify({
+            "success": False,
+            "error": "Could not delete task"
+        }), 500
+
 
 # Custom error response
 @app.errorhandler(CSRFError)
@@ -267,32 +367,46 @@ def dashboard():
     # temporary tasks dictionary to work with to put on dashboard
     user_tasks = current_user.tasks.order_by(Task.due_date.asc()).all()
 
-    tasks_dict = {}
-    for task in user_tasks:
-        tasks_dict[task.id] = [
-            task.title,
-            task.description,
-            task.due_date,
-            'Complete' if task.is_complete else 'Incomplete',
-            'Yes' if task.reminder else 'No'
-        ]
+    tasks_by_day = {}
 
-    return render_template('dashboard.html',
-                            user_quote=user_quote,
-                            name=first_name,
-                            year=year,
-                            month=month,
-                            calendar=cal,
-                            prev_year=prev_year,
-                            prev_month=prev_month,
-                            next_year=next_year,
-                            next_month=next_month,
-                            month_name=month_name,
-                            today=today,
-                            current_month=current_month,
-                            current_year=current_year,
-                            Tasks=tasks_dict
-                        )
+    for task in user_tasks:
+
+        if (
+            task.due_date.month == month and
+            task.due_date.year == year
+        ):
+
+            day = task.due_date.day
+
+            if day not in tasks_by_day:
+                tasks_by_day[day] = []
+
+            tasks_by_day[day].append(task)
+
+    return render_template(
+        'dashboard.html',
+        user_quote=user_quote,
+        name=first_name,
+        
+        year=year,
+        month=month,
+        calendar=cal,
+
+        prev_year=prev_year,
+        prev_month=prev_month,
+
+        next_year=next_year,
+        next_month=next_month,
+
+        month_name=month_name,
+
+        today=today,
+        current_month=current_month,
+        current_year=current_year,
+
+        tasks=user_tasks,
+        tasks_by_day=tasks_by_day
+    )
 
 @app.route('/api/update_quote', methods=['POST'])
 @login_required
