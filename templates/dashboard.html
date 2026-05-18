@@ -21,7 +21,7 @@
 
             <div class="widget side-panel quote">
                 <h1>Inspirational Quote</h1>
-                <meta name="csrf-token" content="{{ csrf_token() }}">
+                <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
                 <br><br>
                 <span id="editable-quote" contenteditable="False">{{ user_quote or "The harder I work, the luckier I get" }}</span>
                 <button id="name-edit" hidden="True">✍️ Click to edit quote</button>
@@ -62,7 +62,11 @@
                     
                                 {% if tasks_by_day.get(day) %}
                                     {% for task in tasks_by_day[day] %}
-                                        <span class="task-dot"></span>
+                                        {% if task.is_complete %}
+                                        <span class="task-dot-green"></span>
+                                        {% else %}
+                                        <span class="task-dot-red"></span>
+                                        {% endif %}
                                     {% endfor %}
                                 {% endif %}
                             {% endif %}
@@ -156,15 +160,17 @@
 <!-- Popup form to add task -->
 <div class="overlay" id="popupOverlay">
     <div class="popup">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
         <button class="close-btn" onclick="closeAddPopup()">&times;</button>
         <h2>Add a task</h2>
-        <form onsubmit="return validateForm(event)">
-            <input type="text" id="title" placeholder="Title" required>
-            <input type="text" id="description" placeholder="Description" required>
-            <input type="date" id="due_date" placeholder="Date due" required>
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
+        <form id="add-task-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="text" name="title" id="title" placeholder="Title" required>
+            <input type="text" name="description" id="description" placeholder="Description" required>
+            <input type="date" name="due_date" id="due_date" required>
             <label>
-            <input type="checkbox" id="reminder">Reminder?
+            <input type="checkbox" name="reminder" id="reminder">Reminder?
             </label>
             <button type="submit">Submit</button>
         </form>
@@ -177,7 +183,10 @@
     <div class="popup">
         <button class="close-btn" onclick="closeEditPopup()">&times;</button>
         <h2>Edit Task</h2>
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
         <form id="edit-task-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="hidden" id="edit-task-id">
             <input type="text" id="edit-title" placeholder="Title" required>
             <input type="text" id="edit-description" placeholder="Description" required>
