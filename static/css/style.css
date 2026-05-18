@@ -750,17 +750,21 @@ div .todo-buttons a{
     vertical-align: middle;
 }
 
-.task-dot {
-    display: block;
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    background-color: #ff0000;
+.task-dot-red,
+.task-dot-green {
+    height: 8px;
+    width: 8px;
     border-radius: 50%;
-    z-index: 10;
+    display: inline-block;
+    margin-left: 2px;
+}
+
+.task-dot-red {
+    background-color: #ff4d4d;
+}
+
+.task-dot-green {
+    background-color: #42d66a;
 }
 
 .current-day .task-dot {
