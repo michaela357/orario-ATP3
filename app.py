@@ -64,63 +64,23 @@ def get_tasks():
 @app.route('/api/add_task', methods=['POST'])
 @login_required
 def add_task():
-    data = request.get_json()
+    title = html.escape(request.form.get('title', '').strip())
+    description = html.escape(request.form.get('description', '').strip())
+    due_date = request.form.get('due_date')
+    reminder = True if request.form.get('reminder') else False
+    print(reminder)
 
-    if not data:
-        return jsonify({
-            "success": False,
-            "error": "Invalid request"
-        }), 400
+    if not title or not due_date:
+        return jsonify({"success": False, "error": "Title and Date are required"}), 400
 
-    title = html.escape(data.get('title', '').strip())
-    description = html.escape(data.get('description', '').strip())
-    due_date = data.get('due_date')
-    reminder = bool(data.get('reminder', False))
-
-    # Validation
-    if not title:
-        return jsonify({
-            "success": False,
-            "error": "Title is required"
-        }), 400
-
-    if len(title) > 100:
-        return jsonify({
-            "success": False,
-            "error": "Title too long"
-        }), 400
-
-    if not description:
-        return jsonify({
-            "success": False,
-            "error": "Description is required"
-        }), 400
-
-    if len(description) > 500:
-        return jsonify({
-            "success": False,
-            "error": "Description too long"
-        }), 400
-
-    if not due_date:
-        return jsonify({
-            "success": False,
-            "error": "Due date is required"
-        }), 400
+    if len(title) > 50:
+        return jsonify({"success": False, "error": "Title is too long"}), 400
+    
+    if len(description) > 100:
+        return jsonify({"success": False, "error": "Description is too long"}), 400
 
     try:
-        valid_date = datetime.strptime(
-            due_date,
-            '%Y-%m-%d'
-        ).date()
-
-    except ValueError:
-        return jsonify({
-            "success": False,
-            "error": "Invalid date"
-        }), 400
-
-    try:
+        valid_date = datetime.strptime(due_date, '%Y-%m-%d').date()
         new_task = Task(
             title=title,
             description=description,
@@ -129,28 +89,18 @@ def add_task():
             is_complete=False,
             user_id=current_user.id
         )
-
         db.session.add(new_task)
         db.session.commit()
-
-        return jsonify({
-            "success": True,
-            "task": new_task.to_dict()
-        }), 201
-
-    except Exception:
+        return jsonify({"success": True, "redirect": url_for('dashboard')}), 201
+    except Exception as e:
         db.session.rollback()
-
-        return jsonify({
-            "success": False,
-            "error": "An unexpected error occurred"
-        }), 500
+        return jsonify({"success": False, "error": "Database error"}), 500
 
 @app.route('/api/edit_task/<int:task_id>', methods=['POST'])
 @login_required
 def edit_task(task_id):
 
-    data = request.get_json()
+    data = request.form
 
     task = db.session.get(Task, task_id)
 
@@ -175,10 +125,10 @@ def edit_task(task_id):
             ).date()
 
         if 'is_complete' in data:
-            task.is_complete = bool(data.get('is_complete'))
+            task.is_complete = data.get('is_complete') == 'true'
 
         if 'reminder' in data:
-            task.reminder = bool(data.get('reminder'))
+            task.reminder = data.get('reminder') == 'true'
 
         db.session.commit()
 
