@@ -101,7 +101,7 @@ async function toggleComplete(taskId, currentStatus) {
 async function deleteTask(taskId) {
     if (!confirm("Are you sure you want to delete this task?")) return;
     
-    const csrfToken = formData.get('csrf_token');
+    const csrfToken = document.querySelector('input[name="csrf_token"]').getAttribute('value');
 
     const response = await fetch(`/api/delete_task/${taskId}`, {
         method: 'POST',
