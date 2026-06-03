@@ -6,10 +6,12 @@ import secrets
 import html
 import regex as re
 from datetime import timedelta, datetime
+from collections import defaultdict
 import calendar
 from extensions import db
 from routes.auth import auth_bp
 from routes.tasks import tasks_bp
+from utils.utils import get_calendar_navigation
 
 # Initialise Flask app
 app = Flask(__name__)
@@ -138,82 +140,48 @@ def register():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    first_name = current_user.name.split()[0]
-    user_quote = current_user.quote
-
+    # Parse and Validate Arguments
+    now = datetime.now()
     try:
-        year = int(request.args.get("year", datetime.now().year))
-        month = int(request.args.get("month", datetime.now().month))
+        year = int(request.args.get("year", now.year))
+        month = int(request.args.get("month", now.month))
+        if not (1 <= month <= 12):
+            raise ValueError
     except ValueError:
-        return jsonify({
-            "success": False,
-            "error": "Invalid Arguments"
-        }), 400
+        return jsonify({"success": False, "error": "Invalid Arguments"}), 400
+
+    prev_year, prev_month, next_year, next_month = get_calendar_navigation(year, month)
     
-    month_name = calendar.month_name[month]
+    # Query tasks for the month efficiently using filters
+    monthly_tasks = current_user.tasks.filter(
+        db.extract('year', Task.due_date) == year,
+        db.extract('month', Task.due_date) == month
+    ).order_by(Task.due_date.asc()).all()
 
-    cal = calendar.Calendar().monthdayscalendar(year, month)
-
-    if month > 1:
-        prev_month = month - 1
-        prev_year = year
-    else:
-        prev_month = 12
-        prev_year = year - 1
+    #group tasks by day
+    tasks_by_day = defaultdict(list)
+    for task in monthly_tasks:
+        tasks_by_day[task.due_date.day].append(task)
     
-    if month < 12:
-        next_month = month + 1
-        next_year = year
-    else:
-        next_month = 1
-        next_year = year + 1
-
-    today = datetime.now().day
-    current_month = datetime.now().month
-    current_year = datetime.now().year
+    first_name = current_user.name.split()[0]
     
-    # temporary tasks dictionary to work with to put on dashboard
-    user_tasks = current_user.tasks.order_by(Task.due_date.asc()).all()
-
-    tasks_by_day = {}
-
-    for task in user_tasks:
-
-        if (
-            task.due_date.month == month and
-            task.due_date.year == year
-        ):
-
-            day = task.due_date.day
-
-            if day not in tasks_by_day:
-                tasks_by_day[day] = []
-
-            tasks_by_day[day].append(task)
-
     return render_template(
         'dashboard.html',
-        user_quote=user_quote,
+        user_quote=current_user.quote,
         name=first_name,
-        
         year=year,
         month=month,
-        calendar=cal,
-
+        calendar=calendar.Calendar().monthdayscalendar(year, month),
+        month_name=calendar.month_name[month],
         prev_year=prev_year,
         prev_month=prev_month,
-
         next_year=next_year,
         next_month=next_month,
-
-        month_name=month_name,
-
-        today=today,
-        current_month=current_month,
-        current_year=current_year,
-
-        tasks=user_tasks,
-        tasks_by_day=tasks_by_day
+        today=now.day,
+        current_month=now.month,
+        current_year=now.year,
+        tasks=monthly_tasks,
+        tasks_by_day=dict(tasks_by_day)
     )
 
 @app.route('/api/update_quote', methods=['POST'])
@@ -228,7 +196,6 @@ def update_quote():
     db.session.commit()
 
     return jsonify({'status': 'success'}), 200
-
 
 @app.route('/logout', methods=["POST"])
 @login_required
