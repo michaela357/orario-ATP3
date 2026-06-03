@@ -94,7 +94,7 @@
             <table class="bordered-table">
                 <thead>
                     <tr>
-                    <th>Task ID</th>
+                    <th>Priority</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th>Due date</th>
@@ -107,7 +107,7 @@
                     {% for task in tasks %}
                     <tr>
                     
-                        <td><strong>{{ task.id }}</strong></td>
+                        <td><strong>{{ loop.index }}</strong></td>
                     
                         <td>{{ task.title }}</td>
                     
