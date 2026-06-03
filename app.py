@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, session, make_response
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask import Flask, render_template, request, url_for, redirect, jsonify, session, make_response
+from flask_login import LoginManager, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect, CSRFError
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 import secrets
 import html
 import regex as re
@@ -9,6 +9,7 @@ from datetime import timedelta, datetime
 import calendar
 from extensions import db
 from routes.auth import auth_bp
+from routes.tasks import tasks_bp
 
 # Initialise Flask app
 app = Flask(__name__)
@@ -24,6 +25,7 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # CSRF protection
 db.init_app(app)
 
 app.register_blueprint(auth_bp)
+app.register_blueprint(tasks_bp)
 
 # Configure Flask-Login
 login_manager = LoginManager(app)
@@ -47,135 +49,6 @@ def home():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard')) # Send users back to dashboard if logged in
     return render_template('home.html')
-
-# To-do routes
-@app.route('/api/get_tasks')
-@login_required
-def get_tasks():
-    user_tasks = (
-        Task.query
-        .filter_by(user_id=current_user.id)
-        .order_by(Task.due_date.asc())
-        .all()
-    )
-
-    return jsonify({
-        "success": True,
-        "tasks": [task.to_dict() for task in user_tasks]
-    }), 200
-
-@app.route('/api/add_task', methods=['POST'])
-@login_required
-def add_task():
-    title = html.escape(request.form.get('title', '').strip())
-    description = html.escape(request.form.get('description', '').strip())
-    due_date = request.form.get('due_date')
-    reminder = True if request.form.get('reminder') else False
-    print(reminder)
-
-    if not title or not due_date:
-        return jsonify({"success": False, "error": "Title and Date are required"}), 400
-
-    if len(title) > 50:
-        return jsonify({"success": False, "error": "Title is too long"}), 400
-    
-    if len(description) > 100:
-        return jsonify({"success": False, "error": "Description is too long"}), 400
-
-    try:
-        valid_date = datetime.strptime(due_date, '%Y-%m-%d').date()
-        new_task = Task(
-            title=title,
-            description=description,
-            due_date=valid_date,
-            reminder=reminder,
-            is_complete=False,
-            user_id=current_user.id
-        )
-        db.session.add(new_task)
-        db.session.commit()
-        return jsonify({"success": True, "redirect": url_for('dashboard')}), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"success": False, "error": "Database error"}), 500
-
-@app.route('/api/edit_task/<int:task_id>', methods=['POST'])
-@login_required
-def edit_task(task_id):
-
-    data = request.form
-
-    task = db.session.get(Task, task_id)
-
-    if not task or task.user_id != current_user.id:
-        return jsonify({
-            "success": False,
-            "error": "Task not found"
-        }), 404
-
-    try:
-
-        if 'title' in data:
-            task.title = html.escape(data.get('title'))
-
-        if 'description' in data:
-            task.description = html.escape(data.get('description'))
-
-        if 'due_date' in data:
-            task.due_date = datetime.strptime(
-                data.get('due_date'),
-                '%Y-%m-%d'
-            ).date()
-
-        if 'is_complete' in data:
-            task.is_complete = data.get('is_complete') == 'true'
-
-        if 'reminder' in data:
-            task.reminder = data.get('reminder') == 'true'
-
-        db.session.commit()
-
-        return jsonify({
-            "success": True
-        }), 200
-
-    except Exception as e:
-
-        db.session.rollback()
-
-        return jsonify({
-            "success": False,
-            "error": str(e)
-        }), 500
-
-@app.route('/api/delete_task/<int:task_id>', methods=['POST'])
-@login_required
-def delete_task(task_id):
-
-    task = db.session.get(Task, task_id)
-
-    if not task or task.user_id != current_user.id:
-        return jsonify({
-            "success": False,
-            "error": "Task not found"
-        }), 404
-
-    try:
-        db.session.delete(task)
-        db.session.commit()
-
-        return jsonify({
-            "success": True
-        }), 200
-
-    except Exception:
-        db.session.rollback()
-
-        return jsonify({
-            "success": False,
-            "error": "Could not delete task"
-        }), 500
-
 
 # Custom error response
 @app.errorhandler(CSRFError)
