@@ -8,6 +8,7 @@ import regex as re
 from datetime import timedelta, datetime
 import calendar
 from extensions import db
+from routes.auth import auth_bp
 
 # Initialise Flask app
 app = Flask(__name__)
@@ -22,9 +23,11 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # CSRF protection
 # Initialise database
 db.init_app(app)
 
+app.register_blueprint(auth_bp)
+
 # Configure Flask-Login
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'auth.login'
 
 # Stops circular import
 from models import User, Task
@@ -258,24 +261,6 @@ def register():
             return jsonify({"success": False, "error": "An unexpected error occurred"}), 500
 
     return render_template("register.html")
-    
-# Login route
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        email = request.form.get('email')
-        password = request.form.get('password')
-        remember = True if request.form.get('remember') else False
-
-        existing_user = User.query.filter_by(email=email).first()
-
-        if not existing_user or not check_password_hash(existing_user.password, password):
-            return jsonify({'success': False, 'error': 'Invalid login details'}), 400
-        
-        login_user(existing_user, remember=remember)
-        return jsonify({"success": True, "redirect": "/dashboard"}), 200
-    
-    return render_template("login.html")
 
 @app.route('/dashboard')
 @login_required
