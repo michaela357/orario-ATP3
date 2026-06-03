@@ -1,9 +1,11 @@
-from flask import Blueprint, request, render_template, jsonify, url_for
-from flask_login import login_required, current_user
 import html
 from datetime import datetime
-from models import Task
+
+from flask import Blueprint, jsonify, request, url_for
+from flask_login import current_user, login_required
+
 from extensions import db
+from models import Task
 
 tasks_bp = Blueprint("tasks", __name__)
 

@@ -1,13 +1,16 @@
-from flask import Flask, render_template, request, url_for, redirect, jsonify, session, make_response
-from flask_login import LoginManager, logout_user, login_required, current_user
-from flask_wtf.csrf import CSRFProtect, CSRFError
-from werkzeug.security import generate_password_hash
-import secrets
-import html
-import regex as re
-from datetime import timedelta, datetime
-from collections import defaultdict
 import calendar
+import html
+import secrets
+from collections import defaultdict
+from datetime import datetime, timedelta
+
+import regex as re
+from flask import (Flask, jsonify, make_response, redirect, render_template,
+                   request, session, url_for)
+from flask_login import LoginManager, current_user, login_required, logout_user
+from flask_wtf.csrf import CSRFError, CSRFProtect
+from werkzeug.security import generate_password_hash
+
 from extensions import db
 from routes.auth import auth_bp
 from routes.tasks import tasks_bp
@@ -34,7 +37,8 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'auth.login'
 
 # Stops circular import
-from models import User, Task
+from models import Task, User
+
 
 # Load user for Flask-Login
 @login_manager.user_loader

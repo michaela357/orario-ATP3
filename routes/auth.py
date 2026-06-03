@@ -1,9 +1,9 @@
 # put all authentication routes
-from flask import Blueprint, request, render_template, jsonify
-
+from flask import Blueprint, jsonify, render_template, request
+from flask_login import login_user
 from werkzeug.security import check_password_hash
+
 from models import User
-from flask_login import LoginManager, login_user
 
 auth_bp = Blueprint("auth", __name__)
 
