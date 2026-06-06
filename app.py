@@ -1,13 +1,20 @@
-from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, session, make_response
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from flask_wtf.csrf import CSRFProtect, CSRFError
-from werkzeug.security import generate_password_hash, check_password_hash
-import secrets
-import html
-import regex as re
-from datetime import timedelta, datetime
 import calendar
+import html
+import secrets
+from collections import defaultdict
+from datetime import datetime, timedelta
+
+import regex as re
+from flask import (Flask, jsonify, make_response, redirect, render_template,
+                   request, session, url_for)
+from flask_login import LoginManager, current_user, login_required, logout_user
+from flask_wtf.csrf import CSRFError, CSRFProtect
+from werkzeug.security import generate_password_hash
+
 from extensions import db
+from routes.auth import auth_bp
+from routes.tasks import tasks_bp
+from utils.utils import get_calendar_navigation
 
 # Initialise Flask app
 app = Flask(__name__)
@@ -22,12 +29,16 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # CSRF protection
 # Initialise database
 db.init_app(app)
 
+app.register_blueprint(auth_bp)
+app.register_blueprint(tasks_bp)
+
 # Configure Flask-Login
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'auth.login'
 
 # Stops circular import
-from models import User
+from models import Task, User
+
 
 # Load user for Flask-Login
 @login_manager.user_loader
@@ -48,7 +59,7 @@ def home():
 # Custom error response
 @app.errorhandler(CSRFError)
 def handle_csrf_error(e):
-    return jsonify({"success": False, "error": f"CSRF Error: {e.description}"}), 400
+    return render_template("404.html", error_message=e.description), 400
 
 @app.errorhandler(404)
 def page_not_found_error(e):
@@ -129,84 +140,53 @@ def register():
             return jsonify({"success": False, "error": "An unexpected error occurred"}), 500
 
     return render_template("register.html")
-    
-# Login route
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        email = request.form.get('email')
-        password = request.form.get('password')
-        remember = True if request.form.get('remember') else False
-
-        existing_user = User.query.filter_by(email=email).first()
-
-        if not existing_user or not check_password_hash(existing_user.password, password):
-            return jsonify({'success': False, 'error': 'Invalid login details'}), 400
-        
-        login_user(existing_user, remember=remember)
-        return jsonify({"success": True, "redirect": "/dashboard"}), 200
-    
-    return render_template("login.html")
 
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    first_name = current_user.name.split()[0]
-    user_quote = current_user.quote
-
+    # Parse and Validate Arguments
+    now = datetime.now()
     try:
-        year = int(request.args.get("year", datetime.now().year))
-        month = int(request.args.get("month", datetime.now().month))
+        year = int(request.args.get("year", now.year))
+        month = int(request.args.get("month", now.month))
+        if not (1 <= month <= 12):
+            raise ValueError
     except ValueError:
-        return jsonify({
-            "success": False,
-            "error": "Invalid Arguments"
-        }), 400
+        return jsonify({"success": False, "error": "Invalid Arguments"}), 400
+
+    prev_year, prev_month, next_year, next_month = get_calendar_navigation(year, month)
     
-    month_name = calendar.month_name[month]
+    # Query tasks for the month efficiently using filters
+    monthly_tasks = current_user.tasks.filter(
+        db.extract('year', Task.due_date) == year,
+        db.extract('month', Task.due_date) == month
+    ).order_by(Task.due_date.asc()).all()
 
-    cal = calendar.Calendar().monthdayscalendar(year, month)
-
-    if month > 1:
-        prev_month = month - 1
-        prev_year = year
-    else:
-        prev_month = 12
-        prev_year = year - 1
+    #group tasks by day
+    tasks_by_day = defaultdict(list)
+    for task in monthly_tasks:
+        tasks_by_day[task.due_date.day].append(task)
     
-    if month < 12:
-        next_month = month + 1
-        next_year = year
-    else:
-        next_month = 1
-        next_year = year + 1
-
-    today = datetime.now().day
-    current_month = datetime.now().month
-    current_year = datetime.now().year
+    first_name = current_user.name.split()[0]
     
-    # temporary tasks dictionary to work with to put on dashboard
-    tasks = {
-        1 : ['Software notes', 'Notes on secure software architecture', datetime.strptime('1/4/2026', "%d/%m/%Y").date(), 'No'],
-        2 : ['Make lunch', 'Peel carrots and make a sandwich', datetime.strptime('15/04/2026', "%d/%m/%Y").date(), 'Yes']
-    }
-
-    return render_template('dashboard.html',
-                            user_quote=user_quote,
-                            name=first_name,
-                            year=year,
-                            month=month,
-                            calendar=cal,
-                            prev_year=prev_year,
-                            prev_month=prev_month,
-                            next_year=next_year,
-                            next_month=next_month,
-                            month_name=month_name,
-                            today=today,
-                            current_month=current_month,
-                            current_year=current_year,
-                            Tasks=tasks
-                        )
+    return render_template(
+        'dashboard.html',
+        user_quote=current_user.quote,
+        name=first_name,
+        year=year,
+        month=month,
+        calendar=calendar.Calendar().monthdayscalendar(year, month),
+        month_name=calendar.month_name[month],
+        prev_year=prev_year,
+        prev_month=prev_month,
+        next_year=next_year,
+        next_month=next_month,
+        today=now.day,
+        current_month=now.month,
+        current_year=now.year,
+        tasks=monthly_tasks,
+        tasks_by_day=dict(tasks_by_day)
+    )
 
 @app.route('/api/update_quote', methods=['POST'])
 @login_required
@@ -220,7 +200,6 @@ def update_quote():
     db.session.commit()
 
     return jsonify({'status': 'success'}), 200
-
 
 @app.route('/logout', methods=["POST"])
 @login_required

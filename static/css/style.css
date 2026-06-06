@@ -226,6 +226,7 @@ body {
 
 .remember-forgot a:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .remember-forgot input[type="checkbox"] {
@@ -256,6 +257,7 @@ body {
     outline: none;
     border-radius: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
     font-weight: 600;
     background: var(--nav-bg);
     color: var(--accent-color1);
@@ -276,6 +278,7 @@ body {
 
 .link p a:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 nav {
@@ -293,9 +296,9 @@ nav {
   
 nav a, nav button {
     float: left;
-    background-color: var(--text-color);
+    background-color: var(--nav-bg);
     display: block;
-    color: var(--border-color);
+    color: var(--accent-color1);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -307,7 +310,8 @@ nav button {
 }
 
  nav a:hover, nav button:hover {
-    background-color: #6e7193;
+    background-color: var(--accent-color1);
+    color: var(--nav-bg);
     text-decoration: underline;
 }
 
@@ -373,60 +377,73 @@ nav button {
     max-width: 1200px;
 }
 
-/* Theme switch style */
+/* Theme switch container */
 .theme-switch-container {
-    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 15px;
+    margin-left: auto;
 }
 
+/* Label text */
+#light-dark-indicator {
+    color: white;
+    font-size: 0.95rem;
+    min-width: unset;
+    display: flex;
+    padding: 14px;
+    align-items: center;
+    white-space: nowrap;
+}
+
+/* Hide default checkbox */
+.theme-switch-container input {
+    display: none;
+}
+
+/* Switch track */
 .slider-round {
-    position: absolute;
-    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
     background-color: #e9e9e9;
-    -webkit-transition: .4s;
-    transition: .4s;
+    border-radius: 34px;
+    cursor: pointer;
+    transition: 0.4s;
 }
 
-.slider-round:before {
-    position: absolute;
+/* Circle */
+.slider-round::before {
     content: "";
+    position: absolute;
     height: 26px;
     width: 26px;
     left: 4px;
-    bottom: 4px;
-    background-color: #072c4a;
-    -webkit-transition: .4s;
-    transition: .4s;
+    top: 4px;
+    border-radius: 50%;
+    background-color: var(--button-text-color);
     background-image: url('../img/icons8-moon-and-stars-30.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 16px;
+    transition: 0.4s;
 }
-  
 
+/* Checked state */
 input:checked + .slider-round {
     background-color: #072c4a;
 }
-  
-input:focus + .slider-round {
-    box-shadow: 0 0 1px #072c4a;
-}
-  
-input:checked + .slider-round:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
+
+/* Move slider */
+input:checked + .slider-round::before {
     transform: translateX(26px);
+
     background-color: white;
     background-image: url('../img/icons8-sun-50.png');
+    background-size: 16px;
 }
-  
-  /* Rounded sliders */
-.slider-round {
-    border-radius: 34px;
-    width: 60px;
-    height: 35px;
-}
-
-.slider-round:before {
-    border-radius: 50%;
-}
-
 
 /* Base Widget Style */
 .widget {
@@ -575,6 +592,126 @@ div .todo-buttons a{
     text-decoration-color: #000000;
 }
 
+#add-button {
+    background-color: var(--bg-color);
+    white-space: nowrap;
+    border: 100px var(--button-color);
+    border-radius: 40px;
+    color: var(--button-color);
+    cursor: pointer;
+    padding: 10px 50%;
+}
+
+#add-button:hover {
+    background-color: var(--button-color);
+    color: var(--accent-color2);
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+/* --- To-do popup --- */
+/* Button styling */
+.open-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 20px;
+    border-radius: 5px;
+}
+.open-btn:hover {
+    background-color: #45a049;
+}
+
+/* Overlay background */
+.overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+/* Popup box */
+.popup {
+    background: var(--bg-color);
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* Form styling */
+.popup form {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+.popup input[type="text"], .popup input[type="email"] {
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+.popup button[type="submit"] {
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.popup button[type="submit"]:hover {
+    background-color: var(--button-color);
+    color: var(--accent-color2);
+    cursor: pointer;
+}
+
+.task-button {
+    background-color: var(--button-color);
+    padding: 10px;
+    border: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--button-text-color);
+}
+
+#button.complete {
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+#button.complete:hover {
+    cursor: pointer;
+    color: var(--accent-color2);
+}
+
+#button.incomplete {
+    cursor: pointer;
+    color: red;
+}
+
 /* --- Calendar widget --- */
 .card {
     flex: 2 1 500px;
@@ -612,6 +749,7 @@ div .todo-buttons a{
 
 .button:hover {
     background-color: #5f65a4ab;
+    cursor: pointer;
 }
 
 .bordered-table {
@@ -628,7 +766,6 @@ div .todo-buttons a{
 .bordered-table td {
     height: 55px;
     text-align: center;
-    cursor: pointer;
     border-radius: 12px;
     transition: 0.2s;
     color: var(--text-color);
@@ -647,17 +784,21 @@ div .todo-buttons a{
     vertical-align: middle;
 }
 
-.task-dot {
-    display: block;
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    background-color: #ff0000;
+.task-dot-red,
+.task-dot-green {
+    height: 8px;
+    width: 8px;
     border-radius: 50%;
-    z-index: 10;
+    display: inline-block;
+    margin-left: 2px;
+}
+
+.task-dot-red {
+    background-color: #ff4d4d;
+}
+
+.task-dot-green {
+    background-color: #42d66a;
 }
 
 .current-day .task-dot {
@@ -697,6 +838,7 @@ div .todo-buttons a{
 
 .widget.card .btn:hover {
     background-color: var(--text-color);
+    cursor: pointer;
     color: var(--accent-color2);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(27, 31, 72, 0.2);

@@ -21,7 +21,7 @@
 
             <div class="widget side-panel quote">
                 <h1>Inspirational Quote</h1>
-                <meta name="csrf-token" content="{{ csrf_token() }}">
+                <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
                 <br><br>
                 <span id="editable-quote" contenteditable="False">{{ user_quote or "The harder I work, the luckier I get" }}</span>
                 <button id="name-edit" hidden="True">✍️ Click to edit quote</button>
@@ -46,30 +46,38 @@
                 <tbody>
                     {% for week in calendar %}
                     <tr>
+                    
                         {% for day in week %}
-                        <td class="{% if day == today and month == current_month and year == current_year %}current-day{% endif %}"
-                            {% if day != 0 %}
-                                {% for key, value in Tasks.items() %}
-                                    {% if value[2].year == year and value[2].month == month and value[2].day == day %}
-                                        data-task-title="{{ value[0] }}"
-                                        data-task-desc="{{ value[1] }}"
-                                    {% endif %}
-                                {% endfor %}
+                    
+                        <td
+                            class="{% if day == today and month == current_month and year == current_year %}current-day{% endif %}"
+                    
+                            {% if day != 0 and tasks_by_day.get(day) %}
+                                data-task-title="{{ tasks_by_day[day][0].title }}"
+                                data-task-desc="{{ tasks_by_day[day][0].description }}"
                             {% endif %}>
-                            
+                    
                             {% if day != 0 %}
                                 {{ day }}
-                                {% for key, value in Tasks.items() %}
-                                    {% if value[2].year == year and value[2].month == month and value[2].day == day %}
-                                        <span class="task-dot"></span>
-                                    {% endif %}
-                                {% endfor %}
+                    
+                                {% if tasks_by_day.get(day) %}
+                                    {% for task in tasks_by_day[day] %}
+                                        {% if task.is_complete %}
+                                        <span class="task-dot-green"></span>
+                                        {% else %}
+                                        <span class="task-dot-red"></span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
                             {% endif %}
+                    
                         </td>
+                    
                         {% endfor %}
+                    
                     </tr>
                     {% endfor %}
-                </tbody>
+                    </tbody>
             </table>
             <a href="{{ url_for('dashboard', month=current_month, year=current_year) }}" class="btn">Today</a>
         </section>
@@ -80,30 +88,64 @@
             </div>
 
             <div class="todo-buttons">
-                <a class="button" id="add-button">Add</a>
-                <a class="button" id="delete-button">Delete</a>
-                <a class="button" id="edit-button">Edit</a>
+                <a class="button" id="add-button" onclick="addTaskPopup()">Add a task</a>
+                <br>
             </div>
 
             <table class="bordered-table">
                 <thead>
-                    <th>Task ID</th>
+                    <tr>
+                    <th>Priority</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th>Due date</th>
+                    <th>Completion status</th>
                     <th>Reminder?</th>
+                    </tr>
                 </thead>
                 
-                <tbody>    
-                    {% for key, value in Tasks.items() %}
+                <tbody>
+                    {% for task in tasks %}
                     <tr>
-                        <td><strong>{{ key }}</strong></td>
-                        <td>{{ value[0] }}</td>
-                        <td>{{ value[1] }}</td>
-                        <td>{{ value[2] }}</td>
-                        <td>{{ value[3] }}</td>
+                    
+                        <td><strong>{{ loop.index }}</strong></td>
+                    
+                        <td>{{ task.title }}</td>
+                    
+                        <td>{{ task.description }}</td>
+                    
+                        <td>{{ task.due_date.strftime('%d %b %Y') }}</td>
+                    
+                        <td>
+                            <a id='button' class="{{ 'complete' if task.is_complete else 'incomplete' }}" onclick="toggleComplete({{ task.id }}, {{ 'true' if task.is_complete else 'false' }})">
+                                {{ 'Complete ✅' if task.is_complete else 'Incomplete ▢' }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ 'Yes' if task.reminder else 'No' }}
+                        </td>
+                    
+                        <td class="task-actions">
+
+                            <button class='task-button' onclick='openEditPopup(
+                                {{ task.id }},
+                                {{ task.title|tojson }},
+                                {{ task.description|tojson }},
+                                "{{ task.due_date.strftime("%Y-%m-%d") }}",
+                                {{ 'true' if task.reminder else 'false' }},
+                                {{ 'true' if task.is_complete else 'false' }}
+                            )'>
+                                Edit
+                            </button>
+                        
+                            <button class='task-button' onclick="deleteTask({{ task.id }})">
+                                Delete
+                            </button>
+                        
+                        </td>
+                    
                     </tr>
-                    {% endfor %}    
+                    {% endfor %}
                 </tbody>
             </table>    
         </section>
@@ -114,6 +156,54 @@
     <div class="popover-arrow"></div>
     <h4 id="popoverTitle"></h4>
     <p id="popoverDesc"></p>
+</div>
+
+<!-- Popup form to add task -->
+<div class="overlay" id="popupOverlay">
+    <div class="popup">
+        <button class="close-btn" onclick="closeAddPopup()">&times;</button>
+        <h2>Add a task</h2>
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
+        <form id="add-task-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="text" name="title" id="title" placeholder="Title" required>
+            <input type="text" name="description" id="description" placeholder="Description" required>
+            <input type="date" name="due_date" id="due_date" required>
+            <label>
+            <input type="checkbox" name="reminder" id="reminder">Reminder?
+            </label>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+<!-- Popup form to edit task -->
+<div class="overlay" id="editPopupOverlay">
+
+    <div class="popup">
+        <button class="close-btn" onclick="closeEditPopup()">&times;</button>
+        <h2>Edit Task</h2>
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
+        <form id="edit-task-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" id="edit-task-id">
+            <input type="text" id="edit-title" placeholder="Title" required>
+            <input type="text" id="edit-description" placeholder="Description" required>
+            <input type="date" id="edit-due-date" required>
+            <label> Complete
+                <input type="checkbox" id="edit-is-complete">
+            </label>
+            <label>
+                Reminder
+                <input type="checkbox" id="edit-reminder">
+            </label>
+            <button type="submit">
+                Save Changes
+            </button>
+        </form>
+    </div>
 </div>
 
 <script>
@@ -129,26 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     taskDays.forEach(day => {
         day.addEventListener('mouseover', function(e) {
-            // Stop the click from bubbling up
-            e.stopPropagation();
-
-            const title = this.getAttribute('data-task-title');
-            const desc = this.getAttribute('data-task-desc');
-
-            const rect = this.getBoundingClientRect();
-
-            pTitle.innerText = title;
-            pDesc.innerText = desc;
-
-            popover.style.display = "block";
-            popover.style.left = (rect.right + window.scrollX + 10) + "px";
-            popover.style.top = (rect.top + window.scrollY + (rect.height / 2) - 20) + "px";
-        });
-    });
-
-    taskDays.forEach(day => {
-        day.addEventListener('mouseover', function(e) {
-            // Stop the click from bubbling up
             e.stopPropagation();
 
             const title = this.getAttribute('data-task-title');
@@ -172,4 +242,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script src = "../static/js/change_quote.js"></script>
+<script src="../static/js/to-do-popups.js"></script>
 {% endblock %}

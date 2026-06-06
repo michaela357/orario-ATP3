@@ -2,7 +2,7 @@ const editButton = document.getElementById("name-edit");
 const newQuote = document.getElementById('editable-quote');
 const ENTER_KEY_CODE = 13;
 const saveMsg = document.getElementById('save-msg');
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const csrfToken = document.querySelector('input[name="csrf_token"]').getAttribute('value');
 
 function handleInputKey(event) {
 
