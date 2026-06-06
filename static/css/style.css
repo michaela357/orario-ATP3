@@ -226,6 +226,7 @@ body {
 
 .remember-forgot a:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .remember-forgot input[type="checkbox"] {
@@ -256,6 +257,7 @@ body {
     outline: none;
     border-radius: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
     font-weight: 600;
     background: var(--nav-bg);
     color: var(--accent-color1);
@@ -276,6 +278,7 @@ body {
 
 .link p a:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 nav {
@@ -589,6 +592,23 @@ div .todo-buttons a{
     text-decoration-color: #000000;
 }
 
+#add-button {
+    background-color: var(--bg-color);
+    white-space: nowrap;
+    border: 100px var(--button-color);
+    border-radius: 40px;
+    color: var(--button-color);
+    cursor: pointer;
+    padding: 10px 50%;
+}
+
+#add-button:hover {
+    background-color: var(--button-color);
+    color: var(--accent-color2);
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
 /* --- To-do popup --- */
 /* Button styling */
 .open-btn {
@@ -664,7 +684,8 @@ div .todo-buttons a{
 }
 .popup button[type="submit"]:hover {
     background-color: var(--button-color);
-    color: var(--accent-color2)
+    color: var(--accent-color2);
+    cursor: pointer;
 }
 
 .task-button {
@@ -728,6 +749,7 @@ div .todo-buttons a{
 
 .button:hover {
     background-color: #5f65a4ab;
+    cursor: pointer;
 }
 
 .bordered-table {
@@ -816,6 +838,7 @@ div .todo-buttons a{
 
 .widget.card .btn:hover {
     background-color: var(--text-color);
+    cursor: pointer;
     color: var(--accent-color2);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(27, 31, 72, 0.2);
