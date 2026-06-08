@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %} AI Generated Flashcards {% endblock %}
+
+{% block content %}
+
+<form action="{{ url_for('genai.generate_flashcards') }}" method="POST" enctype="multipart/form-data" style="max-width: 500px; margin: 40px auto; font-family: sans-serif;">
+    <div style="margin-bottom: 20px;">
+        <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
+        <label for="study_file" style="display: block; font-weight: bold; margin-bottom: 8px;">
+            Upload Study Document (.txt, .pdf, .docx):
+        </label>
+        <input type="file" name="study_file" id="study_file" accept=".txt,.pdf,.docx" required 
+               style="display: block; width: 100%; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+        <label for="num_cards" style="display: block; font-weight: bold; margin-top: 20px;">
+            Number of Flashcards:
+        </label>
+        <input type="range" name="num_cards" id="num_cards" min="1" max="50" value="5" 
+               style="display: block; width: 100%; margin-top: 10px;">
+    </div>
+    
+    <button type="submit" style="background-color: #4f46e5; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+        ⚡ Generate Flashcards
+    </button>
+</form>
+
+<div class="fc-layout">
+    
+    <header class="fc-header">
+        <a href="/dashboard" class="fc-back-link">&larr; Back to Dashboard</a>
+        <h1 class="fc-title">✨ AI Flashcard Generator Result</h1>
+        <p class="fc-subtitle">Here is the educational material generated from your document.</p>
+    </header>
+
+    {% for flashcard in flashcards %}
+    <main class="fc-card">
+        <div class="fc-content">
+            <div class="fc-front">
+                <h2 class="fc-front-title">Q: {{ flashcard.front }}</h2>
+            </div>
+            <div class="fc-back">
+                <p class="fc-back-text">A: {{ flashcard.back }}</p>
+            </div>
+        </div>
+    </main>
+    {% endfor %}
+
+    <footer class="fc-actions">
+        <button onclick="window.print()" class="fc-btn fc-btn-secondary">
+            🖨️ Print / Save PDF
+        </button>
+        <a href="/test-file-summary" class="fc-btn fc-btn-primary">
+            🔄 Regenerate
+        </a>
+    </footer>
+
+</div>
+    </div>
+
+{% endblock %}
