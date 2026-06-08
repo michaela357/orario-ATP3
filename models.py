@@ -54,3 +54,14 @@ class Task(db.Model):
     
     def set_description(self, description):
         self.description = description
+
+class Flashcard(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    front = db.Column(db.String(200), nullable=False)
+    back = db.Column(db.String(200), nullable=False)
+
+    def __init__(self, user_id, front, back):
+        self.user_id = user_id
+        self.front = front
+        self.back = back
