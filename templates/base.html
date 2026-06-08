@@ -13,6 +13,9 @@
     <a href="{{ url_for('dashboard') }}" class="navbar-item">
         Dashboard
     </a>
+    <a href="{{ url_for('flashcards') }}" class="navbar-item">
+        Flashcard Maker
+    </a>
     <form id='logout-form' action="{{ url_for('logout') }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit" class="logout-btn">Logout</button>
