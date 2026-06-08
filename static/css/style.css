@@ -535,9 +535,8 @@ input:checked + .slider-round::before {
     width: 100%;
 
     /* Force long words to break */
-    white-space: normal;
-    overflow-wrap: break-word;
-    word-break: break-all;
+    word-break: normal;
+    overflow-wrap: anywhere;
 }
 
 span #editable-quote {
