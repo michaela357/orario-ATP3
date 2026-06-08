@@ -4,8 +4,12 @@ import os
 from dotenv import load_dotenv
 from flask import Blueprint, current_app, json, jsonify, render_template, request
 from groq import Groq
+from flask_login import current_user, login_required
 
+from extensions import db
+from models import Flashcard
 from utils.utils import extract_text_from_file
+
 
 load_dotenv()  # Load environment variables from .env file
 genai_bp = Blueprint('genai', __name__)
@@ -14,6 +18,7 @@ genai_bp = Blueprint('genai', __name__)
 client = Groq(api_key=os.getenv('GROQ_API_KEY'))
 
 @genai_bp.route('/generate-flashcards', methods=['POST'])
+@login_required
 def generate_flashcards():
     temp_path = None
     try:
@@ -70,12 +75,11 @@ def generate_flashcards():
 
         print(flashcards_list)  # For debugging purposes, to see the generated flashcards in the console
 
-        # TODO: Save to database here
-        # for card in flashcards_list:
-        #     front_text = card['front']
-        #     back_text = card['back']
-        #     db.session.add(Flashcard(user_id=current_user.id, front=front_text, back=back_text))
-        # db.session.commit()
+        for card in flashcards_list:
+            front_text = card['front']
+            back_text = card['back']
+            db.session.add(Flashcard(user_id=current_user.id, front=front_text, back=back_text))
+        db.session.commit()
 
         
         #pass the live list array directly into html template to display them
