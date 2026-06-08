@@ -27,6 +27,7 @@ def generate_flashcards():
             return jsonify({"success": False, "error": "No file uploaded."}), 400
             
         uploaded_file = request.files['study_file']
+        num_cards = request.form.get('num_cards', 5, type=int)  # Get the number of flashcards from the form, default to 5
         
         if uploaded_file.filename == '':
             return jsonify({"success": False, "error": "No file selected."}), 400
@@ -55,6 +56,7 @@ def generate_flashcards():
             "    {\"front\": \"What is Photosynthesis?\", \"back\": \"The process used by plants to convert light into chemical energy.\"}\n"
             "  ]\n"
             "}\n\n"
+            "Make sure to generate exactly " + str(num_cards) + " flashcards based on the most important information in the text. Do not include any other information or formatting outside of the specified JSON structure.\n\n"
             f"Source text content:\n\n{file_text}"
         )
 
