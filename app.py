@@ -13,6 +13,7 @@ from werkzeug.security import generate_password_hash
 
 from extensions import db
 from routes.auth import auth_bp
+from routes.genai import genai_bp
 from routes.tasks import tasks_bp
 from utils.utils import get_calendar_navigation
 
@@ -31,6 +32,7 @@ db.init_app(app)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(tasks_bp)
+app.register_blueprint(genai_bp)
 
 # Configure Flask-Login
 login_manager = LoginManager(app)
@@ -200,6 +202,11 @@ def update_quote():
     db.session.commit()
 
     return jsonify({'status': 'success'}), 200
+
+@app.route('/flashcards')
+@login_required
+def flashcards():
+    return render_template('flashcards.html')
 
 @app.route('/logout', methods=["POST"])
 @login_required
