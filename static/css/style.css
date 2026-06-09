@@ -843,6 +843,93 @@ div .todo-buttons a{
     box-shadow: 0 5px 15px rgba(27, 31, 72, 0.2);
 }
 
+/* Flashcard page styles */
+.fc-layout {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Segment Selector Tabs style */
+.deck-selector {
+    background: var(--widget-bg, #f1f5f9);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+/* Study Card Paginated Stack Framework */
+.study-deck-viewport {
+    margin-top: 30px;
+}
+
+.fc-card {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    display: none; /* Hidden by default; JS toggles active element */
+}
+
+.fc-card.active {
+    display: block;
+}
+
+.fc-content {
+    background: var(--widget-bg, #ffffff);
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    min-height: 280px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+/* JavaScript toggles this on click to spin the item */
+.fc-content.flipped {
+    transform: rotateY(180deg);
+}
+
+.fc-front, .fc-back {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex; justify-content: center; align-items: center; text-align: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.fc-front { transform: rotateY(0deg); z-index: 2; }
+.fc-back { transform: rotateY(180deg); background-color: #f8fafc; border-radius: 20px; }
+
+.fc-front-title { color: #4f46e5; font-size: 1.5rem; font-weight: 700; margin: 0; }
+.fc-back-text { color: #334155; font-size: 1.25rem; line-height: 1.6; margin: 0; }
+
+/* Navigation controls layout */
+.study-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.fc-btn {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid #e2e8f0;
+}
+.fc-btn-primary { background-color: #4f46e5; color: white; border: none; }
+.fc-btn:disabled { background-color: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
+
 /* Stacking for the dashboard */
 @media (max-width: 1000px) {
     .widget-container {
