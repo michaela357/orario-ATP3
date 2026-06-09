@@ -60,8 +60,10 @@ class Flashcard(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     front = db.Column(db.String(200), nullable=False)
     back = db.Column(db.String(200), nullable=False)
+    group = db.Column(db.String(100), nullable=True)
 
-    def __init__(self, user_id, front, back):
+    def __init__(self, user_id, front, back, group='Untitled Group'):
         self.user_id = user_id
         self.front = front
         self.back = back
+        self.group = group
