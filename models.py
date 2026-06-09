@@ -5,7 +5,6 @@ from flask_login import UserMixin
 
 from extensions import db
 
-
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
@@ -13,13 +12,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(250), nullable=True)
     quote = db.Column(db.String(250), nullable=True)
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
-
-    #constructor method
-    def __init__(self, email, name, password, quote): 
-        self.email = email
-        self.name = name
-        self.password = password
-        self.quote = quote
+    flashcards = db.relationship('Flashcard', backref='user', lazy='dynamic', cascade="all, delete-orphan")
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +21,6 @@ class Task(db.Model):
     description = db.Column(db.String(200), nullable=False)
     reminder = db.Column(db.Boolean, default=False)
     is_complete = db.Column(db.Boolean, default=False)
-
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __init__(self, title, description, due_date, reminder, is_complete, user_id):
@@ -58,12 +50,12 @@ class Task(db.Model):
 class Flashcard(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    front = db.Column(db.String(200), nullable=False)
-    back = db.Column(db.String(200), nullable=False)
-    group = db.Column(db.String(100), nullable=True)
+    front = db.Column(db.Text, nullable=False)
+    back = db.Column(db.Text, nullable=False)
+    group = db.Column(db.String(100), nullable=False, default='Untitled Group')
 
     def __init__(self, user_id, front, back, group='Untitled Group'):
         self.user_id = user_id
         self.front = front
         self.back = back
-        self.group = group
+        self.group = group or 'Untitled Group'
