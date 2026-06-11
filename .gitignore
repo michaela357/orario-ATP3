@@ -12,3 +12,4 @@ routes/__pycache__/tasks.cpython-313.pyc
 utils/__pycache__/utils.cpython-313.pyc
 utils/__pycache__/__init__.cpython-313.pyc
 .env
+routes/__pycache__/genai.cpython-313.pyc
