@@ -3,27 +3,46 @@
 
 {% block content %}
 
-<div class="fc-layout">
-
-    <div class="deck-selector">
-        <h3>📚 Your Saved Flashcard Groups</h3>
+<div class="fc-dashboard-wrapper">
+    <div class="decks-dashboard">
+        <h3>📚 Your Study Decks</h3>
         {% if group_names %}
-            <form action="{{ url_for('genai.flashcards_dashboard') }}" method="GET" style="display: flex; gap: 10px; margin-top: 10px;">
-                <select name="study_group" style="padding: 10px; flex-grow: 1; border-radius: 6px; border: 1px solid #ccc;">
-                    <option value="">-- Choose a group to study --</option>
-                    {% for name in group_names %}
-                        <option value="{{ name }}" {% if selected_group == name %}selected{% endif %}>{{ name }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" class="fc-btn fc-btn-primary">📖 Open Deck</button>
-            </form>
-        {% else %}
-            <p style="color: #64748b; font-size: 0.9rem;">You haven't generated any saved flashcard groups yet. Upload a file below to start!</p>
-        {% endif %}
+            <div class="deck-grid">
+                {% for name in group_names %}
+                    <div class="deck-container" id="deck-{{ loop.index }}">
+                        <a href="{{ url_for('genai.flashcards_dashboard', study_group=name) }}" 
+                        class="deck-widget {% if selected_group == name %}active-widget{% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M20 4h-8.59L10 2.59C9.62 2.21 9.12 2 8.59 2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 14H4V6h16z"></path>
+                            </svg>
+                            <div class="deck-details">
+                                <h4 class="deck-name">{{ name }}</h4>
+                                <p class="deck-action">Study Deck &rarr;</p>
+                            </div>
+                        </a>
+
+                        <form class="delete-group-form" 
+                            action="{{ url_for('genai.remove_group', group_name=name) }}" 
+                            method="POST"
+                            data-group-name="{{ name }}"
+                            data-target-id="deck-{{ loop.index }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                                <img src="{{ url_for('static', filename='img/delete.png') }}" width="24px" alt="Delete Icon" class="deck-icon">
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+    {% else %}
+        <p style="color: #64748b; font-size: 0.9rem; background: var(--widget-bg, #f8fafc); padding: 15px; border-radius: 8px; margin: 0;">
+            You haven't generated any flashcard groups yet. Open the panel below to upload a document!
+        </p>
+    {% endif %}
     </div>
 
-    <details style="background: #fafafa; padding: 15px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #e2e8f0;">
-        <summary style="font-weight: bold; cursor: pointer; color: #4f46e5;">⚡ Create / Upload a New Flashcard Group</summary>
+    <details class="fc-details-panel">
+        <summary>⚡ Create / Upload a New Flashcard Group</summary>
         <form action="{{ url_for('genai.generate_flashcards') }}" method="POST" enctype="multipart/form-data" style="margin-top: 15px;">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
             
@@ -39,7 +58,7 @@
 
             <div style="margin-bottom: 15px;">
                 <label for="num_cards" style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem;">Number of Cards:</label>
-                <input type="range" name="num_cards" id="num_cards" min="1" max="30" value="5" oninput="this.nextElementSibling.value = this.value" style="width: 80%;">
+                <input type="range" name="num_cards" id="num_cards" min="1" max="100" value="5" oninput="this.nextElementSibling.value = this.value" style="width: 80%;">
                 <output style="font-weight: bold; margin-left: 10px;">5</output>
             </div>
 
@@ -51,7 +70,7 @@
         <div class="study-deck-viewport">
             <h2 style="text-align: center; margin-bottom: 5px;">✍️ Studying: {{ selected_group }}</h2>
             <p style="text-align: center; color: #64748b; margin-bottom: 15px;" id="progress-indicator">Card 1 of {{ flashcards|length }}</p>
-
+            
             {% for flashcard in flashcards %}
                 <main class="fc-card {% if loop.index0 == 0 %}active{% endif %}">
                     <div class="fc-content" onclick="this.classList.toggle('flipped')">
@@ -67,7 +86,7 @@
 
             <div class="study-controls">
                 <button class="fc-btn" id="prev-btn" onclick="navigateCard(-1)" disabled>◀ Previous</button>
-                <button class="fc-btn" id="next-btn" onclick="navigateCard(1)">Next ▶</button>
+                <button class="fc-btn fc-btn-primary" id="next-btn" onclick="navigateCard(1)">Next ▶</button>
             </div>
         </div>
     {% elif selected_group %}
@@ -84,23 +103,23 @@
     function navigateCard(direction) {
         if (totalCardsCount === 0) return;
 
-        // 1. Unflip card if left backwards before indexing
         const flippingElement = cardNodes[activeIndex].querySelector('.fc-content');
         if (flippingElement) flippingElement.classList.remove('flipped');
 
-        // 2. Clear out active styling class properties
         cardNodes[activeIndex].classList.remove('active');
-
-        // 3. Shift index
         activeIndex += direction;
-
-        // 4. Activate current viewport card segment
         cardNodes[activeIndex].classList.add('active');
 
-        // 5. Adjust interface element metrics dynamically
         document.getElementById('progress-indicator').innerText = `Card ${activeIndex + 1} of ${totalCardsCount}`;
         document.getElementById('prev-btn').disabled = (activeIndex === 0);
         document.getElementById('next-btn').disabled = (activeIndex === totalCardsCount - 1);
+
+        if (activeIndex + 1 === totalCardsCount) {
+            document.getElementById('next-btn').innerText = 'End of Deck';
+        } else {
+            document.getElementById('next-btn').innerText = 'Next ▶';
+        }
     }
 </script>
+<script src="../static/js/flashcard_group_delete.js"></script>
 {% endblock %}
