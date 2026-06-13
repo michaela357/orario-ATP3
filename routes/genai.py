@@ -9,7 +9,7 @@ from groq import Groq
 
 from extensions import db
 from models import Flashcard
-from utils.utils import extract_text_from_file
+from utils.utils import extract_text_for_ai
 
 load_dotenv()  # Load environment variables from .env file
 genai_bp = Blueprint('genai', __name__)
@@ -61,9 +61,10 @@ def generate_flashcards():
         temp_path = os.path.join(temp_dir, uploaded_file.filename)
         uploaded_file.save(temp_path)
 
-        file_text = extract_text_from_file(temp_path)
+        file_text = extract_text_for_ai(temp_path, allowed_directory=temp_dir)
+        
         if not file_text or len(file_text.strip()) < 10:
-            return jsonify({"success": False, "error": "Could not extract readable text."}), 400
+            return jsonify({"success": False, "error": "Could not extract readable text or file was completely empty."}), 400
 
         prompt = (
             "You are an elite study assistant. Analyse the provided text, extract core concepts, and turn them into flashcards. "
