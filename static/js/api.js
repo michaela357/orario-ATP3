@@ -43,12 +43,13 @@ async function getPage(url) {
 }
 
 function showError(message) {
-    const errorBox = document.getElementById('error-message');
+    const errorBox = document.querySelector('.error-message-box');
     if (!errorBox) return;
 
     errorBox.innerText = message;
     errorBox.style.display = 'block';
-    errorBox.style.opacity = '1'
+    errorBox.style.opacity = '1';
+    
     setTimeout(() => {
         errorBox.style.opacity = '0';
         setTimeout(() => { errorBox.style.display = 'none'; }, 500);
