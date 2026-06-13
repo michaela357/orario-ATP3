@@ -43,7 +43,7 @@ async function getPage(url) {
 }
 
 function showError(message) {
-    const errorBox = document.querySelector('.error-message-box');
+    const errorBox = document.getElementById('error-message');
     if (!errorBox) return;
 
     errorBox.innerText = message;
