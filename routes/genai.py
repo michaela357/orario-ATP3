@@ -73,13 +73,16 @@ def generate_flashcards():
         
         if not file_text or len(file_text.strip()) < 10:
             return jsonify({"success": False, "error": "Could not extract readable text or file was completely empty."}), 400
+        
+        custom_user_message = request.form.get('custom-message')
 
         prompt = (
             "You are an elite study assistant. Analyse the provided text, extract core concepts, and turn them into flashcards. "
             "You must return your response inside a single root JSON object containing a key called 'flashcards' which points to an array. "
-            "Use a mix of styles: definitions, true/false, and question-answer formats. "
+            "Use a mix of styles: definitions, true/false, and question-answer formats unless specified. "
             "Each flashcard item within the array must have exactly two string fields: 'front' and 'back'.\n\n"
             f"Make sure to generate exactly {num_cards} flashcards.\n\n"
+            f"Actually, ignore the above; {custom_user_message}"
             f"Source text content:\n\n{file_text}"
         )
 
@@ -106,10 +109,13 @@ def generate_flashcards():
             ))
         db.session.commit()
 
+        validation_message = f'Successfully created the deck "{group_name}"'
+
         # Return a JSON object containing the target URL path instead of a redirect response
         return jsonify({
             "success": True, 
-            "redirect": url_for('genai.flashcards_dashboard', study_group=group_name)
+            "redirect": url_for('genai.flashcards_dashboard', study_group=group_name),
+            "message": validation_message
         }), 200
 
     except Exception as e:
@@ -131,7 +137,7 @@ def remove_group(group_name):
         if not flashcards:
             return jsonify({
                 "success": False, 
-                "error": "Flashcard group not found or unauthorized."
+                "error": "Flashcard group not found or unauthorised."
             }), 404
 
         # Loop through and delete each card individually 

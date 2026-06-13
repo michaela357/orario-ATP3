@@ -59,6 +59,12 @@
             </div>
 
             <div style="margin-bottom: 15px;">
+                <label for="custom-message" style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem;">Custom requirements for this deck:</label>
+                <input type="text" name="custom-message" id="custom-message" placeholder="e.g., True or False questions only" style="display: block; width: 100%; border: 1px solid #ccc; padding: 8px; border-radius: 4px;">
+            </div>
+
+
+            <div style="margin-bottom: 15px;">
                 <label for="num_cards" style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem;">Number of Cards:</label>
                 <input type="range" name="num_cards" id="num_cards" min="1" max="100" value="5" oninput="this.nextElementSibling.value = this.value" style="width: 80%;">
                 <output style="font-weight: bold; margin-left: 10px;">5</output>
