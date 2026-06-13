@@ -17,7 +17,7 @@ async function postForm(url, form) {
     } catch {
         return {
             success: false,
-            error: "CSRF Error, please refresh the page to logout"
+            error: "CSRF Error. Try refreshing the page."
         };
     }
 
