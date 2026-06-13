@@ -84,7 +84,7 @@
 
         <section class="widget to-do">
             <div class="card-header">
-                <h1 class="to-do-title">To-do</h1>
+                <h1 class="to-do-title">✅ To-do list</h1>
             </div>
 
             <div class="todo-buttons">
@@ -105,6 +105,11 @@
                 </thead>
                 
                 <tbody>
+                    {% if not tasks %}
+                    <tr>
+                        <td colspan="7">No tasks found. Add a new task to get started!</td>
+                    </tr>
+                    {% endif %}
                     {% for task in tasks %}
                     <tr>
                     
