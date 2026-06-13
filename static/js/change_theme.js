@@ -17,11 +17,11 @@ function sendAlert() {
     toggleDarkMode(!isLightModeActive);
     
     if (!isLightModeActive) {
-        console.log('light mode enabled!');
-        word.textContent = "Enable Dark Mode!";
-    } else {
         console.log('dark mode enabled!');
         word.textContent = "Enable Light Mode!";
+    } else {
+        console.log('light mode enabled!');
+        word.textContent = "Enable Dark Mode!";
     }
 }
 
