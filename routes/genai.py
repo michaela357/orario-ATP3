@@ -51,7 +51,15 @@ def generate_flashcards():
             
         uploaded_file = request.files['study_file']
         num_cards = request.form.get('num_cards', 5, type=int)
+
+        # Fetch current user groups to prevent duplicate entries
+        groups = db.session.query(Flashcard.group).filter_by(user_id=current_user.id).distinct().all()
+        group_names = [g[0] for g in groups if g[0]]
+
         group_name = request.form.get('group-name', '').strip() or 'Untitled Group'
+
+        if group_name in group_names:
+            return jsonify({"success": False, "error": "A group with this name already exists. Please choose a different name."}), 400
         
         if uploaded_file.filename == '':
             return jsonify({"success": False, "error": "No file selected."}), 400
@@ -98,8 +106,11 @@ def generate_flashcards():
             ))
         db.session.commit()
 
-        # Redirect the user straight to studying the new flashcards in the group they just created
-        return redirect(url_for('genai.flashcards_dashboard', study_group=group_name))
+        # Return a JSON object containing the target URL path instead of a redirect response
+        return jsonify({
+            "success": True, 
+            "redirect": url_for('genai.flashcards_dashboard', study_group=group_name)
+        }), 200
 
     except Exception as e:
         if temp_path and os.path.exists(temp_path):
