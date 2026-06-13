@@ -43,7 +43,9 @@
 
     <details class="fc-details-panel">
         <summary>⚡ Create / Upload a New Flashcard Group</summary>
-        <form action="{{ url_for('genai.generate_flashcards') }}" method="POST" enctype="multipart/form-data" style="margin-top: 15px;">
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
+        <form action="{{ url_for('genai.generate_flashcards') }}" id="flashcard-form" method="POST" enctype="multipart/form-data" style="margin-top: 15px;">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
             
             <div style="margin-bottom: 15px;">
@@ -122,4 +124,5 @@
     }
 </script>
 <script src="../static/js/flashcard_group_delete.js"></script>
+<script src="../static/js/flashcard_validation.js"></script>
 {% endblock %}
