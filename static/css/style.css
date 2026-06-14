@@ -52,11 +52,9 @@
 
 body {
     margin: 0;
-    padding-top: 80px; 
+    padding-top: 85px;     /* Ensures layout context doesn't hide beneath your fixed navbar */
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;        /* 🎯 FIX: Changed from flex to block so elements follow natural page flow */
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: "Poppins", sans-serif;
@@ -110,14 +108,42 @@ body {
 }
 
 /* Responsive adjustment */
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
     .widget-container {
+        display: flex;
         flex-direction: column;
         align-items: center;
-    }
-    .widget {
+        justify-content: center;
         width: 100%;
-        max-width: 500px;
+        padding: 10px;
+        gap: 30px;
+    }
+
+    .side-panel-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 650px;
+        height: auto;
+        gap: 15px;
+    }
+
+    .card, 
+    .widget-to-do,
+    .widget.clock-widget,
+    .widget.side-panel.quote {
+        width: 100%;
+        max-width: 650px;
+        min-width: 0;
+        margin: 0 auto;
+        flex: none;
+    }
+    
+    /* Center the internal title text inside the quote box on mobile */
+    .widget.side-panel.quote h1,
+    #editable-quote {
+        text-align: center;
     }
 }
 
@@ -334,8 +360,8 @@ body {
 }
 
 .nav-item:hover {
-    background-color: var(--nav-hover-bg);   /* 💡 Fix: Mint pop across both modes */
-    color: var(--nav-hover-text);           /* 💡 Fix: Dark contrast for legibility */
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
 }
 
 .nav-item.active {
@@ -447,10 +473,12 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
-    justify-content: center;
     align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1300px;
+    margin: 0 auto;
 }
 
 /* Theme switch container */
@@ -581,6 +609,7 @@ input:checked + .slider-round::before {
     border-left: 5px solid var(--accent-color1);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     min-height: 100px;
+    max-height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -591,6 +620,8 @@ input:checked + .slider-round::before {
     max-height: 400px;
     overflow-y: auto;
     word-wrap: break-word;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .widget.side-panel.quote h1{
@@ -642,14 +673,26 @@ span #editable-quote {
 
 
 /* --- To-do widget --- */
-.widget-to-do {
-    flex: 2 1 500px;
-    max-width: 650px;
-    min-width: 600px;
+.widget.to-do {
+    flex: 1 1 500px;
+    min-width: 100%;
+    width: 100%;    
     background-color: var(--widget-bg);
-    align-self: top;
-    align-self: center;
-    padding: 80px 80px 50px 80px;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    padding: 30px;
+    box-sizing: border-box;
+    box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
+}
+
+
+@media (max-width: 600px) {
+    .widget.to-do {
+        padding: 20px;
+        border-radius: 20px;
+        min-width: fit-content;
+    }
 }
 
 .to-do-title {
