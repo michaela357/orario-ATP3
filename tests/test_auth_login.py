@@ -8,7 +8,7 @@ def test_login_success(client):
         - The session token is given to the user
     """
     response = client.post('/login', data={
-        'email': 'test@email.com',
+        'email': 'test@email.com.au',
         'password': 'Correctpassword123!'
     })
     

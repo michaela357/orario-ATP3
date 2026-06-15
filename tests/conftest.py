@@ -25,7 +25,7 @@ def client():
             
             # Seed the database with default test user
             valid_test_user = User(
-                email='test@email.com', 
+                email='test@email.com.au', 
                 name='John Smith', 
                 password=generate_password_hash('Correctpassword123!'),
                 quote='Example quote'
