@@ -1,28 +1,5 @@
-import os
-import sys
-
-import pytest
-from flask import session
-
-# Add parent directory to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from app import app, db
+from app import app
 from models import User
-
-
-@pytest.fixture
-def client():
-    app.config["TESTING"] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['WTF_CSRF_ENABLED'] = False
-    
-    with app.test_client() as client:
-        with app.app_context():
-            db.create_all()
-            yield client
-            db.session.remove()
-            db.drop_all()
 
 def test_register_success(client):
     """
@@ -32,7 +9,7 @@ def test_register_success(client):
         - The user is redirected to the login page
     """
     response = client.post('/register/', data={
-        'email': 'test@email.com.au',
+        'email': 'test_register@email.com.au',
         'name' : 'John Smith',
         'password' : 'Correctpassword123!'
     })
@@ -44,7 +21,7 @@ def test_register_success(client):
     assert data['redirect'] == '/login'
 
     with app.app_context():
-        user = User.query.filter_by(email='test@email.com.au').first()
+        user = User.query.filter_by(email='test_register@email.com.au').first()
         assert user is not None
         assert user.name == 'John Smith'
 

@@ -1,44 +1,5 @@
-import os
-import sys
-
-import pytest
 import regex as re
-from werkzeug.security import generate_password_hash
-
-# Add parent directory to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from app import app, db
-from models import User
-
-
-@pytest.fixture
-def client():
-    """
-    Fixture to set up a clean test client and in-memory database
-    for every single test function.
-    """
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SESSION_COOKIE_SECURE'] = False
-    app.config['WTF_CSRF_ENABLED'] = True
-    
-    with app.test_client() as client:
-        with app.app_context():
-            db.create_all()
-            valid_test_user = User(
-                email='test@email.com', 
-                name='John Smith', 
-                password=generate_password_hash('Correctpassword123!')
-            )
-            db.session.add(valid_test_user)
-            db.session.commit()
-            
-            yield client
-            
-            db.session.remove()
-            db.drop_all()
-
+from app import app
 
 def test_csrf_token_exists_on_register_page(client):
     """
@@ -48,6 +9,8 @@ def test_csrf_token_exists_on_register_page(client):
         - There is a CSRF token in the HTML
         - The CSRF token is hidden
     """
+    app.config['WTF_CSRF_ENABLED'] = True
+
     response = client.get("/register/")
     assert response.status_code == 200
     
@@ -63,6 +26,8 @@ def test_csrf_token_exists_on_login_page(client):
         - There is a CSRF token in the HTML
         - The CSRF token is hidden
     """
+    app.config['WTF_CSRF_ENABLED'] = True
+
     response = client.get("/login")
     assert response.status_code == 200
     
@@ -78,6 +43,8 @@ def test_csrf_token_different_between_sessions():
           as the length of the list (i.e. all generated tokens are unique)
     """
     tokens = []
+
+    app.config['WTF_CSRF_ENABLED'] = True
 
     for _ in range(3):
         with app.test_client() as client:
@@ -98,6 +65,8 @@ def test_invalid_csrf_token(client):
         - A request with an invalid CSRF token is rejected with a 400 error
         - The type of error is "CSRF Error"
     """
+    app.config['WTF_CSRF_ENABLED'] = True
+
     response = client.post('/register/', 
         headers={"X-CSRFToken": 'this_is_a_fake_token'},
         data={
@@ -106,7 +75,6 @@ def test_invalid_csrf_token(client):
             'password' : 'Password1!'
         }
     )
-
 
     assert response.status_code == 400
     html_content = response.data.decode('utf-8')
