@@ -27,7 +27,8 @@ def client():
             valid_test_user = User(
                 email='test@email.com', 
                 name='John Smith', 
-                password=generate_password_hash('Correctpassword123!')
+                password=generate_password_hash('Correctpassword123!'),
+                quote='Example quote'
             )
             db.session.add(valid_test_user)
             db.session.commit()
