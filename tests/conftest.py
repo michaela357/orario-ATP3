@@ -2,12 +2,13 @@ import os
 import sys
 import pytest
 from werkzeug.security import generate_password_hash
+from datetime import datetime
 
 # Add parent directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app import app as flask_app, db
-from models import User, Flashcard
+from models import User, Task, Flashcard
 
 @pytest.fixture
 def client():
@@ -30,7 +31,26 @@ def client():
                 password=generate_password_hash('Correctpassword123!'),
                 quote='Example quote'
             )
+
+            valid_tasks = Task(
+                title="To-do task title",
+                description="Description for a valid task",
+                due_date=datetime.strptime('5/5/2019','%d/%m/%Y'),
+                reminder=True,
+                is_complete=True,
+                user_id=1
+            )
+
+            valid_flashcard = Flashcard(
+                user_id=1,
+                front="The front of a valid flashcard",
+                back="The back of a valid flashcard",
+                group="A unique flashcard group",
+            )
+
             db.session.add(valid_test_user)
+            db.session.add(valid_tasks)
+            db.session.add(valid_flashcard)
             db.session.commit()
             
             yield test_client
