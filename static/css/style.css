@@ -54,7 +54,7 @@ body {
     margin: 0;
     padding-top: 85px;     /* Ensures layout context doesn't hide beneath your fixed navbar */
     min-height: 100vh;
-    display: block;        /* 🎯 FIX: Changed from flex to block so elements follow natural page flow */
+    display: block;
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: "Poppins", sans-serif;
@@ -164,6 +164,12 @@ body {
     color: var(--text-color);
     border-radius: 20px;
     padding: 40px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .wrapper h1{
