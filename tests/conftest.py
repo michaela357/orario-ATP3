@@ -45,7 +45,7 @@ def client():
                 user_id=1,
                 front="The front of a valid flashcard",
                 back="The back of a valid flashcard",
-                group="A unique flashcard group",
+                group="a-unique-flashcard-group",
             )
 
             db.session.add(valid_test_user)
