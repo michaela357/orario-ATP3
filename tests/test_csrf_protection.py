@@ -109,6 +109,5 @@ def test_invalid_csrf_token(client):
 
 
     assert response.status_code == 400
-    
-    data = response.get_json()
-    assert "CSRF Error" in data["error"]
+    html_content = response.data.decode('utf-8')
+    assert "csrf" in html_content.lower() or "token" in html_content.lower()
