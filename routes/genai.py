@@ -81,10 +81,14 @@ def generate_flashcards():
             "You must return your response inside a single root JSON object containing a key called 'flashcards' which points to an array. "
             "Use a mix of styles: definitions, true/false, and question-answer formats unless specified. "
             "Each flashcard item within the array must have exactly two string fields: 'front' and 'back'.\n\n"
-            f"Make sure to generate exactly {num_cards} flashcards.\n\n"
-            f"Actually, ignore the above; {custom_user_message}"
-            f"Source text content:\n\n{file_text}"
+            f"Make sure to generate exactly {num_cards} flashcards. No more, no less. If you can't, duplicate some flashcards until you have that EXACT amount.\n\n"
         )
+
+        # Only append user styling instructions cleanly if they entered them
+        if custom_user_message and custom_user_message.strip():
+            prompt += f"User Modification Criteria: {custom_user_message.strip()}\n\n"
+
+        prompt += f"--- begin source content ---\n{file_text}\n ---end---"
 
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
@@ -122,6 +126,34 @@ def generate_flashcards():
         if temp_path and os.path.exists(temp_path):
             os.remove(temp_path)
         return jsonify({"success": False, "error": str(e)}), 500
+    
+@genai_bp.route('/api/edit_flashcard/<int:flashcard_id>', methods=['POST'])
+def edit_flashcard(flashcard_id):
+    flashcard = Flashcard.query.get(flashcard_id)
+    data = request.form
+
+    if not flashcard or flashcard.user_id != current_user.id:
+        return jsonify({
+            "success": False,
+            "error": "Flashcard not found or access unauthorised"
+        }), 404
+
+    try:
+        if 'front' in data:
+            flashcard.front = data.get('front')
+
+        if 'back' in data:
+            flashcard.back = data.get('back')
+
+        db.session.commit()
+        return jsonify({"success": True}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            "success": False,
+            "error": f"Database mutation crash: {str(e)}"
+        }), 500
 
 @genai_bp.route('/delete-group/<group_name>', methods=['POST'])
 @login_required
