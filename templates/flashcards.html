@@ -6,6 +6,8 @@
 <div class="fc-dashboard-wrapper">
     <div class="decks-dashboard">
         <h3>📚 Your Study Decks</h3>
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
         {% if group_names %}
             <div class="deck-grid">
                 {% for name in group_names %}
@@ -43,8 +45,6 @@
 
     <details class="fc-details-panel">
         <summary>⚡ Create / Upload a New Flashcard Group</summary>
-        <div id="error-message" class="error"></div>
-        <div id="success-message" class="success"></div>
         <form action="{{ url_for('genai.generate_flashcards') }}" id="flashcard-form" method="POST" enctype="multipart/form-data" style="margin-top: 15px;">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
             
@@ -86,7 +86,7 @@
                 data-card-id="{{ flashcard.id }}"
                 data-front="{{ flashcard.front|e }}"
                 data-back="{{ flashcard.back|e }}">
-            &times;
+            ✍️ Edit card
         </button>
         
         <div class="fc-content">
@@ -104,8 +104,6 @@
     <div class="popup">
         <button class="close-btn" onclick="closeEditPopup()">&times;</button>
         <h2>Edit Flashcard</h2>
-        <div id="error-message" class="error" style="display: none;"></div>
-        <div id="success-message" class="success" style="display: none;"></div>
         <form id="edit-fc-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="hidden" id="edit-fc-id">
