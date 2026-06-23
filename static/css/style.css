@@ -1059,6 +1059,24 @@ div .todo-buttons a{
     opacity: 1;
 }
 
+button.edit-card-button {
+    background-color: var(--nav-bg);
+    color: var(--nav-text);
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 5px;
+    transition: all 0.5s;
+}
+button.edit-card-button:hover {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
+    opacity: 0.9;
+    transform: translateY(-5px);
+}
+button.edit-card-button::after {
+    display: none;
+}
+
 /* 2. CREATOR ACCORDION PANEL FORM STYLES */
 .fc-details-panel {
     background: var(--widget-bg);

@@ -34,7 +34,7 @@ def extract_text_for_ai(file_path, allowed_directory):
     system memory boundaries and strict 7,000-character constraints for API stability.
     """
     try:
-        # Prevent Path Traversal by locking processing strictly inside your active temp folder
+        # Prevent Path Traversal by locking processing strictly inside active temp folder
         abs_allowed_dir = os.path.abspath(allowed_directory)
         abs_file_path = os.path.abspath(file_path)
         
