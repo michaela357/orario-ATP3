@@ -1,4 +1,16 @@
-def test_login_success(client):
+import os
+import sys
+
+import pytest
+from werkzeug.security import generate_password_hash
+
+# Add parent directory to path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app import app, db
+from models import User
+
+def test_login_success(client, authenticated_user):
     """
     Test that login is successful and a session token is given to the user
     Asserts that:
