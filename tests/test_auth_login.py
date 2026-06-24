@@ -11,33 +11,7 @@ from app import app, db
 from models import User
 
 
-@pytest.fixture
-def client():
-    """
-    Fixture to set up a clean test client and in-memory database
-    for every single test function.
-    """
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['WTF_CSRF_ENABLED'] = False
-    
-    with app.test_client() as client:
-        with app.app_context():
-            db.create_all()
-            valid_test_user = User(
-                email='test@email.com', 
-                name='John Smith', 
-                password=generate_password_hash('Correctpassword123!')
-            )
-            db.session.add(valid_test_user)
-            db.session.commit()
-            
-            yield client
-            
-            db.session.remove()
-            db.drop_all()
-
-def test_login_success(client):
+def test_login_success(client, authenticated_user):
     """
     Test that login is successful and a session token is given to the user
     Asserts that:
