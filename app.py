@@ -3,6 +3,7 @@ import html
 import secrets
 from collections import defaultdict
 from datetime import datetime, timedelta
+import traceback
 
 import regex as re
 from flask import (Flask, jsonify, make_response, redirect, render_template,
@@ -131,12 +132,13 @@ def register():
 
         # Implement try / except to catch any database errors
         try:
-            new_user = User(email=email, name=final_name.strip(), password=generate_password_hash(password), quote=None)
+            new_user = User(email=email, name=final_name.strip(), password=generate_password_hash(password), quote=None, study_time="00:00")
             db.session.add(new_user)
             db.session.commit()
             return jsonify({"success": True, "redirect": "/login"}), 200
         except Exception as e:
             db.session.rollback()
+            traceback.print_exc()
             return jsonify({"success": False, "error": "An unexpected error occurred"}), 500
 
     return render_template("register.html")
