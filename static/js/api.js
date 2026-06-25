@@ -17,7 +17,7 @@ async function postForm(url, form) {
     } catch {
         return {
             success: false,
-            error: "CSRF Error, please refresh the page to logout"
+            error: "CSRF Error. Try refreshing the page."
         };
     }
 
@@ -48,7 +48,8 @@ function showError(message) {
 
     errorBox.innerText = message;
     errorBox.style.display = 'block';
-    errorBox.style.opacity = '1'
+    errorBox.style.opacity = '1';
+    
     setTimeout(() => {
         errorBox.style.opacity = '0';
         setTimeout(() => { errorBox.style.display = 'none'; }, 500);

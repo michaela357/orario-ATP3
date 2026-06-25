@@ -1,0 +1,5 @@
+This is a test for the gemini API to summarise!
+
+This is just a text file, located within the static folder of my project.
+
+If this works, it is very cool!

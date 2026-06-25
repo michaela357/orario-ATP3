@@ -13,6 +13,7 @@ from werkzeug.security import generate_password_hash
 
 from extensions import db
 from routes.auth import auth_bp
+from routes.genai import genai_bp
 from routes.tasks import tasks_bp
 from utils.utils import get_calendar_navigation
 
@@ -31,6 +32,7 @@ db.init_app(app)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(tasks_bp)
+app.register_blueprint(genai_bp)
 
 # Configure Flask-Login
 login_manager = LoginManager(app)
@@ -44,10 +46,6 @@ from models import Task, User
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-# Create the database tables
-with app.app_context():
-    db.create_all()
 
 # Home route
 @app.route('/')
@@ -201,6 +199,11 @@ def update_quote():
 
     return jsonify({'status': 'success'}), 200
 
+@app.route('/flashcards')
+@login_required
+def flashcards():
+    return render_template('flashcards.html')
+
 @app.route('/logout', methods=["POST"])
 @login_required
 def logout():
@@ -216,7 +219,8 @@ def logout():
     return response
 
 if __name__ == "__main__":
-    app.run(debug=True, ssl_context='adhoc')
+    # Create the database tables when running the app directly
+    with app.app_context():
+        db.create_all()
 
-if __name__ == '__main__':
-	app.run()
+    app.run(debug=True, ssl_context='adhoc')

@@ -1,11 +1,9 @@
 const toggleSwitch = document.getElementById('toggleCheckbox');
 const body = document.body;
-const word = document.getElementById("light-dark-indicator")
+const word = document.getElementById("light-dark-indicator");
 
-
-function toggleDarkMode() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+function toggleDarkMode(isDark) {
+    const targetTheme = isDark ? 'dark' : 'light';
     
     document.documentElement.setAttribute('data-theme', targetTheme);
     
@@ -13,20 +11,32 @@ function toggleDarkMode() {
 }
 
 function sendAlert() {
-    body.classList.toggle('dark-mode', toggleSwitch.checked)
-    toggleDarkMode()
-    if (toggleSwitch.checked) {
-        console.log('light mode enabled!');
-        word.textContent = "Enable Dark Mode!";
-    } else {
+    // Checked means light mode is active
+    const isLightModeActive = toggleSwitch.checked;
+    
+    toggleDarkMode(!isLightModeActive);
+    
+    if (!isLightModeActive) {
         console.log('dark mode enabled!');
         word.textContent = "Enable Light Mode!";
-}}
+    } else {
+        console.log('light mode enabled!');
+        word.textContent = "Enable Dark Mode!";
+    }
+}
 
-// On page load, check if they liked dark mode before
 const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
+
+if (savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    
+    toggleSwitch.checked = false;
+    
+    word.textContent = "Enable Light Mode!";
+} else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    toggleSwitch.checked = true;
+    word.textContent = "Enable Dark Mode!";
 }
 
 toggleSwitch.addEventListener('change', sendAlert);

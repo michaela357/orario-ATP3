@@ -5,6 +5,8 @@
 <div class="dashboard-wrapper">
     <header class="dashboard-header">
         <h1>Welcome, {{ name }}!</h1>
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
     </header>
     <main class="widget-container">
         <div class="side-panel-column">
@@ -84,7 +86,7 @@
 
         <section class="widget to-do">
             <div class="card-header">
-                <h1 class="to-do-title">To-do</h1>
+                <h1 class="to-do-title">✅ To-do list</h1>
             </div>
 
             <div class="todo-buttons">
@@ -105,6 +107,11 @@
                 </thead>
                 
                 <tbody>
+                    {% if not tasks %}
+                    <tr>
+                        <td colspan="7">No tasks found. Add a new task to get started!</td>
+                    </tr>
+                    {% endif %}
                     {% for task in tasks %}
                     <tr>
                     
@@ -180,28 +187,26 @@
 
 <!-- Popup form to edit task -->
 <div class="overlay" id="editPopupOverlay">
-
     <div class="popup">
         <button class="close-btn" onclick="closeEditPopup()">&times;</button>
         <h2>Edit Task</h2>
-        <div id="error-message" class="error"></div>
-        <div id="success-message" class="success"></div>
+
         <form id="edit-task-form">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" id="edit-task-id">
-            <input type="text" id="edit-title" placeholder="Title" required>
-            <input type="text" id="edit-description" placeholder="Description" required>
-            <input type="date" id="edit-due-date" required>
+            
+            <input type="text" id="edit-title" name="title" placeholder="Title" required>
+            <input type="text" id="edit-description" name="description" placeholder="Description" required>
+            <input type="date" id="edit-due-date" name="due_date" required>
+            
             <label> Complete
-                <input type="checkbox" id="edit-is-complete">
+                <input type="checkbox" id="edit-is-complete" name="is_complete">
             </label>
-            <label>
-                Reminder
-                <input type="checkbox" id="edit-reminder">
+            <label> Reminder
+                <input type="checkbox" id="edit-reminder" name="reminder">
             </label>
-            <button type="submit">
-                Save Changes
-            </button>
+            
+            <button type="submit">Save Changes</button>
         </form>
     </div>
 </div>

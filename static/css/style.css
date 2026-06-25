@@ -6,7 +6,6 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
-
 :root {
     --bg-color: #f4f7f6;
     --widget-bg: #ffffff;
@@ -16,7 +15,12 @@
     --accent-color1: #00ffb7;
     --accent-color2: #00ffb7;
     --border-color: #eee;
+    
     --nav-bg: #1b1f48;
+    --nav-text: #f4f7f6;
+    --nav-hover-bg: #00ffb7;
+    --nav-hover-text: #1b1f48;
+    --nav-active-bg: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme="dark"] {
@@ -28,7 +32,12 @@
     --accent-color1: #00ffb7;
     --accent-color2: #1b1f48;
     --border-color: #2a2f5b;
+    
     --nav-bg: #070914;
+    --nav-text: #f4f7f6;
+    --nav-hover-bg: #00ffb7;
+    --nav-hover-text: #070914;
+    --nav-active-bg: rgba(255, 255, 255, 0.08);
 }
 
 [data-theme="purple"] {
@@ -43,11 +52,9 @@
 
 body {
     margin: 0;
-    padding-top: 80px; 
+    padding-top: 85px;     /* Ensures layout context doesn't hide beneath your fixed navbar */
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: "Poppins", sans-serif;
@@ -101,14 +108,42 @@ body {
 }
 
 /* Responsive adjustment */
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
     .widget-container {
+        display: flex;
         flex-direction: column;
         align-items: center;
-    }
-    .widget {
+        justify-content: center;
         width: 100%;
-        max-width: 500px;
+        padding: 10px;
+        gap: 30px;
+    }
+
+    .side-panel-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 650px;
+        height: auto;
+        gap: 15px;
+    }
+
+    .card, 
+    .widget-to-do,
+    .widget.clock-widget,
+    .widget.side-panel.quote {
+        width: 100%;
+        max-width: 650px;
+        min-width: 0;
+        margin: 0 auto;
+        flex: none;
+    }
+    
+    /* Center the internal title text inside the quote box on mobile */
+    .widget.side-panel.quote h1,
+    #editable-quote {
+        text-align: center;
     }
 }
 
@@ -129,6 +164,12 @@ body {
     color: var(--text-color);
     border-radius: 20px;
     padding: 40px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .wrapper h1{
@@ -281,38 +322,105 @@ body {
     cursor: pointer;
 }
 
-nav {
+body {
+    padding-top: 75px;
+}
+
+.main-navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+    height: 65px;
     background-color: var(--nav-bg);
+    border-bottom: 1px solid var(--border-color);
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
-  
-nav a, nav button {
-    float: left;
-    background-color: var(--nav-bg);
-    display: block;
-    color: var(--accent-color1);
-    text-align: center;
-    padding: 14px 16px;
+
+.nav-container {
+    width: 100%;
+    height: 100%;
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-item {
+    color: var(--nav-text); /* 💡 Fix: Uses continuous light color framework */
+    font-size: 0.95rem;
+    font-weight: 500;
     text-decoration: none;
-    transition: all 0.5s ease;
+    padding: 10px 16px;
+    border-radius: 6px;
+    position: relative;
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-nav button {
-    float: right;
+.nav-item:hover {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
 }
 
- nav a:hover, nav button:hover {
+.nav-item.active {
+    background-color: var(--nav-active-bg);
+    color: var(--accent-color1);
+    font-weight: 600;
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 16px;
+    right: 16px;
+    height: 2px;
     background-color: var(--accent-color1);
-    color: var(--nav-bg);
-    text-decoration: underline;
+    transform: scaleX(0);
+    transition: transform 0.2s ease-in-out;
+}
+.nav-item.active::after,
+.nav-item:hover::after {
+    transform: scaleX(1);
+}
+
+.nav-btn-logout {
+    background: transparent;
+    border: 1px solid rgba(244, 247, 246, 0.3);
+    color: var(--nav-text);
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.nav-btn-logout:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+.nav-btn-signup {
+    background-color: var(--accent-color1);
+    color: var(--nav-bg); /* Uses dynamic local background inverse context */
+    font-weight: 600;
+}
+.nav-btn-signup:hover {
+    background-color: var(--accent-color1);
+    opacity: 0.9; /* Subtle glow shift */
+    transform: translateY(-1px);
+}
+.nav-btn-signup::after {
+    display: none;
 }
 
 .error{
@@ -371,10 +479,12 @@ nav button {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
-    justify-content: center;
     align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1300px;
+    margin: 0 auto;
 }
 
 /* Theme switch container */
@@ -505,6 +615,7 @@ input:checked + .slider-round::before {
     border-left: 5px solid var(--accent-color1);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     min-height: 100px;
+    max-height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -515,6 +626,8 @@ input:checked + .slider-round::before {
     max-height: 400px;
     overflow-y: auto;
     word-wrap: break-word;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .widget.side-panel.quote h1{
@@ -535,9 +648,8 @@ input:checked + .slider-round::before {
     width: 100%;
 
     /* Force long words to break */
-    white-space: normal;
-    overflow-wrap: break-word;
-    word-break: break-all;
+    word-break: normal;
+    overflow-wrap: anywhere;
 }
 
 span #editable-quote {
@@ -567,14 +679,26 @@ span #editable-quote {
 
 
 /* --- To-do widget --- */
-.widget-to-do {
-    flex: 2 1 500px;
-    max-width: 650px;
-    min-width: 600px;
+.widget.to-do {
+    flex: 1 1 500px;
+    min-width: 100%;
+    width: 100%;    
     background-color: var(--widget-bg);
-    align-self: top;
-    align-self: center;
-    padding: 80px 80px 50px 80px;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    padding: 30px;
+    box-sizing: border-box;
+    box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
+}
+
+
+@media (max-width: 600px) {
+    .widget.to-do {
+        padding: 20px;
+        border-radius: 20px;
+        min-width: fit-content;
+    }
 }
 
 .to-do-title {
@@ -842,6 +966,220 @@ div .todo-buttons a{
     color: var(--accent-color2);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(27, 31, 72, 0.2);
+}
+
+/* Flashcard page styles */
+/* Global Dashboard Formatting Layout */
+.fc-dashboard-wrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Forces uniform vertical stack space down the page */
+}
+
+/* 1. SUBJECTS DECK GRID STYLES */
+.decks-dashboard h3 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.deck-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.deck-widget {
+    background: var(--widget-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.deck-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    border-color: var(--accent-color1);
+}
+
+.deck-widget svg {
+    fill: var(--text-color);
+    flex-shrink: 0;
+}
+
+.navbar-item.active {
+    border-color: var(--accent-color1);
+    background-color: var(--bg-color);
+    box-shadow: 0 0 0 2px var(--accent-color1);
+    text-decoration: underline;
+}
+
+.active-widget {
+    border-color: var(--accent-color1);
+    background-color: var(--bg-color);
+    box-shadow: 0 0 0 2px var(--accent-color1);
+}
+
+.deck-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.deck-name {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.deck-action {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.active-widget .deck-action {
+    color: var(--accent-color1);
+    font-weight: 500;
+    opacity: 1;
+}
+
+button.edit-card-button {
+    background-color: var(--nav-bg);
+    color: var(--nav-text);
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 5px;
+    transition: all 0.5s;
+}
+button.edit-card-button:hover {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
+    opacity: 0.9;
+    transform: translateY(-5px);
+}
+button.edit-card-button::after {
+    display: none;
+}
+
+/* 2. CREATOR ACCORDION PANEL FORM STYLES */
+.fc-details-panel {
+    background: var(--widget-bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.fc-details-panel summary {
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--text-color);
+    user-select: none;
+}
+
+/* 3. ACTIVE STUDY ENVIRONMENT VIEWPORT STYLES */
+.study-deck-viewport {
+    border-top: 2px dashed var(--border-color);
+    padding-top: 30px;
+}
+
+.fc-card {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    display: none;
+}
+
+.fc-card.active {
+    display: block;
+}
+
+.fc-content {
+    background: var(--widget-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    min-height: 280px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.fc-content.flipped {
+    transform: rotateY(180deg);
+}
+
+.fc-front, .fc-back {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex; justify-content: center; align-items: center; text-align: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.fc-front { transform: rotateY(0deg); z-index: 2; }
+.fc-back { transform: rotateY(180deg); background-color: var(--bg-color); border-radius: 20px; }
+
+.fc-front-title { color: var(--text-color); font-size: 1.5rem; font-weight: 700; margin: 0; }
+.fc-back-text { color: var(--text-color); font-size: 1.25rem; line-height: 1.6; margin: 0; }
+
+/* Controls Alignment Panel */
+.study-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 20px auto 0 auto;
+}
+
+.fc-btn {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    background: var(--widget-bg);
+    color: var(--text-color);
+    transition: all 0.2s;
+}
+.fc-btn:hover:not(:disabled) { 
+    color: var(--accent-color1);
+    background-color: var(--nav-bg);
+    transform: translateY(-2px);
+}
+.fc-btn-primary { 
+    background-color: var(--button-color); 
+    color: var(--button-text-color); 
+    border: none; 
+}
+.fc-btn-primary:hover {
+    background: var(--nav-bg);
+    color: var(--accent-color1);
+}
+.fc-btn:disabled { 
+    opacity: 0.4;
+    cursor: not-allowed; 
 }
 
 /* Stacking for the dashboard */
