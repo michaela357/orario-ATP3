@@ -28,7 +28,7 @@ document.querySelectorAll('.delete-group-form').forEach(form => {
 
             // If no decks are left, reload to show the empty placeholder message
             if (document.querySelectorAll('.deck-container').length === 0) {
-                window.location.reload();
+                setTimeout(() => {window.location.reload();}, 700);
             }
         }
     });
