@@ -11,8 +11,15 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=True)
     quote = db.Column(db.String(250), nullable=True)
+    study_time = db.Column(db.String(10), nullable=False)
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
     flashcards = db.relationship('Flashcard', backref='user', lazy='dynamic', cascade="all, delete-orphan")
+
+    def get_study_time_dict(self):
+        return {
+            'name': self.name,
+            'study_time': self.study_time
+        }
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
