@@ -6,6 +6,8 @@
 <div class="fc-dashboard-wrapper">
     <div class="decks-dashboard">
         <h3>📚 Your Study Decks</h3>
+        <div id="error-message" class="error"></div>
+        <div id="success-message" class="success"></div>
         {% if group_names %}
             <div class="deck-grid">
                 {% for name in group_names %}
@@ -43,8 +45,6 @@
 
     <details class="fc-details-panel">
         <summary>⚡ Create / Upload a New Flashcard Group</summary>
-        <div id="error-message" class="error"></div>
-        <div id="success-message" class="success"></div>
         <form action="{{ url_for('genai.generate_flashcards') }}" id="flashcard-form" method="POST" enctype="multipart/form-data" style="margin-top: 15px;">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
             
@@ -79,18 +79,41 @@
             <h2 style="text-align: center; margin-bottom: 5px;">✍️ Studying: {{ selected_group }}</h2>
             <p style="text-align: center; color: #64748b; margin-bottom: 15px;" id="progress-indicator">Card 1 of {{ flashcards|length }}</p>
             
-            {% for flashcard in flashcards %}
-                <main class="fc-card {% if loop.index0 == 0 %}active{% endif %}">
-                    <div class="fc-content" onclick="this.classList.toggle('flipped')">
-                        <div class="fc-front">
-                            <h2 class="fc-front-title">{{ flashcard.front }}</h2>
-                        </div>
-                        <div class="fc-back">
-                            <p class="fc-back-text">{{ flashcard.back }}</p>
-                        </div>
-                    </div>
-                </main>
-            {% endfor %}
+{% for flashcard in flashcards %}
+    <main class="fc-card {% if loop.index0 == 0 %}active{% endif %}">
+        <button class="edit-card-button"
+                type="button"
+                data-card-id="{{ flashcard.id }}"
+                data-front="{{ flashcard.front|e }}"
+                data-back="{{ flashcard.back|e }}">
+            ✍️ Edit card
+        </button>
+        
+        <div class="fc-content">
+            <div class="fc-front">
+                <h2 class="fc-front-title">{{ flashcard.front }}</h2>
+            </div>
+            <div class="fc-back">
+                <p class="fc-back-text">{{ flashcard.back }}</p>
+            </div>
+        </div>
+    </main>
+{% endfor %}
+
+<div class="overlay" id="editFlashcardPopupOverlay" style="display: none;">
+    <div class="popup">
+        <button class="close-btn" onclick="closeEditPopup()">&times;</button>
+        <h2>Edit Flashcard</h2>
+        <form id="edit-fc-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" id="edit-fc-id">
+            
+            <input type="text" id="edit-front" name="front" placeholder="Front" required>
+            <input type="text" id="edit-back" name="back" placeholder="Back" required>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</div>
 
             <div class="study-controls">
                 <button class="fc-btn" id="prev-btn" onclick="navigateCard(-1)" disabled>◀ Previous</button>
@@ -128,7 +151,24 @@
             document.getElementById('next-btn').innerText = 'Next ▶';
         }
     }
+
+    document.querySelectorAll('.edit-card-button').forEach((button) => {
+        button.addEventListener('click', () => {
+            openFcPopup(
+                Number(button.dataset.cardId),
+                button.dataset.front,
+                button.dataset.back
+            );
+        });
+    });
+
+    document.querySelectorAll('.fc-content').forEach((content) => {
+        content.addEventListener('click', () => {
+            content.classList.toggle('flipped');
+        });
+    });
 </script>
 <script src="../static/js/flashcard_group_delete.js"></script>
 <script src="../static/js/flashcard_validation.js"></script>
+<script src="../static/js/fc_edit_popups.js"></script>
 {% endblock %}

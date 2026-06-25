@@ -54,7 +54,7 @@ body {
     margin: 0;
     padding-top: 85px;     /* Ensures layout context doesn't hide beneath your fixed navbar */
     min-height: 100vh;
-    display: block;        /* 🎯 FIX: Changed from flex to block so elements follow natural page flow */
+    display: block;
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: "Poppins", sans-serif;
@@ -164,6 +164,12 @@ body {
     color: var(--text-color);
     border-radius: 20px;
     padding: 40px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .wrapper h1{
@@ -1051,6 +1057,24 @@ div .todo-buttons a{
     color: var(--accent-color1);
     font-weight: 500;
     opacity: 1;
+}
+
+button.edit-card-button {
+    background-color: var(--nav-bg);
+    color: var(--nav-text);
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 5px;
+    transition: all 0.5s;
+}
+button.edit-card-button:hover {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
+    opacity: 0.9;
+    transform: translateY(-5px);
+}
+button.edit-card-button::after {
+    display: none;
 }
 
 /* 2. CREATOR ACCORDION PANEL FORM STYLES */

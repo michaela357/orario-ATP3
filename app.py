@@ -47,10 +47,6 @@ from models import Task, User
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Create the database tables
-with app.app_context():
-    db.create_all()
-
 # Home route
 @app.route('/')
 def home():
@@ -223,7 +219,8 @@ def logout():
     return response
 
 if __name__ == "__main__":
-    app.run(debug=True, ssl_context='adhoc')
+    # Create the database tables when running the app directly
+    with app.app_context():
+        db.create_all()
 
-if __name__ == '__main__':
-	app.run()
+    app.run(debug=True, ssl_context='adhoc')
