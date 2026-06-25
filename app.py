@@ -15,6 +15,7 @@ from extensions import db
 from routes.auth import auth_bp
 from routes.genai import genai_bp
 from routes.tasks import tasks_bp
+from routes.pomodoro import pomodoro_bp
 from utils.utils import get_calendar_navigation
 
 # Initialise Flask app
@@ -33,6 +34,7 @@ db.init_app(app)
 app.register_blueprint(auth_bp)
 app.register_blueprint(tasks_bp)
 app.register_blueprint(genai_bp)
+app.register_blueprint(pomodoro_bp)
 
 # Configure Flask-Login
 login_manager = LoginManager(app)
