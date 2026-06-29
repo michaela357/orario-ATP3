@@ -9,10 +9,9 @@ Pomodoro timer
     <h1 class="main-title">POMODORO TIMER</h1>
    </div>
    <div class="timer-container">
+    <div class="timer-card">
         <div id="error-message" class="error"></div>
         <div id="success-message" class="success"></div>
-    <div class="timer-card">
-     
      <div class="tabs-flex">
        <button id="tab-work" class="canva-button" onclick="switchMode('work')" style="font-weight: 500; font-size: 14px;">Work</button> 
        <button id="tab-short" class="canva-button" onclick="switchMode('short')" style="font-weight: 500; font-size: 14px;">Short Break</button> 
@@ -56,5 +55,16 @@ Pomodoro timer
 <input type="range" min="1" max="30" value="5" class="slider" id="short_time" oninput="this.nextElementSibling.value = this.value">
 <output style="font-weight: bold; margin-left: 10px;">5</output>
 
+<form id="add-group-name" action="{{ url_for('pomodoro.update_group') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="group_name">Enter a group name:</label>
+    <input id="group_name" name="group_name" type="text" placeholder="E.g. HSC 2026">
+    <input type="submit" value="Submit">
+</form>
+
+<table>
+    <thead>Leaderboard for {}</thead>
+
+</table>
 <script src="../static/js/pomodoro_timer.js"></script>
 {% endblock %}
