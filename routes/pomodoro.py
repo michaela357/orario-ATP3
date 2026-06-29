@@ -12,7 +12,7 @@ pomodoro_bp = Blueprint("pomodoro", __name__)
 def timer_dashboard():
     return render_template('pomodoro.html')
 
-from models import DailyStudyLog
+from models import DailyStudyLog, User
 
 
 @pomodoro_bp.route('/api/save_study_time', methods=['POST'])
@@ -48,3 +48,16 @@ def save_study_time():
     except Exception as e:
         db.session.rollback()
         return jsonify({"success": False, "error": str(e)}), 500
+    
+
+@pomodoro_bp.route('/api/update_group', methods=["POST"])
+def update_group():
+    data = request.get_json()
+    
+    if not data or 'group' not in data:
+        return jsonify({'success': False, 'error': 'Invalid quote details'}), 400
+
+    current_user.study_group = data['group']
+    db.session.commit()
+
+    return jsonify({'success': True}), 200
