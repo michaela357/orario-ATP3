@@ -19,6 +19,9 @@
                 <a href="{{ url_for('genai.flashcards_dashboard') }}" class="nav-item {{ 'active' if request.endpoint == 'genai.flashcards_dashboard' else '' }}">
                     ⚡ Flashcard Maker
                 </a>
+                <a href="{{ url_for('pomodoro.timer_dashboard') }}" class="nav-item {{ 'active' if request.endpoint == 'pomodoro.timer_dashboard' else '' }}">
+                    ⏳ Pomodoro Timer
+                </a>
             </div>
 
             <div class="nav-right">
