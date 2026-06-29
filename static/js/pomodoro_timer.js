@@ -160,5 +160,41 @@ function playChime() {
     } catch(e) {}
 }
 
+document.querySelector('#add-group-name')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const currentForm = e.currentTarget;
+    const groupName = currentForm.querySelector('input[name="group_name"]').value.trim();
+
+    const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
+
+    if (groupName.length > 50 || groupName.length === 0) {
+        showError("Please enter a group that is between 1 and 50 characters.");
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/update_group', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ group: groupName })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            window.location.reload();
+            setTimeout(() => { showSuccess("Group updated successfully!"); }, 1000);
+        } else {
+            showError(data.error || "Failed to update group name");
+        }
+    } catch (error) {
+        showError("Error updating group name.");
+    }
+});
+
 updateDisplay();
 updateTabs();
