@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(250), nullable=True)
     quote = db.Column(db.String(250), nullable=True)
     study_time = db.Column(db.String(10), nullable=False)
+    study_group = db.Column(db.String(50), nullable=True)
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
     flashcards = db.relationship('Flashcard', backref='user', lazy='dynamic', cascade="all, delete-orphan")
 
@@ -69,6 +70,7 @@ class Flashcard(db.Model):
 
 class DailyStudyLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    study_group = db.Column(db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
     date = db.Column(db.Date, nullable=False, default=date.today)
     total_minutes = db.Column(db.Integer, nullable=False, default=0)
