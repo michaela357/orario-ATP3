@@ -66,3 +66,9 @@ class Flashcard(db.Model):
         self.front = front
         self.back = back
         self.group = group or 'Untitled Group'
+
+class DailyStudyLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
+    date = db.Column(db.Date, nullable=False, default=date.today)
+    total_minutes = db.Column(db.Integer, nullable=False, default=0)
