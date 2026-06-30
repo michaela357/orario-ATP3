@@ -96,8 +96,33 @@ function switchMode(mode) {
     totalTime = MODES[mode];
     startBtn.classList.remove('hidden');
     pauseBtn.classList.add('hidden');
+    if (currentMode === 'work') {
+        toggleActivity(true);
+    } else {
+        toggleActivity(false);
+    }
     updateDisplay();
     updateTabs();
+}
+
+async function toggleActivity(newStatus) {
+    const csrf_token = document.querySelector('input[name="csrf_token"]')?.value;
+    try {
+        const response = await fetch('/api/toggle_activity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrf_token
+            },
+            body: JSON.stringify({ is_studying: newStatus })
+        });
+
+        const data = await response.json();
+
+    } catch (error) {
+        showError("Error updating status.");
+        console.log(error)
+    }
 }
 
 function startTimer() {
@@ -107,6 +132,11 @@ function startTimer() {
     if (timeLeft === totalTime) {
         timeLeft = MODES[currentMode];
         totalTime = MODES[currentMode];
+    }
+    if (currentMode === 'work') {
+        toggleActivity(true);
+    } else {
+        toggleActivity(false);
     }
 
     interval = setInterval(() => {
@@ -123,8 +153,10 @@ function startTimer() {
                 saveStudySession(work_length); 
                 
                 switchMode(sessions % 4 === 0 ? 'long' : 'short');
+                toggleActivity(false);
             } else {
                 switchMode('work');
+                toggleActivity(true);
             }
         startTimer();
         }
@@ -135,6 +167,7 @@ function pauseTimer() {
     clearInterval(interval); interval = null;
     pauseBtn.classList.add('hidden');
     startBtn.classList.remove('hidden');
+    toggleActivity(false);
 }
 
 function resetTimer() {
@@ -144,6 +177,7 @@ function resetTimer() {
     startBtn.classList.remove('hidden');
     pauseBtn.classList.add('hidden');
     updateDisplay();
+    toggleActivity(false);
 }
 
 function playChime() {
