@@ -73,4 +73,5 @@ class DailyStudyLog(db.Model):
     study_group = db.Column(db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
     date = db.Column(db.Date, nullable=False, default=date.today)
+    sessions_today = db.Column(db.Integer, default=0)
     total_minutes = db.Column(db.Integer, nullable=False, default=0)
