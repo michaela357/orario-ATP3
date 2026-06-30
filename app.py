@@ -1,9 +1,9 @@
 import calendar
 import html
 import secrets
+import traceback
 from collections import defaultdict
 from datetime import datetime, timedelta
-import traceback
 
 import regex as re
 from flask import (Flask, jsonify, make_response, redirect, render_template,
@@ -15,8 +15,8 @@ from werkzeug.security import generate_password_hash
 from extensions import db
 from routes.auth import auth_bp
 from routes.genai import genai_bp
-from routes.tasks import tasks_bp
 from routes.pomodoro import pomodoro_bp
+from routes.tasks import tasks_bp
 from utils.utils import get_calendar_navigation
 
 # Initialise Flask app
