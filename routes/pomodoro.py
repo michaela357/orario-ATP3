@@ -76,7 +76,8 @@ def study_leaderboard():
 
     leaderboard_data = db.session.query(
         User.name,
-        DailyStudyLog.total_minutes
+        DailyStudyLog.total_minutes,
+        User.is_studying,
     ).join(DailyStudyLog, User.id == DailyStudyLog.user_id)\
      .filter(User.study_group == group_name)\
      .filter(DailyStudyLog.date == today)\
@@ -106,7 +107,8 @@ def leaderboard_data():
     # Query exactly like before
     raw_data = db.session.query(
         User.name,
-        DailyStudyLog.total_minutes
+        DailyStudyLog.total_minutes,
+        User.is_studying,
     ).join(DailyStudyLog, User.id == DailyStudyLog.user_id)\
      .filter(User.study_group == group_name)\
      .filter(DailyStudyLog.date == today)\
@@ -115,7 +117,7 @@ def leaderboard_data():
 
     # Convert the raw database tuples into a clean list of dictionaries
     formatted_leaderboard = [
-        {"name": row[0], "total_minutes": row[1]} for row in raw_data
+        {"name": row[0], "total_minutes": row[1], "is_studying": row[2]} for row in raw_data
     ]
 
     return jsonify({
