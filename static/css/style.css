@@ -1403,3 +1403,54 @@ button.edit-card-button::after {
 .hidden {
     display: none !important;
 }
+
+/* --- STYLING FOR POMODORO TIMER --- */
+.main-title {
+    color: var(--text-color);
+}
+
+.svg-rotate circle {
+    cx:"100";
+    cy:"100";
+    r:"90";
+    fill:"none";
+    stroke:"#e5e7eb";
+    stroke-width:"8";
+}
+
+.svg-rotate circle .progress {
+    cx:"100";
+    cy:"100";
+    r:"90";
+    fill:"none";
+    stroke:"#e74c3c";
+    stroke-width:"8";
+    stroke-linecap:"round";
+    stroke-dasharray:"565.49";
+    stroke-dashoffset:"0";
+}
+
+/* --- STYLING FOR LEADERBOARD TABLE --- */
+.dot {
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: #00ff0a;
+    box-shadow: 0 0 10px #00ff0a;
+    margin: 20px 10px;
+    border-radius: 50%;
+    animation: animateDot 2s linear infinite;
+}
+
+@keyframes animateDot {
+    0% {
+        transform: scale(0.6);
+    }
+    30% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(0.6);
+    }
+}
