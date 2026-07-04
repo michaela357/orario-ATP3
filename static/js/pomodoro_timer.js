@@ -165,12 +165,20 @@ function startTimer() {
     localStorage.setItem('timerMode', currentMode);
     localStorage.removeItem('timerTimeLeft');
 
+    if (currentMode === 'work') {
+        // clear any old save intervals first so they don't stack up
+        clearInterval(saveInterval);
+        
+        // Set the interval to log 1 minute every 60 seconds
+        saveInterval = setInterval(() => {saveStudySession(1);}, 60000);
+    }
+
     // 1. Independent Countdown Loop
+    clearInterval(countdownInterval); countdownInterval = null;
     countdownInterval = setInterval(() => {
         const now = Date.now();
         timeLeft = Math.max(0, Math.floor((endTime - now) / 1000));
         updateDisplay();
-        
         if (timeLeft <= 0) {
             clearInterval(countdownInterval); countdownInterval = null;
             clearInterval(saveInterval); saveInterval = null;
@@ -181,6 +189,7 @@ function startTimer() {
             
             if (currentMode === 'work') {
                 sessions++;
+                saveStudySession(work_length);
                 document.getElementById('session-count').textContent = sessions;
                 switchMode(sessions % 4 === 0 ? 'long' : 'short');
             } else {
@@ -189,13 +198,6 @@ function startTimer() {
             startTimer();
         }
     }, 1000);
-
-    // 2. Separate Incremental Sync Loop
-    if (currentMode === 'work') {
-        saveInterval = setInterval(() => {
-            saveStudySession(1);
-        }, 60000);
-    }
 }
 
 function pauseTimer() {
