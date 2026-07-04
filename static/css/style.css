@@ -15,7 +15,7 @@
     --accent-color1: #00ffb7;
     --accent-color2: #00ffb7;
     --border-color: #eee;
-    
+    --ring-color: rgb(167, 164, 164);
     --nav-bg: #1b1f48;
     --nav-text: #f4f7f6;
     --nav-hover-bg: #00ffb7;
@@ -32,7 +32,7 @@
     --accent-color1: #00ffb7;
     --accent-color2: #1b1f48;
     --border-color: #2a2f5b;
-    
+    --ring-color: black;
     --nav-bg: #070914;
     --nav-text: #f4f7f6;
     --nav-hover-bg: #00ffb7;
@@ -1463,6 +1463,10 @@ button.edit-card-button::after {
     border: 1px solid var(--border-color);
 }
 
+circle {
+    stroke: var(--ring-color);
+}
+
 .pomodoro-details-panel summary {
     background: var(--widget-bg);
     padding: 20px;
@@ -1508,3 +1512,4 @@ button.edit-card-button::after {
     color: var(--accent-color1);
     transform: translateY(-2px);
 }
+
