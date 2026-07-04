@@ -1454,3 +1454,57 @@ button.edit-card-button::after {
         transform: scale(0.6);
     }
 }
+
+/* --- STYLING FOR POMODORO TIMER ---*/
+.timer-card {
+    background: var(--widget-bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.pomodoro-details-panel summary {
+    background: var(--widget-bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+#timer-display,#session-count {
+    color: var(--text-color);
+}
+
+.leaderboard-link{
+    color: var(--button-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#join-group-btn {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    
+    font-size: 16px;
+    font-weight: 600;
+
+    background: var(--button-color);
+    color: var(--button-text-color);
+    transition: transform 0.2s ease;
+}
+
+#join-group-btn:hover {
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-weight: 600;
+    background: var(--nav-bg);
+    color: var(--accent-color1);
+    transform: translateY(-2px);
+}
