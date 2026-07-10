@@ -50,6 +50,12 @@
     --nav-bg: #2a024d;
 }
 
+html,
+body {
+    max-width:100%;
+    overflow-x:hidden;
+}
+
 body {
     margin: 0;
     padding-top: 85px;     /* Ensures layout context doesn't hide beneath your fixed navbar */
@@ -59,14 +65,47 @@ body {
     color: var(--text-color);
     font-family: "Poppins", sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: large;
+    background: radial-gradient(circle at top, rgba(0,255,183,.08), transparent 35%), var(--bg-color);
 }
 
-.home-title {
-    color: var(--text-color);
-    padding: 40px;
-    border: 2px solid var(--text-color); /* Professional solid border */
-    border-radius: 20px;
-    margin-bottom: 20px;
+
+/* -- Style for logo on navbar -- */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding: 30px;
+    text-decoration:none;
+    color:inherit;
+}
+
+
+.logo img{
+    width:44px;
+    height:44px;
+    border-radius:12px;
+    object-fit:cover;
+}
+
+.logo-text{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
+}
+
+.logo-title{
+    font-size:1.2rem;
+    font-weight:700;
+    color:var(--nav-text);
+}
+
+.logo-subtitle{
+    color: whitesmoke;
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+    opacity:.65;
 }
 
 /* Container for all widgets */
@@ -95,10 +134,6 @@ body {
     transform: translateY(-5px); /* Subtle feedback */
 }
 
-/* Specific sizing for the Calendar */
-.card {
-    flex: 2 1 450px;
-}
 
 /* Title Styling */
 .dashboard-header {
@@ -107,45 +142,6 @@ body {
     color: white;
 }
 
-/* Responsive adjustment */
-@media (max-width: 1000px) {
-    .widget-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 10px;
-        gap: 30px;
-    }
-
-    .side-panel-column {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        max-width: 650px;
-        height: auto;
-        gap: 15px;
-    }
-
-    .card, 
-    .widget-to-do,
-    .widget.clock-widget,
-    .widget.side-panel.quote {
-        width: 100%;
-        max-width: 650px;
-        min-width: 0;
-        margin: 0 auto;
-        flex: none;
-    }
-    
-    /* Center the internal title text inside the quote box on mobile */
-    .widget.side-panel.quote h1,
-    #editable-quote {
-        text-align: center;
-    }
-}
 
 .home-directions {
     color: #444;
@@ -156,175 +152,10 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-.wrapper {
-    width: 420px;
-    background: var(--widget-bg);
-    border: 1px solid var(--border-color);;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-    color: var(--text-color);
-    border-radius: 20px;
-    padding: 40px;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
 
-.wrapper h1{
-    font-size: 36px;
-    text-align: center;
-    color: var(--text-color);
-    font-weight: 700;
-}
-
-.wrapper .input-box {
-    position: relative;
-    width: 100%;
-    height: 50px;
-    background: var(--bg-color);
-    border-radius: 40px;
-    margin: 25px 0;
-}
-
-.input-box input {
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 40px;
-    font-size: 16px;
-    padding: 20px 45px 20px 20px;
-    color: var(--text-color);
-    border: 2px solid transparent;
-}
-
-.input-box input::placeholder{
-    color: var(--text-color);
-}
-
-.input-box i {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 20px;
-}
-
-.input-box label {
-    position: absolute;
-    top: 50%;
-    left: 22px;
-    transform: translateY(-50%);
-    color: #777;
-    pointer-events: none; /* Allows clicks to pass through the label to the input */
-    transition: all 0.3s ease; /* Smooth transition for the movement */
-}
-
-.input-box input::placeholder {
-    color: var(--text-color);
-    opacity: 0;
-}
-
-.input-box input:focus::placeholder {
-    color: var(--text-color);
-    opacity: 0.7;
-}
-
-.input-box input:focus ~ label,
-.input-box input:not(:placeholder-shown) ~ label {
-    top: 0;
-    font-size: 12px;
-    color: var(--text-color);
-    transform: translateY(-9px);
-    padding: 0 5px;
-}
-  
-
-.input-box input:focus {
-    border-bottom-color: var(--accent-color1);
-}
-
-.wrapper .remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14.5px;
-    margin: -15px 0 15px;
-}
-
-.remember-forgot label input {
-    accent-color: var(--widget-bg);
-    margin-right: 3px;
-}
-
-.remember-forgot a {
-    color: var(--widget-bg);
-    text-decoration: none;
-}
-
-.remember-forgot a:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.remember-forgot input[type="checkbox"] {
-    accent-color: var(--accent-color1);
-    width: 20px;
-    transform: translateY(1.5px) translateX(1.5px);
-}
-
-.wrapper .btn {
-    width: 100%;
-    height: 45px;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    
-    font-size: 16px;
-    font-weight: 600;
-
-    background: var(--button-color);
-    color: var(--button-text-color);
-    transition: transform 0.2s ease;
-}
-
-.wrapper .btn:hover {
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    font-weight: 600;
-    background: var(--nav-bg);
-    color: var(--accent-color1);
-    transform: translateY(-2px);
-}
-
-.wrapper .link {
-    font-size: 14.5px;
-    text-align: center;
-    margin: 20px 0 15px;
-}
-
-.link p a {
-    color: var(--text-color);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.link p a:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-body {
-    padding-top: 75px;
-}
+/* ==========================================================================
+   DESKTOP NAVIGATION DEFAULT LAYOUT
+   ========================================================================== */
 
 .main-navbar {
     position: fixed;
@@ -341,7 +172,6 @@ body {
 .nav-container {
     width: 100%;
     height: 100%;
-    padding: 0 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -355,7 +185,7 @@ body {
 }
 
 .nav-item {
-    color: var(--nav-text); /* 💡 Fix: Uses continuous light color framework */
+    color: var(--nav-text); 
     font-size: 0.95rem;
     font-weight: 500;
     text-decoration: none;
@@ -387,6 +217,7 @@ body {
     transform: scaleX(0);
     transition: transform 0.2s ease-in-out;
 }
+
 .nav-item.active::after,
 .nav-item:hover::after {
     transform: scaleX(1);
@@ -403,6 +234,7 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
 }
+
 .nav-btn-logout:hover {
     background-color: #ef4444;
     border-color: #ef4444;
@@ -411,9 +243,10 @@ body {
 
 .nav-btn-signup {
     background-color: var(--accent-color1);
-    color: var(--nav-bg); /* Uses dynamic local background inverse context */
+    color: var(--nav-bg); 
     font-weight: 600;
 }
+
 .nav-btn-signup:hover {
     background-color: var(--accent-color1);
     opacity: 0.9; /* Subtle glow shift */
@@ -422,6 +255,8 @@ body {
 .nav-btn-signup::after {
     display: none;
 }
+
+
 
 .error{
     display: none;
@@ -585,7 +420,7 @@ input:checked + .slider-round::before {
     background-color: var(--text-color);
     color: var(--accent-color2);
     align-self: center;
-    width: 110%;
+    width: 100%;
 }
 
 #current-time {
@@ -681,8 +516,8 @@ span #editable-quote {
 /* --- To-do widget --- */
 .widget.to-do {
     flex: 1 1 500px;
-    min-width: 100%;
-    width: 100%;    
+    width:100%;
+    min-width:0;
     background-color: var(--widget-bg);
     color: var(--text-color);
     border: 1px solid var(--border-color);
@@ -690,15 +525,6 @@ span #editable-quote {
     padding: 30px;
     box-sizing: border-box;
     box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
-}
-
-
-@media (max-width: 600px) {
-    .widget.to-do {
-        padding: 20px;
-        border-radius: 20px;
-        min-width: fit-content;
-    }
 }
 
 .to-do-title {
@@ -840,7 +666,7 @@ div .todo-buttons a{
 .card {
     flex: 2 1 500px;
     max-width: 650px;
-    min-width: 600px;
+    min-width: 0;
     background-color: var(--widget-bg);
     align-self: top;
     align-self: center;
@@ -1182,45 +1008,6 @@ button.edit-card-button::after {
     cursor: not-allowed; 
 }
 
-/* Stacking for the dashboard */
-@media (max-width: 1000px) {
-    .widget-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .side-panel-column.clock-widget, .card {
-        width: 100%;
-        max-width: 600px;
-        flex: none;
-    }
-    
-    .dashboard-header {
-        text-align: center;
-    }
-}
-
-/* Optimization for Large Screens */
-@media (min-width: 1200px) {
-    .widget-container {
-        max-width: 1400px;
-        gap: 40px;
-    }
-
-    .side-panel-column {
-        flex: 0 0 400px;
-    }
-
-    .card {
-        flex: 1;
-        max-width: 900px;
-    }
-
-    .dashboard-header h1 {
-        font-size: 3rem;
-    }
-}
 
 /* Modal Background (Overlay) */
 .modal {
@@ -1533,60 +1320,71 @@ circle {
 
 /* ---STREAK FIRE STYLING --- */
 .fire-container {
-    position: relative;
-    width: 100px;
-    height: 120px;
-    animation: float 3s ease-in-out infinite;
-}
-
-/* teardrop shape flame */
-.flame {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    border-radius: 0% 100% 60% 60% / 0% 60% 60% 100%;
-    transform-origin: 30% 70%;
-    filter: drop-shadow(0 2px 8px rgba(255, 69, 0, 0.2));
-}
-
-.flame.outer {
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(135deg, #ff4500, #ff6b00);
-    transform: translateX(-50%) rotate(45deg);
-    animation: flame-smooth 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-}
-
-.flame.inner {
-    width: 72px;
-    height: 72px;
-    background: linear-gradient(135deg, #ff9000, #ffa500);
-    transform: translateX(-50%) rotate(45deg);
-    animation: flame-smooth 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate-reverse;
-}
-
-.flame.core {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #ffeb3b, #fff176);
-    transform: translateX(-50%) rotate(45deg);
-    animation: flame-smooth 1s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-}
-
-@keyframes flame-smooth {
-    0% { 
-    transform: translateX(-50%) rotate(43deg) scale(0.96, 1.04); 
+      position: relative;
+      width: 100px;
+      height: 120px;
+      animation: float 3s ease-in-out infinite;
+      
+      /* Intense, layered neon ambient glow behind the entire asset */
+      filter: 
+        drop-shadow(0 4px 12px rgba(255, 69, 0, 0.35))
+        drop-shadow(0 12px 30px rgba(255, 110, 0, 0.2));
     }
-    100% { 
-    transform: translateX(-50%) rotate(47deg) scale(1.04, 0.96); 
+
+    /* Elegant teardrop geometry */
+    .flame {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      border-radius: 0% 100% 60% 60% / 0% 60% 60% 100%;
+      transform-origin: 30% 70%;
     }
-}
 
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-}
+    .flame.outer {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #ff4500, #ff6b00);
+      transform: translateX(-50%) rotate(45deg);
+      animation: flame-smooth 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+      /* Intense glow specifically for the outer red rim */
+      filter: drop-shadow(0 0 6px rgba(255, 69, 0, 0.6));
+    }
 
+    .flame.inner {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #ff9000, #ffa500);
+      transform: translateX(-50%) rotate(45deg);
+      animation: flame-smooth 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate-reverse;
+      /* Adds a fiery mid-layer radiance */
+      filter: drop-shadow(0 0 4px rgba(255, 144, 0, 0.5));
+    }
+
+    .flame.core {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #ffeb3b, #fff176);
+      transform: translateX(-50%) rotate(45deg);
+      animation: flame-smooth 1s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+      /* Inner white-hot brightness core glow */
+      filter: drop-shadow(0 0 4px rgba(255, 235, 59, 0.8));
+    }
+
+    /* Fluid, organic swaying motion */
+    @keyframes flame-smooth {
+      0% { 
+        transform: translateX(-50%) rotate(43deg) scale(0.96, 1.04); 
+      }
+      100% { 
+        transform: translateX(-50%) rotate(47deg) scale(1.04, 0.96); 
+      }
+    }
+
+    /* Premium UI floating effect */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
 .streak-widget {
     display: flex;
     flex-direction: column;
