@@ -102,7 +102,7 @@ def generate_flashcards():
         if custom_user_message and custom_user_message.strip():
             prompt += f"User Modification Criteria: {custom_user_message.strip()}\n\n"
 
-        prompt += f"--- begin source content ---\n{file_text}\n ---end---"
+        base_prompt += f"--- begin source content ---\n{file_text}\n ---end---"
 
         # Primary AI call
         response = client.chat.completions.create(
