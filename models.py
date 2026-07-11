@@ -11,8 +11,17 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=True)
     quote = db.Column(db.String(250), nullable=True)
+    study_time = db.Column(db.String(10), nullable=False)
+    is_studying = db.Column(db.Boolean, default=False)
+    study_group = db.Column(db.String(50), nullable=True)
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
     flashcards = db.relationship('Flashcard', backref='user', lazy='dynamic', cascade="all, delete-orphan")
+
+    def get_study_time_dict(self):
+        return {
+            'name': self.name,
+            'study_time': self.study_time
+        }
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -59,3 +68,11 @@ class Flashcard(db.Model):
         self.front = front
         self.back = back
         self.group = group or 'Untitled Group'
+
+class DailyStudyLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    study_group = db.Column(db.String(50))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
+    date = db.Column(db.Date, nullable=False, default=date.today)
+    sessions_today = db.Column(db.Integer, default=0)
+    total_minutes = db.Column(db.Integer, nullable=False, default=0)

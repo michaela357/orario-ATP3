@@ -149,5 +149,5 @@ function checkReminders() {
 // Initialisations
 document.addEventListener('DOMContentLoaded', () => {
     requestNotificationPermission();
-    setInterval(checkReminders, 60000);
+    setInterval(checkReminders, 3600000);
 });

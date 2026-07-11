@@ -48,35 +48,49 @@ def generate_flashcards():
     try:
         if 'study_file' not in request.files:
             return jsonify({"success": False, "error": "No file uploaded."}), 400
-            
-        uploaded_file = request.files['study_file']
-        num_cards = request.form.get('num_cards', 5, type=int)
-
-        # Fetch current user groups to prevent duplicate entries
-        groups = db.session.query(Flashcard.group).filter_by(user_id=current_user.id).distinct().all()
-        group_names = [g[0] for g in groups if g[0]]
-
-        group_name = request.form.get('group-name', '').strip() or 'Untitled Group'
-
-        if group_name in group_names:
-            return jsonify({"success": False, "error": "A group with this name already exists. Please choose a different name."}), 400
         
-        if uploaded_file.filename == '':
-            return jsonify({"success": False, "error": "No file selected."}), 400
+        uploaded_file = request.files['study_file']
 
-        temp_dir = os.path.join(current_app.root_path, 'static', 'temp')
-        os.makedirs(temp_dir, exist_ok=True)
-        temp_path = os.path.join(temp_dir, uploaded_file.filename)
+        if uploaded_file.filename == '':
+            return jsonify({"success":False,"error":"No file selected."}),400
+
+        num_cards = request.form.get("num_cards",5,type=int)
+
+        # Check duplicate group names
+        group_name = request.form.get("group-name","").strip() or "Untitled Group"
+
+        existing_groups = (
+            db.session.query(Flashcard.group)
+            .filter_by(user_id=current_user.id)
+            .distinct()
+            .all()
+        )
+
+        existing_groups = [g[0] for g in existing_groups if g[0]]
+
+        if group_name in existing_groups:
+            return jsonify({
+                "success":False,
+                "error":"A group with this name already exists."
+            }),400
+
+        # Save uploaded file
+        temp_dir = os.path.join(current_app.root_path,"static","temp")
+        os.makedirs(temp_dir,exist_ok=True)
+        filename = f"{current_user.id}_{uploaded_file.filename}"
+
+        temp_path = os.path.join(temp_dir,filename)
+
         uploaded_file.save(temp_path)
 
         file_text = extract_text_for_ai(temp_path, allowed_directory=temp_dir)
-        
+
         if not file_text or len(file_text.strip()) < 10:
             return jsonify({"success": False, "error": "Could not extract readable text or file was completely empty."}), 400
         
-        custom_user_message = request.form.get('custom-message')
+        custom_user_message = request.form.get("custom-message","").strip()
 
-        prompt = (
+        base_prompt = (
             "You are an elite study assistant. Analyse the provided text, extract core concepts, and turn them into flashcards. "
             "You must return your response inside a single root JSON object containing a key called 'flashcards' which points to an array. "
             "Use a mix of styles: definitions, true/false, and question-answer formats unless specified. "
@@ -88,22 +102,68 @@ def generate_flashcards():
         if custom_user_message and custom_user_message.strip():
             prompt += f"User Modification Criteria: {custom_user_message.strip()}\n\n"
 
-        prompt += f"--- begin source content ---\n{file_text}\n ---end---"
+        base_prompt += f"--- begin source content ---\n{file_text}\n ---end---"
 
+        # Primary AI call
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role":"user","content":base_prompt}],
             temperature=0.2,
-            response_format={"type": "json_object"}
+            response_format={"type":"json_object"}
         )
-
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
 
         raw_json_string = response.choices[0].message.content
         data = json.loads(raw_json_string)
         flashcards_list = data.get('flashcards', [])
 
+        # Remove invalid cards
+        flashcards_list = [
+            c for c in flashcards_list
+            if isinstance(c,dict)
+            and c.get("front")
+            and c.get("back")
+        ]
+
+        # if there are too many flashcards
+        flashcards_list = flashcards_list[:num_cards]
+
+        # if there are not enough flashcards
+        if len(flashcards_list) < num_cards:
+
+            missing = num_cards - len(flashcards_list)
+
+            second_prompt = (
+                f"Generate EXACTLY {missing} MORE flashcards "
+                "using the same notes.\n"
+                "Return ONLY JSON in the form:\n"
+                "{\"flashcards\":[{\"front\":\"...\",\"back\":\"...\"}]}\n\n"
+                f"{file_text}"
+            )
+
+            response = client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[{"role":"user","content":second_prompt}],
+                temperature=0.2,
+                response_format={"type":"json_object"}
+            )
+
+            extra = json.loads(
+                response.choices[0].message.content
+            ).get("flashcards",[])
+
+            extra = [
+                c for c in extra
+                if isinstance(c,dict)
+                and c.get("front")
+                and c.get("back")
+            ]
+
+            flashcards_list.extend(extra)
+
+        # Final guarantee
+        flashcards_list = flashcards_list[:num_cards]
+
+        # Save cards
         for card in flashcards_list:
             db.session.add(Flashcard(
                 user_id=current_user.id, 
@@ -123,9 +183,16 @@ def generate_flashcards():
         }), 200
 
     except Exception as e:
+        db.session.rollback()
+
+        return jsonify({
+            "success":False,
+            "error":str(e)
+        }),500
+
+    finally:
         if temp_path and os.path.exists(temp_path):
             os.remove(temp_path)
-        return jsonify({"success": False, "error": str(e)}), 500
     
 @genai_bp.route('/api/edit_flashcard/<int:flashcard_id>', methods=['POST'])
 def edit_flashcard(flashcard_id):
