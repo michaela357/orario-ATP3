@@ -69,6 +69,47 @@ body {
     background: radial-gradient(circle at top, rgba(0,255,183,.08), transparent 35%), var(--bg-color);
 }
 
+/* --- Loading animation style --- */
+#animated-text-fill {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    text-transform: uppercase;
+    color: white;
+    background: url("../img/loader_bg.png");
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: animate 12.5s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    transition: opacity 0.75s, visibility 0.75s;
+}
+
+.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
 
 /* -- Style for logo on navbar -- */
 .logo{
