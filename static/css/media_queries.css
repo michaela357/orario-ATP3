@@ -57,6 +57,60 @@
         padding-bottom: 95px;    
     }
 
+    /* Error messages appear on top right for mobile */
+.error{
+    display: none;
+    color: red;
+    transition: opacity 0.5s ease;
+    background-color: #fce4e4;
+    border: 1px solid #fcc2c2;
+    padding: 10px;
+    top: 1%;
+    right: 1%;
+    margin:0%;
+
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    width: fit-content;
+    height: auto;
+    max-height: fit-content;
+
+    padding: 14px 18px;
+
+    border-radius: 10px;
+
+    z-index: 9999;
+}
+
+.success {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    color: rgb(12, 114, 12);
+    background-color: #e4fcee;
+    border: 1px solid #c2fcd3;
+    padding: 10px;
+    border-radius: 5px;
+    top: 1%;
+    right: 1%;
+    margin:0%;
+
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    width: fit-content;
+    height: auto;
+    max-height: fit-content;
+
+    padding: 14px 18px;
+
+    border-radius: 10px;
+
+    z-index: 9999;
+}
+
     .dashboard-wrapper,
     .widget-container,
     .side-panel-column {
