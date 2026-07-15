@@ -26,7 +26,7 @@ def get_tasks():
     num_overdue = 0
 
     for task in user_tasks:
-        if task.due_date and task.due_date < today:
+        if task.due_date and task.due_date < today and not task.is_complete:
             num_overdue += 1
 
         if not task.is_complete:
