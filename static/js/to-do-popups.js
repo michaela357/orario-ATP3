@@ -170,7 +170,12 @@ function displayGroupRank() {
             const group = document.getElementById('group-name');
 
             position.innerText = data.rank;
-            group.innerText = data.group_name;
+            group.innerText = 'Rank today in ' + data.group_name;
+
+            if (data.rank === null) {
+                position.innerText = '--';
+                group.innerText = 'Join a group to get a rank!';
+            }
         })
 }
 

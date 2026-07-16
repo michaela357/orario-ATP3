@@ -97,8 +97,14 @@ def study_leaderboard():
 @login_required
 def leaderboard_data():
     group_name = request.args.get('group') or current_user.study_group
+
     if not group_name:
-        return jsonify({"success": False, "error": "Group name required"}), 400
+            return jsonify({
+                "success": True,
+                "group_name": None,
+                "leaderboard": [],
+                "rank": None
+            }), 200
 
     studying_users = db.session.query()
 
