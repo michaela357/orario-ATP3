@@ -196,18 +196,27 @@ body {
 /* --- Style for to-do statistics on dashboard */
 .stats-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns:repeat(3,1fr);
     gap: 20px;
     margin: 30px 0;
+    flex:1;
 }
 
 .stat-card {
-    background: white;
+    background: var(--bg-color);
     border-radius: 18px;
     padding: 24px;
     text-align: center;
     box-shadow: 0 6px 18px rgba(0,0,0,.08);
     transition: all .2s ease;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* Vertical centering */
+    align-items: center;       /* Horizontal centering */
+    text-align: center;
+
+    min-height: 180px;
 }
 
 .stat-card:hover {
@@ -1442,8 +1451,9 @@ circle {
 
 /* --- STYLING FOR POMODORO WIDGET ON DASHBOARD --- */
 #pomodoro-info {
-    display: flex;
-    justify-content: space-evenly;
+    display:flex;
+    gap:24px;
+    align-items: stretch;
 }
 
 #streak-length {
@@ -1454,7 +1464,7 @@ circle {
 }
 
 #streak-counter {
-    font-size: 3.8rem;
+    font-size: 4.8rem;
     font-weight: 700;
     color: white;
     line-height: 1;
@@ -1473,6 +1483,7 @@ circle {
     font-size:.9rem;
     color:#8f909b;
     text-align:center;
+    max-width:180px;
 }
 
 .streak-badge {
@@ -1492,71 +1503,68 @@ circle {
 
 /* ---STREAK FIRE STYLING --- */
 .fire-container {
-      position: relative;
-      width: 100px;
-      height: 120px;
-      animation: float 3s ease-in-out infinite;
-      
-      /* Intense, layered neon ambient glow behind the entire asset */
-      filter: 
-        drop-shadow(0 4px 12px rgba(255, 69, 0, 0.35))
-        drop-shadow(0 12px 30px rgba(255, 110, 0, 0.2));
-    }
+    position: relative;
+    width: 100px;
+    height: 120px;
+    animation: float 3s ease-in-out infinite;
+    transform-origin: center;
+    filter: drop-shadow(0 4px 12px rgba(255, 69, 0, 0.35)) drop-shadow(0 12px 30px rgba(255, 110, 0, 0.2));
+}
 
-    /* Elegant teardrop geometry */
-    .flame {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      border-radius: 0% 100% 60% 60% / 0% 60% 60% 100%;
-      transform-origin: 30% 70%;
-    }
+/* Elegant teardrop geometry */
+.flame {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    border-radius: 0% 100% 60% 60% / 0% 60% 60% 100%;
+    transform-origin: 30% 70%;
+}
 
-    .flame.outer {
-      width: 100px;
-      height: 100px;
-      background: linear-gradient(135deg, #ff4500, #ff6b00);
-      transform: translateX(-50%) rotate(45deg);
-      animation: flame-smooth 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-      /* Intense glow specifically for the outer red rim */
-      filter: drop-shadow(0 0 6px rgba(255, 69, 0, 0.6));
-    }
+.flame.outer {
+    width: 83px;
+    height: 83px;
+    background: linear-gradient(135deg, #ff4500, #ff6b00);
+    transform: translateX(-50%) rotate(45deg);
+    animation: flame-smooth 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+    /* Intense glow specifically for the outer red rim */
+    filter: drop-shadow(0 0 6px rgba(255, 69, 0, 0.6));
+}
 
-    .flame.inner {
-      width: 72px;
-      height: 72px;
-      background: linear-gradient(135deg, #ff9000, #ffa500);
-      transform: translateX(-50%) rotate(45deg);
-      animation: flame-smooth 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate-reverse;
-      /* Adds a fiery mid-layer radiance */
-      filter: drop-shadow(0 0 4px rgba(255, 144, 0, 0.5));
-    }
+.flame.inner {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff9000, #ffa500);
+    transform: translateX(-50%) rotate(45deg);
+    animation: flame-smooth 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate-reverse;
+    /* Adds a fiery mid-layer radiance */
+    filter: drop-shadow(0 0 4px rgba(255, 144, 0, 0.5));
+}
 
-    .flame.core {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, #ffeb3b, #fff176);
-      transform: translateX(-50%) rotate(45deg);
-      animation: flame-smooth 1s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-      /* Inner white-hot brightness core glow */
-      filter: drop-shadow(0 0 4px rgba(255, 235, 59, 0.8));
-    }
+.flame.core {
+    width: 37px;
+    height: 37px;
+    background: linear-gradient(135deg, #ffeb3b, #fff176);
+    transform: translateX(-50%) rotate(45deg);
+    animation: flame-smooth 1s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+    /* Inner white-hot brightness core glow */
+    filter: drop-shadow(0 0 4px rgba(255, 235, 59, 0.8));
+}
 
-    /* Fluid, organic swaying motion */
-    @keyframes flame-smooth {
-      0% { 
-        transform: translateX(-50%) rotate(43deg) scale(0.96, 1.04); 
-      }
-      100% { 
-        transform: translateX(-50%) rotate(47deg) scale(1.04, 0.96); 
-      }
+/* Fluid, organic swaying motion */
+@keyframes flame-smooth {
+    0% { 
+    transform: translateX(-50%) rotate(43deg) scale(0.96, 1.04); 
     }
+    100% { 
+    transform: translateX(-50%) rotate(47deg) scale(1.04, 0.96); 
+    }
+}
 
-    /* Premium UI floating effect */
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
+/* Premium UI floating effect */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
 
 .streak-widget {
     display: flex;
@@ -1564,12 +1572,14 @@ circle {
     align-items: center;
     justify-content: center;
     gap: 18px;
-    width: 260px;
+    max-width: 260px;
+    min-width: 260px;
     min-height: 290px;
     padding: 35px 30px;
     background: linear-gradient(180deg,#24242c,#1b1b22);
     border-radius: 28px;
     border: 1px solid rgba(255,255,255,.06);
+    border-top:4px solid #ff7a00;
     box-shadow: 0 20px 40px rgba(0,0,0,.35), inset 0 1px rgba(255,255,255,.04);
     transition: .25s ease;
 }
@@ -1586,24 +1596,24 @@ circle {
 }
 
 .flame.outer.dead {
-    width: 100px;
-    height: 100px;
+    width: 83px;
+    height: 83px;
     background: linear-gradient(135deg, #424240, #171717);
     transform: translateX(-50%) rotate(45deg);
     animation: flame-smooth 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
 }
 
 .flame.inner.dead {
-    width: 72px;
-    height: 72px;
+    width: 60px;
+    height: 60px;
     background: linear-gradient(135deg, #7a7977, #636260);
     transform: translateX(-50%) rotate(45deg);
     animation: flame-smooth 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate-reverse;
 }
 
 .flame.core.dead {
-    width: 44px;
-    height: 44px;
+    width: 37px;
+    height: 37px;
     background: linear-gradient(135deg, #acaba8, #e5e4db);
     transform: translateX(-50%) rotate(45deg);
     animation: flame-smooth 1s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
@@ -1611,4 +1621,45 @@ circle {
 
 .flame {
     transition: background .35s ease;
+}
+
+/* --- Flashcard loader --- */
+.loader-container{
+    position:fixed;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(4px);
+    z-index:9999;
+}
+
+.loader-container.active{
+    display:flex;
+}
+
+.loader-box{
+    width:380px;
+    max-width:90%;
+    padding:30px;
+    border-radius:20px;
+    background:var(--widget-bg);
+    text-align:center;
+}
+
+.progress-bar{
+    width:100%;
+    height:12px;
+    margin-top:20px;
+    border-radius:999px;
+    background:#2d2d35;
+    overflow:hidden;
+}
+
+.progress{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,var(--button-color),var(--accent-color1));
+    transition:width .4s ease;
 }
