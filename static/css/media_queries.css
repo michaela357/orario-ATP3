@@ -52,7 +52,7 @@
     }
 
     .completion-card{
-        grid-column:1 / -1;
+        grid-template-columns:repeat(2,1fr);
     }
 
     .streak-widget{
