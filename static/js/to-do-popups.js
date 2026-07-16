@@ -162,9 +162,22 @@ function displayTaskStatistics() {
         })
 }
 
+function displayGroupRank() {
+    fetch('/api/leaderboard_data')
+        .then(res => res.json())
+        .then(data => {
+            const position = document.getElementById('leaderboard-rank');
+            const group = document.getElementById('group-name');
+
+            position.innerText = data.rank;
+            group.innerText = data.group_name;
+        })
+}
+
 // Initialisations
 document.addEventListener('DOMContentLoaded', () => {
     requestNotificationPermission();
     displayTaskStatistics();
+    displayGroupRank();
     setInterval(checkReminders, 3600000);
 });
