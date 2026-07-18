@@ -122,7 +122,7 @@ python seed.py
 ``` Bash
 python app.py
 ```
-Open your browser and navigate to http://127.0.0.1:5000/.
+Open your browser and navigate to https://127.0.0.1:5000/.
 
 ## Evaluation Login Credentials
 
