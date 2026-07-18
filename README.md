@@ -1,4 +1,4 @@
-# Orario- AI-Powered Student Productivity Platform
+# Orario - AI-Powered Student Productivity Platform
 
 Orario is a full-stack web application designed to help students organise their studies through task management, AI-generated flashcards, Pomodoro study sessions, collaborative study groups and productivity analytics. The application combines modern web technologies with secure authentication and user-centred design to provide an integrated study platform.
 
@@ -33,7 +33,7 @@ Orario is a full-stack web application designed to help students organise their 
 ---
 ## Project Architecture
 
-The application follows a modular Flask architecture using Blueprints to separate functionality into logical components. Data is stored in a SQLite database using SQLAlchemy as the ORM, while Flask-Login manages user authentication and sessions.
+The application follows a modular Flask architecture, using Blueprints to separate features into logical components. SQLAlchemy provides the object-relational mapping (ORM) for the SQLite database, while Flask-Login manages user authentication and secure session handling.
 
 ```
 orario/
@@ -47,7 +47,7 @@ orario/
 │   └── genai.py            # AI flashcard generation     
 ├── templates/              # Jinja2 HTML templates
 ├── utils/
-│   ├── utils.py            # Helper functions
+│   └── utils.py            # Helper functions
 ├── static/
 │   ├── css/                # All styling files
 │   ├── js/                 # All javascript files
@@ -69,12 +69,16 @@ orario/
 **Backend**
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![Flask](https://img.shields.io/badge/flask-black?style=for-the-badge&logo=flask&logoColor=white)
+![Flask](https://img.shields.io/badge/flask-black?style=for-the-badge&logo=flask&logoColor=red)
 
 **Database**
 
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![SQLAlchemy](https://img.shields.io/badge/sqlalchemy-green?style=for-the-badge&logo=sqlalchemy&logoColor=white)
+
+**AI Integration**
+
+![Groq](https://img.shields.io/badge/Groq-000000?style=for-the-badge&logo=groq&logoColor=white)
 
 **Testing**
 
@@ -109,8 +113,20 @@ Create a .env file in the root directory containing:
 GROQ_API_KEY=your_llm_api_key_here
 ```
 
-### 5. Run the Application
+### 5. Seed the database with the test data
 ``` Bash
-flask run
+python seed.py
+```
+
+### 6. Run the Application
+``` Bash
+python app.py
 ```
 Open your browser and navigate to http://127.0.0.1:5000/.
+
+## Evaluation Login Credentials
+
+The repository includes seeded demonstration data, allowing evaluators to explore dashboard analytics, study statistics, streaks and personalised dashboard content without creating a new account.
+
+* **Email:** `teacher@test.com`
+* **Password:** `Password123!`
