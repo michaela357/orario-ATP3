@@ -100,19 +100,18 @@ def generate_flashcards():
             # try JSON first
             try:
                 obj = json.loads(text)
-                fc = obj.get("flashcards", [])
-                for c in fc:
-                    front = c.get("front")
-                    back = c.get("back")
+                flashcard = obj.get("flashcards", [])
+                for card in flashcard:
+                    front = card.get("front")
+                    back = card.get("back")
                     if isinstance(front, list):
                         front = front[0]
                     if isinstance(front, str) and isinstance(back, str):
                         cards.append({"front": front, "back": back})
                 if cards:
                     return cards
-            except:
-                pass
-
+            except Exception as e:
+                print(e)
             # strip markdown characters
             cleaned = text.replace("```json", "").replace("```", "").strip()
 
@@ -129,9 +128,8 @@ def generate_flashcards():
                         cards.append({"front": front, "back": back})
                 if cards:
                     return cards
-            except:
-                pass
-
+            except Exception as e:
+                print(e)
             # Regex to ensure nothing slips through
             import re
             pattern = re.compile(
