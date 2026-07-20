@@ -1,4 +1,4 @@
-from app import app
+from app import app, db
 from models import Flashcard
 
 def test_successful_deletion(client):
@@ -11,8 +11,15 @@ def test_successful_deletion(client):
         - No flashcards with the group name remain in the database
     """
 
-    with client.session_transaction() as sess:
-        sess['_user_id'] = 1
+    mock_card = Flashcard(
+        front="Mock Front Question",
+        back="Mock Back Answer",
+        group="a-unique-flashcard-group",
+        user_id=1
+    )
+
+    db.session.add(mock_card)
+    db.session.commit()
 
     response = client.post('/delete-group/a-unique-flashcard-group')
 

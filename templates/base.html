@@ -38,25 +38,25 @@
             <div class="nav-right">
                 <form id="logout-form" action="{{ url_for('logout') }}" method="POST" style="margin: 0;">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button type="submit" class="nav-btn-logout">Logout</button>
+                    <button type="submit" aria-label="Logout" class="nav-btn-logout">Logout</button>
                 </form>
             </div>
         {% else %}
             <div class="nav-left">
-                <a href="{{ url_for('home') }}" class="nav-item {{ 'active' if request.endpoint == 'home' else '' }}">
+                <a href="{{ url_for('home') }}" aria-label="Home" class="nav-item {{ 'active' if request.endpoint == 'home' else '' }}">
                     <span class="icon">🏠</span> <span>Home</span>
                 </a>
             </div>
             <div class="nav-right">
-                <a href="{{ url_for('auth.login') }}" class="nav-item {{ 'active' if request.endpoint == 'auth.login' else '' }}">
+                <a href="{{ url_for('auth.login') }}" aria-label="Login" class="nav-item {{ 'active' if request.endpoint == 'auth.login' else '' }}">
                     <span class="icon">🔑</span> <span>Login</span>
                 </a>
-                <a href="{{ url_for('register') }}" class="nav-item nav-btn-signup {{ 'active' if request.endpoint == 'register' else '' }}">
+                <a href="{{ url_for('register') }}" aria-label="Sign up" class="nav-item nav-btn-signup {{ 'active' if request.endpoint == 'register' else '' }}">
                     <span class="icon">📋</span> <span>Register</span>
                 </a>
             </div>
         {% endif %}
-    <div class="theme-switch-container">
+    <div class="theme-switch-container" aria-label="Switch theme">
         <label class="switch">
             <input type="checkbox" id="toggleCheckbox" hidden>
             <span class="slider-round"></span>
@@ -65,6 +65,10 @@
     </div>
     </div>
 </nav>
+<header>
+    <div id="error-message" class="error"></div>
+    <div id="success-message" class="success"></div>
+</header>
 <body>
 
     {% block content %}

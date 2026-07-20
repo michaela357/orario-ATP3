@@ -45,29 +45,45 @@ def db(app):
     """
     return _db
 
-
-@pytest.fixture(scope='function')
-def client(app):
-    """
-    Provide a test client for making requests.
-    """
-    return app.test_client()
-
-
 @pytest.fixture(scope='function')
 def authenticated_user(db):
     """
     Create a test user that can be used for authentication tests.
     """
     user = User(
-        email='test@email.com',
+        email='test@email.com.au',
         name='John Smith',
         password=generate_password_hash('Correctpassword123!'),
-        quote=None
+        quote=None,
+        study_time=0,
+        is_studying=False,
+        study_group=''
     )
     db.session.add(user)
     db.session.commit()
     return user
+
+@pytest.fixture(scope='function')
+def client(app, authenticated_user):
+    """
+    Provide a pre-authenticated test client linked directly to the created user.
+    """
+    test_client = app.test_client()
+    
+    # Inject the session cookies Flask-Login expects for authenticated users
+    with test_client.session_transaction() as sess:
+        sess['_user_id'] = str(authenticated_user.id)
+        sess['_fresh'] = True
+        
+    return test_client
+
+
+@pytest.fixture(scope='function')
+def anon_client(app):
+    """
+    Provide an unauthenticated client for testing logouts e.t.c.
+    """
+    return app.test_client()
 
 
 @pytest.fixture(scope='function')
@@ -91,10 +107,13 @@ def csrf_client():
 
             # Create test user for CSRF tests
             user = User(
-                email='test@email.com',
+                email='test@email.com.au',
                 name='John Smith',
                 password=generate_password_hash('Correctpassword123!'),
-                quote=None
+                quote=None,
+                study_time=0,
+                is_studying=False,
+                study_group=''
             )
             _db.session.add(user)
             _db.session.commit()

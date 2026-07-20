@@ -22,3 +22,17 @@ tests/__pycache__/test_flashcard_deletion.cpython-313-pytest-9.0.3.pyc
 tests/__pycache__/conftest.cpython-313-pytest-9.0.3.pyc
 tests/__pycache__/test_auth_login.cpython-313-pytest-9.0.3.pyc
 routes/__pycache__/pomodoro.cpython-313.pyc
+__pycache__/locustfile.cpython-313.pyc
+tests/__pycache__/conftest.cpython-313-pytest-9.1.1.pyc
+tests/__pycache__/test_csrf_protection.cpython-313-pytest-9.1.1.pyc
+tests/__pycache__/test_todo.cpython-313-pytest-9.1.1.pyc
+.gitignore
+tests/__pycache__/test_flashcard_creation.cpython-313-pytest-9.1.1.pyc
+.gitignore
+tests/__pycache__/test_auth_register.cpython-313-pytest-9.1.1.pyc
+tests/__pycache__/test_flashcard_deletion.cpython-313-pytest-9.1.1.pyc
+.gitignore
+tests/__pycache__/test_auth_login.cpython-313-pytest-9.1.1.pyc
+tests/__pycache__/test_pomodoro_logic.cpython-313-pytest-9.1.1.pyc
+tests/__pycache__/test_streak_logic.cpython-313-pytest-9.1.1.pyc
+tests/__pycache__/test_leaderboard.cpython-313-pytest-9.1.1.pyc
